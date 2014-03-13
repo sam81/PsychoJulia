@@ -21,7 +21,8 @@ using PySide
 szp = Qt.QSizePolicy()
 
 prm = (String => Any)[]
-wd = (String => Any)[]
+wd = (String => Any)[] #widgets
+wdc = (String => Any)[] #widget containers (like lists of widgets)
 prm = get_prefs(prm)
 prm = set_global_parameters(prm)
 
@@ -241,28 +242,28 @@ end
 function removePrmWidgets()
     if prm["prevExp"] != None
         for f in 1:length(wd["field"])
-            pw_prm_sizer_0[:removeWidget(fieldLabel[f])]
-            fieldLabel[f][:setParent(None)]
-            pw_prm_sizer_0[:removeWidget(wd["field"][f])]
-            field[f][:setParent(None)]
-            pw_prm_sizer_0[:removeWidget(fieldCheckBox[f])]
-            fieldCheckBox[f][:setParent(None)]
+            pw_prm_sizer_0[:removeWidget](wd["fieldLabel"][f])
+            wd["fieldLabel"][f][:setParent](None)
+            pw_prm_sizer_0[:removeWidget](wd["field"][f])
+            wd["field"][f][:setParent](None)
+            pw_prm_sizer_0[:removeWidget](wd["fieldCheckBox"][f])
+            wd["fieldCheckBox"][f][:setParent](None)
         end
         for c in 1:length(chooser)
-            pw_prm_sizer_1[:removeWidget(chooserLabel[c])]
-            chooserLabel[c][:setParent(None)]
-            pw_prm_sizer_1[:removeWidget(chooser[c])]
-            chooser[c][:setParent(None)]
-            pw_prm_sizer_1[:removeWidget(chooserCheckBox[c])]
-            chooserCheckBox[c][:setParent(None)]
+            pw_prm_sizer_1[:removeWidget](wd["chooserLabel"][c])
+            wd["chooserLabel"][c][:setParent](None)
+            pw_prm_sizer_1[:removeWidget](wd["chooser"][c])
+            wd["chooser"][c][:setParent](None)
+            pw_prm_sizer_1[:removeWidget](wd["chooserCheckBox"][c])
+            wd["chooserCheckBox"][c][:setParent](None)
             end
         for f in 1:length(fileChooser)
-            pw_prm_sizer_0[:removeWidget(fileChooser[f])]
-            fileChooser[f][:setParent(None)]
-            pw_prm_sizer_0[:removeWidget(fileChooserButton[f])]
-            fileChooserButton[f][:setParent(None)]
-            pw_prm_sizer_0[:removeWidget(fileChooserCheckBox[f])]
-            fileChooserCheckBox[f][:setParent(None)]
+            pw_prm_sizer_0[:removeWidget](wd["fileChooser"][f])
+            wd["fileChooser"][f][:setParent](None)
+            pw_prm_sizer_0[:removeWidget](wd["fileChooserButton"][f])
+            wd["fileChooserButton"][f][:setParent](None)
+            pw_prm_sizer_0[:removeWidget](wd["fileChooserCheckBox"][f])
+            wd["fileChooserCheckBox"][f][:setParent](None)
         end
     end
 end
@@ -556,51 +557,51 @@ function setDefaultParameters(experiment, paradigm, par)
     prm["nFileChoosers"] = length(prm["fileChooser"])
     # SET UP TEXT FIELDS
     wd["field"] = (Any)[] #list(range(prm["nFields"]))
-    fieldLabel = (Any)[] #list(range(prm["nFields"]))
-    fieldCheckBox = (Any)[] #list(range(prm["nFields"]))
+    wd["fieldLabel"] = (Any)[] #list(range(prm["nFields"]))
+    wd["fieldCheckBox"] = (Any)[] #list(range(prm["nFields"]))
     for f in 1:prm["nFields"]
-        push!(fieldLabel, Qt.QLabel(prm["fieldLabel"][f]))
-        pw_prm_sizer_0[:addWidget](fieldLabel[f], f, 1)
+        push!(wd["fieldLabel"], Qt.QLabel(prm["fieldLabel"][f]))
+        pw_prm_sizer_0[:addWidget](wd["fieldLabel"][f], f, 1)
         push!(wd["field"], Qt.QLineEdit())
         wd["field"][f][:setText](string(prm["field"][f]))
         wd["field"][f][:setValidator](Qt.QDoubleValidator())
         pw_prm_sizer_0[:addWidget](wd["field"][f], f, 2)
-        push!(fieldCheckBox, Qt.QCheckBox())
-        pw_prm_sizer_0[:addWidget](fieldCheckBox[f], f, 0)
+        push!(wd["fieldCheckBox"], Qt.QCheckBox())
+        pw_prm_sizer_0[:addWidget](wd["fieldCheckBox"][f], f, 0)
     end
     # SET UP CHOOSERS
-    chooser = (Any)[] #list(range(prm["nChoosers"]))
-    chooserLabel = (Any)[] #list(range(prm["nChoosers"]))
-    chooserOptions = (Any)[] #list(range(prm["nChoosers"]))
-    chooserCheckBox = (Any)[] #list(range(prm["nChoosers"]))
+    wd["chooser"] = (Any)[] #list(range(prm["nChoosers"]))
+    wd["chooserLabel"] = (Any)[] #list(range(prm["nChoosers"]))
+    wd["chooserOptions"] = (Any)[] #list(range(prm["nChoosers"]))
+    wd["chooserCheckBox"] = (Any)[] #list(range(prm["nChoosers"]))
     for c in 1:prm["nChoosers"]
-        push!(chooserLabel, Qt.QLabel(prm["chooserLabel"][c]))
-        pw_prm_sizer_1[:addWidget](chooserLabel[c], c, 4)
-        push!(chooserOptions, prm["chooserOptions"][c])
-        push!(chooser, Qt.QComboBox())
-        chooser[c][:addItems](chooserOptions[c])
-        chooser[c][:setCurrentIndex](find(chooserOptions[c] .== prm["chooser"][c]))
-        pw_prm_sizer_1[:addWidget](chooser[c], c, 5)
-        push!(chooserCheckBox, Qt.QCheckBox())
-        pw_prm_sizer_1[:addWidget](chooserCheckBox[c], c, 3)
+        push!(wd["chooserLabel"], Qt.QLabel(prm["chooserLabel"][c]))
+        pw_prm_sizer_1[:addWidget](wd["chooserLabel"][c], c, 4)
+        push!(wd["chooserOptions"], prm["chooserOptions"][c])
+        push!(wd["chooser"], Qt.QComboBox())
+        wd["chooser"][c][:addItems](wd["chooserOptions"][c])
+        wd["chooser"][c][:setCurrentIndex](find(wd["chooserOptions"][c] .== prm["chooser"][c]))
+        pw_prm_sizer_1[:addWidget](wd["chooser"][c], c, 5)
+        push!(wd["chooserCheckBox"], Qt.QCheckBox())
+        pw_prm_sizer_1[:addWidget](wd["chooserCheckBox"][c], c, 3)
     end
-    for c in 1:length(chooser)
-        qconnect(chooser[c], :activated, (str) -> oChooserChange())
+    for c in 1:length(wd["chooser"])
+        qconnect(wd["chooser"][c], :activated, (str) -> oChooserChange())
     end
  
     #SET UP FILE CHOOSERS
-    fileChooser = (Any)[] #list(range(prm["nFileChoosers"]))
-    fileChooserButton = (Any)[] #list(range(prm["nFileChoosers"]))
-    fileChooserCheckBox = (Any)[] #list(range(prm["nFileChoosers"]))
+    wd["fileChooser"] = (Any)[] #list(range(prm["nFileChoosers"]))
+    wd["fileChooserButton"] = (Any)[] #list(range(prm["nFileChoosers"]))
+    wd["fileChooserCheckBox"] = (Any)[] #list(range(prm["nFileChoosers"]))
     for f in 1:prm["nFileChoosers"]
-        push!(fileChooser, QLineEdit())
-        fileChooser[f][:setText(str(prm["fileChooser"][f]))]
-        pw_prm_sizer_0[:addWidget(fileChooser[f], prm["nFields"]+f, 2)]
-        push!(fileChooserButton, QPushButton(prm["fileChooserButton"][f]), self)
-        fileChooserButton[f][:clicked][:connect(fileChooserButtonClicked)]
-        pw_prm_sizer_0[:addWidget(fileChooserButton[f], prm["nFields"]+f, 1)]
-        push!(fileChooserCheckBox[f], QCheckBox())
-        pw_prm_sizer_0[:addWidget(fileChooserCheckBox[f], prm["nFields"]+f, 0)]
+        push!(wd["fileChooser"], QLineEdit())
+        wd["fileChooser"][f][:setText(str(prm["fileChooser"][f]))]
+        pw_prm_sizer_0[:addWidget(wd["fileChooser"][f], prm["nFields"]+f, 2)]
+        push!(wd["fileChooserButton"], QPushButton(prm["fileChooserButton"][f]), self)
+        wd["fileChooserButton"][f][:clicked][:connect(fileChooserButtonClicked)]
+        pw_prm_sizer_0[:addWidget(wd["fileChooserButton"][f], prm["nFields"]+f, 1)]
+        push!(wd["fileChooserCheckBox"][f], QCheckBox())
+        pw_prm_sizer_0[:addWidget(wd["fileChooserCheckBox"][f], prm["nFields"]+f, 0)]
     end
         
     prm["prevParadigm"] = copy(prm["currParadigm"])
@@ -622,21 +623,21 @@ end
 
 function setParadigmWidgets()
     if prm["prevParadigm"] != None
-        for i=1:length(paradigmChooserList)
-            paradigm_widg_sizer[:removeWidget](paradigmChooserList[i])
-            paradigmChooserList[i][:setParent](None)
-            paradigm_widg_sizer[:removeWidget](paradigmChooserLabelList[i])
-            paradigmChooserLabelList[i][:setParent](None)
-            paradigm_widg_sizer[:removeWidget](paradigmChooserCheckBoxList[i])
-            paradigmChooserCheckBoxList[i][:setParent](None)
+        for i=1:length(wdc["paradigmChooserList"])
+            paradigm_widg_sizer[:removeWidget](wdc["paradigmChooserList"][i])
+            wdc["paradigmChooserList"][i][:setParent](None)
+            paradigm_widg_sizer[:removeWidget](wdc["paradigmChooserLabelList"][i])
+            wdc["paradigmChooserLabelList"][i][:setParent](None)
+            paradigm_widg_sizer[:removeWidget](wdc["paradigmChooserCheckBoxList"][i])
+            wdc["paradigmChooserCheckBoxList"][i][:setParent](None)
         end
-        for i=1:length(paradigmFieldList)
-            paradigm_widg_sizer[:removeWidget](paradigmFieldList[i])
-            paradigmFieldList[i][:setParent](None)
-            paradigm_widg_sizer[:removeWidget](paradigmFieldLabelList[i])
-            paradigmFieldLabelList[i][:setParent](None)
-            paradigm_widg_sizer[:removeWidget](paradigmFieldCheckBoxList[i])
-            paradigmFieldCheckBoxList[i][:setParent](None)
+        for i=1:length(wdc["paradigmFieldList"])
+            paradigm_widg_sizer[:removeWidget](wdc["paradigmFieldList"][i])
+            wdc["paradigmFieldList"][i][:setParent](None)
+            paradigm_widg_sizer[:removeWidget](wdc["paradigmFieldLabelList"][i])
+            wdc["paradigmFieldLabelList"][i][:setParent](None)
+            paradigm_widg_sizer[:removeWidget](wdc["paradigmFieldCheckBoxList"][i])
+            wdc["paradigmFieldCheckBoxList"][i][:setParent](None)
         end
     end
 
@@ -645,88 +646,88 @@ function setParadigmWidgets()
         ## #ADAPTIVE PARADIGM WIDGETS
     if prm["currParadigm"] == "Transformed Up-Down"
         n = 0
-        adaptiveTypeChooserLabel = Qt.QLabel("Procedure:")
-        paradigm_widg_sizer[:addWidget](adaptiveTypeChooserLabel, n, 1)
+        wd["adaptiveTypeChooserLabel"] = Qt.QLabel("Procedure:")
+        paradigm_widg_sizer[:addWidget](wd["adaptiveTypeChooserLabel"], n, 1)
         wd["adaptiveTypeChooser"] = Qt.QComboBox()
         wd["adaptiveTypeChooser"][:addItems](prm["adaptiveTypeChoices"])
         wd["adaptiveTypeChooser"][:setCurrentIndex](0)
         paradigm_widg_sizer[:addWidget](wd["adaptiveTypeChooser"], n, 2)
-        adaptiveTypeCheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](adaptiveTypeCheckBox, n, 0)
+        wd["adaptiveTypeCheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["adaptiveTypeCheckBox"], n, 0)
 
         n = n+1
-        initialTrackDirChooserLabel = Qt.QLabel("Initial Track Direction:")
-        paradigm_widg_sizer[:addWidget](initialTrackDirChooserLabel, n, 1)
-        initialTrackDirChooser = Qt.QComboBox()
-        initialTrackDirChooser[:addItems](["Up", "Down"])
-        initialTrackDirChooser[:setCurrentIndex](1)
-        paradigm_widg_sizer[:addWidget](initialTrackDirChooser, n, 2)
-        initialTrackDirCheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](initialTrackDirCheckBox, n, 0)
+        wd["initialTrackDirChooserLabel"] = Qt.QLabel("Initial Track Direction:")
+        paradigm_widg_sizer[:addWidget](wd["initialTrackDirChooserLabel"], n, 1)
+        wd["initialTrackDirChooser"] = Qt.QComboBox()
+        wd["initialTrackDirChooser"][:addItems](["Up", "Down"])
+        wd["initialTrackDirChooser"][:setCurrentIndex](0)
+        paradigm_widg_sizer[:addWidget](wd["initialTrackDirChooser"], n, 2)
+        wd["initialTrackDirCheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["initialTrackDirCheckBox"], n, 0)
         
         n = n+1
-        ruleDownLabel = Qt.QLabel("Rule Down")
-        paradigm_widg_sizer[:addWidget](ruleDownLabel, n, 1)
-        ruleDownTF = Qt.QLineEdit()
-        ruleDownTF[:setText]("2")
-        ruleDownTF[:setValidator](Qt.QIntValidator())
-        paradigm_widg_sizer[:addWidget](ruleDownTF, n, 2)
-        ruleDownCheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](ruleDownCheckBox, n, 0)
+        wd["ruleDownLabel"] = Qt.QLabel("Rule Down")
+        paradigm_widg_sizer[:addWidget](wd["ruleDownLabel"], n, 1)
+        wd["ruleDownTF"] = Qt.QLineEdit()
+        wd["ruleDownTF"][:setText]("2")
+        wd["ruleDownTF"][:setValidator](Qt.QIntValidator())
+        paradigm_widg_sizer[:addWidget](wd["ruleDownTF"], n, 2)
+        wd["ruleDownCheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["ruleDownCheckBox"], n, 0)
         
-        ruleUpLabel = Qt.QLabel("Rule Up")
-        paradigm_widg_sizer[:addWidget](ruleUpLabel, n, 5)
-        ruleUpTF = Qt.QLineEdit()
-        ruleUpTF[:setText]("1")
-        ruleUpTF[:setValidator](Qt.QIntValidator())
-        paradigm_widg_sizer[:addWidget](ruleUpTF, n, 4)
-        ruleUpCheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](ruleUpCheckBox, n, 3)
+        wd["ruleUpLabel"] = Qt.QLabel("Rule Up")
+        paradigm_widg_sizer[:addWidget](wd["ruleUpLabel"], n, 5)
+        wd["ruleUpTF"] = Qt.QLineEdit()
+        wd["ruleUpTF"][:setText]("1")
+        wd["ruleUpTF"][:setValidator](Qt.QIntValidator())
+        paradigm_widg_sizer[:addWidget](wd["ruleUpTF"], n, 4)
+        wd["ruleUpCheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["ruleUpCheckBox"], n, 3)
         n = n+1
-        initialTurnpointsLabel = Qt.QLabel("Initial Turnpoints")
-        paradigm_widg_sizer[:addWidget](initialTurnpointsLabel, n, 1)
-        initialTurnpointsTF = Qt.QLineEdit()
-        initialTurnpointsTF[:setText]("4")
-        initialTurnpointsTF[:setValidator](Qt.QIntValidator())
-        paradigm_widg_sizer[:addWidget](initialTurnpointsTF, n, 2)
-        initialTurnpointsCheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](initialTurnpointsCheckBox, n, 0)
+        wd["initialTurnpointsLabel"] = Qt.QLabel("Initial Turnpoints")
+        paradigm_widg_sizer[:addWidget](wd["initialTurnpointsLabel"], n, 1)
+        wd["initialTurnpointsTF"] = Qt.QLineEdit()
+        wd["initialTurnpointsTF"][:setText]("4")
+        wd["initialTurnpointsTF"][:setValidator](Qt.QIntValidator())
+        paradigm_widg_sizer[:addWidget](wd["initialTurnpointsTF"], n, 2)
+        wd["initialTurnpointsCheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["initialTurnpointsCheckBox"], n, 0)
         
-        totalTurnpointsLabel = Qt.QLabel("Total Turnpoints")
-        paradigm_widg_sizer[:addWidget](totalTurnpointsLabel, n, 5)
-        totalTurnpointsTF = Qt.QLineEdit()
-        totalTurnpointsTF[:setText]("16")
-        totalTurnpointsTF[:setValidator](Qt.QIntValidator())
-        paradigm_widg_sizer[:addWidget](totalTurnpointsTF, n, 4)
-        totalTurnpointsCheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](totalTurnpointsCheckBox, n, 3)
+        wd["totalTurnpointsLabel"] = Qt.QLabel("Total Turnpoints")
+        paradigm_widg_sizer[:addWidget](wd["totalTurnpointsLabel"], n, 5)
+        wd["totalTurnpointsTF"] = Qt.QLineEdit()
+        wd["totalTurnpointsTF"][:setText]("16")
+        wd["totalTurnpointsTF"][:setValidator](Qt.QIntValidator())
+        paradigm_widg_sizer[:addWidget](wd["totalTurnpointsTF"], n, 4)
+        wd["totalTurnpointsCheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["totalTurnpointsCheckBox"], n, 3)
         n = n+1
-        stepSize1Label = Qt.QLabel("Step Size 1")
-        paradigm_widg_sizer[:addWidget](stepSize1Label, n, 1)
-        stepSize1TF = Qt.QLineEdit()
-        stepSize1TF[:setText]("4")
-        stepSize1TF[:setValidator](Qt.QDoubleValidator())
-        paradigm_widg_sizer[:addWidget](stepSize1TF, n, 2)
-        stepSize1CheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](stepSize1CheckBox, n, 0)
+        wd["stepSize1Label"] = Qt.QLabel("Step Size 1")
+        paradigm_widg_sizer[:addWidget](wd["stepSize1Label"], n, 1)
+        wd["stepSize1TF"] = Qt.QLineEdit()
+        wd["stepSize1TF"][:setText]("4")
+        wd["stepSize1TF"][:setValidator](Qt.QDoubleValidator())
+        paradigm_widg_sizer[:addWidget](wd["stepSize1TF"], n, 2)
+        wd["stepSize1CheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["stepSize1CheckBox"], n, 0)
 
-        stepSize2Label = Qt.QLabel("Step Size 2")
-        paradigm_widg_sizer[:addWidget](stepSize2Label, n, 5)
-        stepSize2TF = Qt.QLineEdit()
-        stepSize2TF[:setText]("2")
-        stepSize2TF[:setValidator](Qt.QDoubleValidator())
-        paradigm_widg_sizer[:addWidget](stepSize2TF, n, 4)
-        stepSize2CheckBox = Qt.QCheckBox()
-        paradigm_widg_sizer[:addWidget](stepSize2CheckBox, n, 3)
+        wd["stepSize2Label"] = Qt.QLabel("Step Size 2")
+        paradigm_widg_sizer[:addWidget](wd["stepSize2Label"], n, 5)
+        wd["stepSize2TF"] = Qt.QLineEdit()
+        wd["stepSize2TF"][:setText]("2")
+        wd["stepSize2TF"][:setValidator](Qt.QDoubleValidator())
+        paradigm_widg_sizer[:addWidget](wd["stepSize2TF"], n, 4)
+        wd["stepSize2CheckBox"] = Qt.QCheckBox()
+        paradigm_widg_sizer[:addWidget](wd["stepSize2CheckBox"], n, 3)
         
-        paradigmChooserList = [wd["adaptiveTypeChooser"], initialTrackDirChooser]
-        paradigmChooserLabelList = [adaptiveTypeChooserLabel, initialTrackDirChooserLabel]
-        paradigmChooserOptionsList = [prm["adaptiveTypeChoices"], ["Up", "Down"]]
-        paradigmChooserCheckBoxList = [adaptiveTypeCheckBox, initialTrackDirCheckBox]
+        wdc["paradigmChooserList"] = [wd["adaptiveTypeChooser"], wd["initialTrackDirChooser"]]
+        wdc["paradigmChooserLabelList"] = [wd["adaptiveTypeChooserLabel"], wd["initialTrackDirChooserLabel"]]
+        wdc["paradigmChooserOptionsList"] = [prm["adaptiveTypeChoices"], ["Up", "Down"]]
+        wdc["paradigmChooserCheckBoxList"] = [wd["adaptiveTypeCheckBox"], wd["initialTrackDirCheckBox"]]
         
-        paradigmFieldList = [ruleDownTF, ruleUpTF, initialTurnpointsTF, totalTurnpointsTF, stepSize1TF, stepSize2TF]
-        paradigmFieldLabelList = [ruleDownLabel, ruleUpLabel, initialTurnpointsLabel, totalTurnpointsLabel, stepSize1Label, stepSize2Label]
-        paradigmFieldCheckBoxList = [ruleDownCheckBox, ruleUpCheckBox, initialTurnpointsCheckBox, totalTurnpointsCheckBox, stepSize1CheckBox, stepSize2CheckBox]
+        wdc["paradigmFieldList"] = [wd["ruleDownTF"], wd["ruleUpTF"], wd["initialTurnpointsTF"], wd["totalTurnpointsTF"], wd["stepSize1TF"], wd["stepSize2TF"]]
+        wdc["paradigmFieldLabelList"] = [wd["ruleDownLabel"], wd["ruleUpLabel"], wd["initialTurnpointsLabel"], wd["totalTurnpointsLabel"], wd["stepSize1Label"], wd["stepSize2Label"]]
+        wdc["paradigmFieldCheckBoxList"] = [wd["ruleDownCheckBox"], wd["ruleUpCheckBox"], wd["initialTurnpointsCheckBox"], wd["totalTurnpointsCheckBox"], wd["stepSize1CheckBox"], wd["stepSize2CheckBox"]]
     end
     
     ## #------------------------------------
