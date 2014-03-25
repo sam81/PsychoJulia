@@ -172,7 +172,7 @@ function def_pref(prm)
     ## prm["pref"]["general"]["triggerDur"] = 1
     ## prm["pref"]["general"]["defaultISI"] = "500"
     prm["pref"]["general"]["preTrialSilence"] = "200"
-    ## prm["pref"]["general"]["responseLightDuration"] = "500"
+    prm["pref"]["general"]["responseLightDuration"] = "500"
     ## prm["pref"]["general"]["maxRecursionDepth"] = sys.getrecursionlimit()
    
 
