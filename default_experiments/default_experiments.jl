@@ -16,7 +16,8 @@
 
 module default_experiments
 
-exps = ["audiogram"]
+exps = ["audiogram",
+        "freq"]
 for i in 1:length(exps)
     include(string(exps[i], ".jl"))
 end

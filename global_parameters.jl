@@ -15,8 +15,8 @@
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
 
 function set_global_parameters(prm)
-   locale = QtCore.QLocale()[:system]()[:name]()
-    prm["currentLocale"] = QtCore.QLocale(locale)
+   locale = QtCore[:QLocale]()[:system]()[:name]()
+    prm["currentLocale"] = QtCore[:QLocale](locale)
     prm["tmpParametersFile"] = ".tmp_prm.prm"
     ## prm["nAlternatives"] = 3
     prm["experimentsChoices"] = (String)[]

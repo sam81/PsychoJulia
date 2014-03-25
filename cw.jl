@@ -1912,12 +1912,12 @@ pw_prm_sizer[:addLayout](pw_prm_sizer_0)
 pw_prm_sizer[:addLayout](pw_prm_sizer_1)
 pw_sizer[:addLayout](pw_prm_sizer)
 pw[:setLayout](pw_sizer)
-#pw[:layout]()[:setSizeConstraint](Qt.QLayout[:SetFixedSize])
-#cw.layout().setSizeConstraint(QLayout.SetFixedSize)
+#pw[:layout]()[:setSizeConstraint](Qt[:QLayout][:SetFixedSize])
+#cw[:layout]()[:setSizeConstraint](QLayout.SetFixedSize)
 pw_scrollarea = Qt.QScrollArea()
 pw_scrollarea[:setWidget](pw)
 splitter[:addWidget](pw_scrollarea)
-#splitter.setSizes([(2/6)*screen.width(), (2/6)*screen.width()])
+#splitter[:setSizes]([(2/6)*screen.width(), (2/6)*screen.width()])
 
 
 
