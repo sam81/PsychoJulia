@@ -27,11 +27,11 @@ prm = get_prefs(prm)
 prm = set_global_parameters(prm)
 
 function onChooserChange(selectedOption)
-        ## self.fieldsToHide = []; self.fieldsToShow = []
-        ## self.choosersToHide = []; self.choosersToShow = [];
-        ## self.fileChoosersToHide = []; self.fileChoosersToShow = [];
+        ## fieldsToHide = []; fieldsToShow = []
+        ## choosersToHide = []; choosersToShow = [];
+        ## fileChoosersToHide = []; fileChoosersToShow = [];
 
-        ## execString = self.prm[self.currExp]['execString']
+        ## execString = prm[currExp]['execString']
 
         ## try:
         ##     methodToCall1 = getattr(default_experiments, execString)
@@ -46,89 +46,89 @@ function onChooserChange(selectedOption)
         ##     methodToCall2 = getattr(methodToCall1, 'get_fields_to_hide_'+ execString)
         ##     tmp = methodToCall2(self)
 
-        ##     for i in range(len(self.fieldsToHide)):
-        ##         self.field[self.fieldsToHide[i]].hide()
-        ##         self.fieldLabel[self.fieldsToHide[i]].hide()
-        ##         self.fieldCheckBox[self.fieldsToHide[i]].hide()
-        ##     for i in range(len(self.fieldsToShow)):
-        ##         self.field[self.fieldsToShow[i]].show()
-        ##         self.fieldLabel[self.fieldsToShow[i]].show()
-        ##         self.fieldCheckBox[self.fieldsToShow[i]].show()
-        ##     for i in range(len(self.choosersToHide)):
-        ##         self.chooser[self.choosersToHide[i]].hide()
-        ##         self.chooserLabel[self.choosersToHide[i]].hide()
-        ##         self.chooserCheckBox[self.choosersToHide[i]].hide()
-        ##     for i in range(len(self.choosersToShow)):
-        ##         self.chooser[self.choosersToShow[i]].show()
-        ##         self.chooserLabel[self.choosersToShow[i]].show()
-        ##         self.chooserCheckBox[self.choosersToShow[i]].show()
-        ##     for i in range(len(self.fileChoosersToHide)):
-        ##         self.fileChooser[self.fileChoosersToHide[i]].hide()
-        ##         self.fileChooserButton[self.fileChoosersToHide[i]].hide()
-        ##         self.fileChooserCheckBox[self.fileChoosersToHide[i]].hide()
-        ##     for i in range(len(self.fileChoosersToShow)):
-        ##         self.fileChooser[self.fileChoosersToHide[i]].show()
-        ##         self.fileChooserButton[self.fileChoosersToHide[i]].show()
-        ##         self.fileChooserCheckBox[self.fileChoosersToHide[i]].show()
+        ##     for i in range(len(fieldsToHide)):
+        ##         field[fieldsToHide[i]].hide()
+        ##         fieldLabel[fieldsToHide[i]].hide()
+        ##         fieldCheckBox[fieldsToHide[i]].hide()
+        ##     for i in range(len(fieldsToShow)):
+        ##         field[fieldsToShow[i]].show()
+        ##         fieldLabel[fieldsToShow[i]].show()
+        ##         fieldCheckBox[fieldsToShow[i]].show()
+        ##     for i in range(len(choosersToHide)):
+        ##         chooser[choosersToHide[i]].hide()
+        ##         chooserLabel[choosersToHide[i]].hide()
+        ##         chooserCheckBox[choosersToHide[i]].hide()
+        ##     for i in range(len(choosersToShow)):
+        ##         chooser[choosersToShow[i]].show()
+        ##         chooserLabel[choosersToShow[i]].show()
+        ##         chooserCheckBox[choosersToShow[i]].show()
+        ##     for i in range(len(fileChoosersToHide)):
+        ##         fileChooser[fileChoosersToHide[i]].hide()
+        ##         fileChooserButton[fileChoosersToHide[i]].hide()
+        ##         fileChooserCheckBox[fileChoosersToHide[i]].hide()
+        ##     for i in range(len(fileChoosersToShow)):
+        ##         fileChooser[fileChoosersToHide[i]].show()
+        ##         fileChooserButton[fileChoosersToHide[i]].show()
+        ##         fileChooserCheckBox[fileChoosersToHide[i]].show()
 end
 
 
 function onClickDeleteParametersButton()
-        ## if self.prm["storedBlocks"] > 1:
-        ##     if self.prm["currentBlock"] <= self.prm["storedBlocks"] and self.prm["storedBlocks"] > 0:
-        ##         currBlock = "b" + str(self.prm["currentBlock"])
+        ## if prm["storedBlocks"] > 1:
+        ##     if prm["currentBlock"] <= prm["storedBlocks"] and prm["storedBlocks"] > 0:
+        ##         currBlock = "b" + str(prm["currentBlock"])
                 
-        ##         if self.prm["currentBlock"] < (self.prm["storedBlocks"] -1):
-        ##             blockPosition = self.prm[currBlock]["blockPosition"]
-        ##             del self.prm[currBlock]
-        ##             self.prm["storedBlocks"] = self.prm["storedBlocks"] -1
-        ##             for i in range(self.prm["storedBlocks"]-self.prm["currentBlock"]+1):
-        ##                 self.prm["b"+str(self.prm["currentBlock"]+i)] = self.prm["b"+str(self.prm["currentBlock"]+i+1)]
-        ##             del self.prm["b"+str(self.prm["currentBlock"]+i+1)]
-        ##             self.updateParametersWin()
-        ##         elif self.prm["currentBlock"] == (self.prm["storedBlocks"] -1):
-        ##             blockPosition = self.prm[currBlock]["blockPosition"]
-        ##             del self.prm[currBlock]
-        ##             self.prm["storedBlocks"] = self.prm["storedBlocks"] -1
-        ##             self.prm["b"+str(self.prm["currentBlock"])] =  self.prm["b"+str(self.prm["storedBlocks"]+1)]
-        ##             del self.prm["b"+str(self.prm["storedBlocks"]+1)]
-        ##             self.updateParametersWin()
-        ##         elif self.prm["currentBlock"] > (self.prm["storedBlocks"] -1):
-        ##             self.moveNextBlock()
-        ##             blockPosition = self.prm[currBlock]["blockPosition"]
-        ##             del self.prm[currBlock]
-        ##             self.prm["storedBlocks"] = self.prm["storedBlocks"] -1
-        ##             self.storedBlocksCountLabel.setText(str(self.prm["storedBlocks"]))
+        ##         if prm["currentBlock"] < (prm["storedBlocks"] -1):
+        ##             blockPosition = prm[currBlock]["blockPosition"]
+        ##             del prm[currBlock]
+        ##             prm["storedBlocks"] = prm["storedBlocks"] -1
+        ##             for i in range(prm["storedBlocks"]-prm["currentBlock"]+1):
+        ##                 prm["b"+str(prm["currentBlock"]+i)] = prm["b"+str(prm["currentBlock"]+i+1)]
+        ##             del prm["b"+str(prm["currentBlock"]+i+1)]
+        ##             updateParametersWin()
+        ##         elif prm["currentBlock"] == (prm["storedBlocks"] -1):
+        ##             blockPosition = prm[currBlock]["blockPosition"]
+        ##             del prm[currBlock]
+        ##             prm["storedBlocks"] = prm["storedBlocks"] -1
+        ##             prm["b"+str(prm["currentBlock"])] =  prm["b"+str(prm["storedBlocks"]+1)]
+        ##             del prm["b"+str(prm["storedBlocks"]+1)]
+        ##             updateParametersWin()
+        ##         elif prm["currentBlock"] > (prm["storedBlocks"] -1):
+        ##             moveNextBlock()
+        ##             blockPosition = prm[currBlock]["blockPosition"]
+        ##             del prm[currBlock]
+        ##             prm["storedBlocks"] = prm["storedBlocks"] -1
+        ##             storedBlocksCountLabel.setText(str(prm["storedBlocks"]))
 
-        ##         for i in range(self.prm["storedBlocks"]):
-        ##             if int(self.prm["b"+str(i+1)]["blockPosition"]) > int(blockPosition):
-        ##                 self.prm["b"+str(i+1)]["blockPosition"] = str(int(self.prm["b"+str(i+1)]["blockPosition"]) -1)
-        ##         self.shufflingSchemeTF.setText("")
-        ##         self.updateParametersWin()
+        ##         for i in range(prm["storedBlocks"]):
+        ##             if int(prm["b"+str(i+1)]["blockPosition"]) > int(blockPosition):
+        ##                 prm["b"+str(i+1)]["blockPosition"] = str(int(prm["b"+str(i+1)]["blockPosition"]) -1)
+        ##         shufflingSchemeTF.setText("")
+        ##         updateParametersWin()
         ##     else:
-        ##         self.moveNextBlock()
-        ## elif self.prm["storedBlocks"] == 1 and self.prm["currentBlock"] > self.prm["storedBlocks"]: #created a new 2nd block, not saved, and now wants to delete, since for a single stored block you should do nothing it does nothing, so move to next block
-        ##     self.moveNextBlock()
+        ##         moveNextBlock()
+        ## elif prm["storedBlocks"] == 1 and prm["currentBlock"] > prm["storedBlocks"]: #created a new 2nd block, not saved, and now wants to delete, since for a single stored block you should do nothing it does nothing, so move to next block
+        ##     moveNextBlock()
 end
 
 function onClickResetParametersButton()
-    ##    if self.prm["storedBlocks"] == 0:
+    ##    if prm["storedBlocks"] == 0:
     ##         pass
     ##     else:
-    ##         self.prm["currentBlock"] = 1
-    ##         for i in range(self.prm["storedBlocks"]):
-    ##             self.prm["b"+str(i+1)]["blockPosition"] = str(i+1)
-    ##         self.updateParametersWin()
-    ##         self.prm["shuffled"] = False
-    ##         self.saveParametersToFile(self.prm["tmpParametersFile"])
-    ##         self.prm["currentRepetition"] = 1
-    ##         self.autoSetGaugeValue()
-    ##         self.responseBox.statusButton.setText(self.prm["rbTrans"].translate("rb", "Start"))
+    ##         prm["currentBlock"] = 1
+    ##         for i in range(prm["storedBlocks"]):
+    ##             prm["b"+str(i+1)]["blockPosition"] = str(i+1)
+    ##         updateParametersWin()
+    ##         prm["shuffled"] = False
+    ##         saveParametersToFile(prm["tmpParametersFile"])
+    ##         prm["currentRepetition"] = 1
+    ##         autoSetGaugeValue()
+    ##         responseBox.statusButton.setText(prm["rbTrans"].translate("rb", "Start"))
     ## def onClickUndoUnsavedButton(self):
-    ##     if self.prm["currentBlock"] > self.prm["storedBlocks"]:
-    ##         self.onExperimentChange(self.experimentChooser.currentText())
+    ##     if prm["currentBlock"] > prm["storedBlocks"]:
+    ##         onExperimentChange(experimentChooser.currentText())
     ##     else:
-    ##         self.updateParametersWin()
+    ##         updateParametersWin()
 end
 
 function onClickLoadParametersButton()
@@ -140,23 +140,23 @@ function onClickLoadParametersButton()
 end
 
 function onClickSaveParametersButton()
-    ##@ if self.prm["storedBlocks"] < 1
-    ##     ret = QMessageBox.warning(self, self.tr("Warning"),
-    ##                               self.tr("There are no stored parameters to save."),
+    ##@ if prm["storedBlocks"] < 1
+    ##     ret = QMessageBox.warning(self, tr("Warning"),
+    ##                               tr("There are no stored parameters to save."),
     ##                               QMessageBox.Ok)
     ## else
-    ##     if self.parametersFile == None:
-    ##         ftow = QFileDialog.getSaveFileName(self, self.tr("Choose file to write prm"), ".prm", self.tr("All Files (*)"))[0]
+    ##     if parametersFile == None:
+    ##         ftow = QFileDialog.getSaveFileName(self, tr("Choose file to write prm"), ".prm", tr("All Files (*)"))[0]
     ##     else
-    ##         ftow = QFileDialog.getSaveFileName(self, self.tr("Choose file to write prm"), self.parametersFile, self.tr("All Files (*)"))[0]
+    ##         ftow = QFileDialog.getSaveFileName(self, tr("Choose file to write prm"), parametersFile, tr("All Files (*)"))[0]
     ##     end
-    ##     if len(ftow) > 0 and self.prm["storedBlocks"] > 0:
-    ##         self.saveParametersToFile(ftow)
-    ##         self.saveParametersToFile(self.prm["tmpParametersFile"])
-    ##         #if self.parametersFile == self.prm["tmpParametersFile"]:
-    ##         #    if os.path.exists(self.parametersFile) == True:
-    ##         #        os.remove(self.parametersFile)
-    ##         self.parametersFile = ftow
+    ##     if len(ftow) > 0 and prm["storedBlocks"] > 0:
+    ##         saveParametersToFile(ftow)
+    ##         saveParametersToFile(prm["tmpParametersFile"])
+    ##         #if parametersFile == prm["tmpParametersFile"]:
+    ##         #    if os.path.exists(parametersFile) == True:
+    ##         #        os.remove(parametersFile)
+    ##         parametersFile = ftow
     ##     end
     ## end
 end
@@ -243,262 +243,266 @@ function removePrmWidgets()
     if prm["prevExp"] != None
         for f in 1:length(wd["field"])
             pw_prm_sizer_0[:removeWidget](wd["fieldLabel"][f])
-            wd["fieldLabel"][f][:setParent](None)
+            wd["fieldLabel"][f][:setParent](nothing)
             pw_prm_sizer_0[:removeWidget](wd["field"][f])
-            wd["field"][f][:setParent](None)
+            wd["field"][f][:setParent](nothing)
             pw_prm_sizer_0[:removeWidget](wd["fieldCheckBox"][f])
-            wd["fieldCheckBox"][f][:setParent](None)
+            wd["fieldCheckBox"][f][:setParent](nothing)
         end
-        for c in 1:length(chooser)
+        for c in 1:length(wd["chooser"])
             pw_prm_sizer_1[:removeWidget](wd["chooserLabel"][c])
-            wd["chooserLabel"][c][:setParent](None)
+            wd["chooserLabel"][c][:setParent](nothing)
             pw_prm_sizer_1[:removeWidget](wd["chooser"][c])
-            wd["chooser"][c][:setParent](None)
+            wd["chooser"][c][:setParent](nothing)
             pw_prm_sizer_1[:removeWidget](wd["chooserCheckBox"][c])
-            wd["chooserCheckBox"][c][:setParent](None)
+            wd["chooserCheckBox"][c][:setParent](nothing)
             end
-        for f in 1:length(fileChooser)
+        for f in 1:length(wd["fileChooser"])
             pw_prm_sizer_0[:removeWidget](wd["fileChooser"][f])
-            wd["fileChooser"][f][:setParent](None)
+            wd["fileChooser"][f][:setParent](nothing)
             pw_prm_sizer_0[:removeWidget](wd["fileChooserButton"][f])
-            wd["fileChooserButton"][f][:setParent](None)
+            wd["fileChooserButton"][f][:setParent](nothing)
             pw_prm_sizer_0[:removeWidget](wd["fileChooserCheckBox"][f])
-            wd["fileChooserCheckBox"][f][:setParent](None)
+            wd["fileChooserCheckBox"][f][:setParent](nothing)
         end
     end
 end
 
 function setAdditionalWidgets()
     if prm["prevExp"] != None
-        for i=1:length(additionalWidgetsIntFieldList)
-        ##         self.add_widg_sizer.removeWidget(self.additionalWidgetsIntFieldLabelList[i])
-        ##         self.additionalWidgetsIntFieldLabelList[i].setParent(None)
-        ##         self.add_widg_sizer.removeWidget(self.additionalWidgetsIntFieldList[i])
-        ##         self.additionalWidgetsIntFieldList[i].setParent(None)
-        ##         self.add_widg_sizer.removeWidget(self.additionalWidgetsIntFieldCheckBoxList[i])
-        ##         self.additionalWidgetsIntFieldCheckBoxList[i].setParent(None)
+        for i=1:length(wdc["additionalWidgetsIntFieldList"])
+            add_widg_sizer[:removeWidget](wdc["additionalWidgetsIntFieldLabelList"][i])
+            wdc["additionalWidgetsIntFieldLabelList"][i][:setParent](nothing)
+            add_widg_sizer[:removeWidget](wdc["additionalWidgetsIntFieldList"][i])
+            wdc["additionalWidgetsIntFieldList"][i][:setParent](nothing)
+            add_widg_sizer[:removeWidget](wdc["additionalWidgetsIntFieldCheckBoxList"][i])
+            wdc["additionalWidgetsIntFieldCheckBoxList"][i][:setParent](nothing)
         end
-        for i=1:length(additionalWidgetsChooserList)
-            ##self.add_widg_sizer.removeWidget(self.additionalWidgetsChooserLabelList[i])
-        ##         self.additionalWidgetsChooserLabelList[i].setParent(None)
-        ##         self.add_widg_sizer.removeWidget(self.additionalWidgetsChooserList[i])
-        ##         self.additionalWidgetsChooserList[i].setParent(None)
-        ##         self.add_widg_sizer.removeWidget(self.additionalWidgetsChooserCheckBoxList[i])
-        ##         self.additionalWidgetsChooserCheckBoxList[i].setParent(None)
+        
+        for i=1:length(wdc["additionalWidgetsChooserList"])
+            add_widg_sizer[:removeWidget](wdc["additionalWidgetsChooserLabelList"][i])
+            wdc["additionalWidgetsChooserLabelList"][i][:setParent](nothing)
+            add_widg_sizer[:removeWidget](wdc["additionalWidgetsChooserList"][i])
+            wdc["additionalWidgetsChooserList"][i][:setParent](nothing)
+            add_widg_sizer[:removeWidget](wdc["additionalWidgetsChooserCheckBoxList"][i])
+            wdc["additionalWidgetsChooserCheckBoxList"][i][:setParent](nothing)
         end
     end
 
         ## #ADD ADDITIONAL WIDGETS
-        ## n = 0
-        ## self.additionalWidgetsIntFieldList = []
-        ## self.additionalWidgetsIntFieldLabelList = []
-        ## self.additionalWidgetsIntFieldCheckBoxList = []
-        ## self.additionalWidgetsChooserList = []
-        ## self.additionalWidgetsChooserLabelList = []
-        ## self.additionalWidgetsChooserCheckBoxList = []
+        n = 0
+        wdc["additionalWidgetsIntFieldList"] = (Any)[]
+        wdc["additionalWidgetsIntFieldLabelList"] = (Any)[]
+        wdc["additionalWidgetsIntFieldCheckBoxList"] = (Any)[]
+        wdc["additionalWidgetsChooserList"] = (Any)[]
+        wdc["additionalWidgetsChooserLabelList"] =(Any) []
+        wdc["additionalWidgetsChooserCheckBoxList"] = (Any)[]
 
-        ## if self.prm[self.currExp]["hasISIBox"] == True:
-        ##     self.ISILabel = Qt.QLabel(self.tr("ISI (ms):"), self)
-        ##     self.add_widg_sizer.addWidget(self.ISILabel, n, 1)
-        ##     self.ISIBox = QLineEdit()
-        ##     self.ISIBox.setText('500')
-        ##     self.ISIBox.setValidator(QIntValidator(self))
-        ##     self.add_widg_sizer.addWidget(self.ISIBox, n, 2)
-        ##     self.ISIBoxCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.ISIBoxCheckBox, n, 0)
-        ##     self.additionalWidgetsIntFieldList.append(self.ISIBox)
-        ##     self.additionalWidgetsIntFieldLabelList.append(self.ISILabel)
-        ##     self.additionalWidgetsIntFieldCheckBoxList.append(self.ISIBoxCheckBox)
-        ##     n = n+1
-        ## if self.prm[self.currExp]["hasAlternativesChooser"] == True:
-        ##     self.nIntervalsLabel = Qt.QLabel(self.tr("Intervals:"), self)
-        ##     self.add_widg_sizer.addWidget(self.nIntervalsLabel, n, 1)
-        ##     self.nIntervalsChooser = QComboBox()
-        ##     self.nIntervalsChooser.addItems(self.prm['nIntervalsChoices'])
-        ##     if 'nIntervals' in self.prm:
-        ##         self.nIntervalsChooser.setCurrentIndex(self.prm['nIntervalsChoices'].index(str(self.prm['nIntervals'])))
-        ##     else:
-        ##         self.nIntervalsChooser.setCurrentIndex(0)
-        ##     self.add_widg_sizer.addWidget(self.nIntervalsChooser, n, 2)
-        ##     self.nIntervalsChooser.activated[str].connect(self.onNIntervalsChange)
-        ##     self.nIntervalsCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.nIntervalsCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.nIntervalsChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.nIntervalsLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.nIntervalsCheckBox)
-        ##     n = n+1
-        ##     self.nAlternativesLabel = Qt.QLabel(self.tr("Alternatives:"), self)
-        ##     self.add_widg_sizer.addWidget(self.nAlternativesLabel, n, 1)
-        ##     self.nAlternativesChooser = QComboBox()
-        ##     self.nAlternativesChooser.addItems([str(self.currLocale.toInt(self.nIntervalsChooser.currentText())[0]-1), self.nIntervalsChooser.currentText()])
-        ##     self.nAlternativesChooser.setCurrentIndex(self.nAlternativesChooser.findText(str(self.prm['nAlternatives'])))
-        ##     self.add_widg_sizer.addWidget(self.nAlternativesChooser, n, 2)
-        ##     self.nAlternativesChooser.activated[str].connect(self.onNAlternativesChange)
-        ##     self.nAlternativesCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.nAlternativesCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.nAlternativesChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.nAlternativesLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.nAlternativesCheckBox)
-        ##     n = n+1
+        if prm[prm["currExp"]]["hasISIBox"] == true
+            ISILabel = Qt.QLabel("ISI (ms):")
+            add_widg_sizer[:addWidget](ISILabel, n, 1)
+            ISIBox = Qt.QLineEdit()
+            ISIBox[:setText]("500")
+            ISIBox[:setValidator](Qt.QIntValidator())
+            add_widg_sizer[:addWidget](ISIBox, n, 2)
+            ISIBoxCheckBox = Qt.QCheckBox()
+            add_widg_sizer[:addWidget](ISIBoxCheckBox, n, 0)
+            push!(wdc["additionalWidgetsIntFieldList"], ISIBox)
+            push!(wdc["additionalWidgetsIntFieldLabelList"], ISILabel)
+            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], ISIBoxCheckBox)
+            n = n+1
+        end
+        if prm[prm["currExp"]]["hasAlternativesChooser"] == true
+            nIntervalsLabel = Qt.QLabel("Intervals:")
+            add_widg_sizer[:addWidget](nIntervalsLabel, n, 1)
+            nIntervalsChooser = Qt.QComboBox()
+            nIntervalsChooser[:addItems](prm["nIntervalsChoices"])
+            if haskey(prm, "nIntervals")
+                nIntervalsChooser[:setCurrentIndex](find(prm["nIntervalsChoices"] .== string(prm["nIntervals"]))-1)
+            else
+                nIntervalsChooser[:setCurrentIndex](0)
+            end
+            add_widg_sizer[:addWidget](nIntervalsChooser, n, 2)
+            qconnect(nIntervalsChooser, :activated, (str) -> onNIntervalsChange())
+            nIntervalsCheckBox = Qt.QCheckBox()
+            add_widg_sizer[:addWidget](nIntervalsCheckBox, n, 0)
+            push!(wdc["additionalWidgetsChooserList"], nIntervalsChooser)
+            push!(wdc["additionalWidgetsChooserLabelList"], nIntervalsLabel)
+            push!(wdc["additionalWidgetsChooserCheckBoxList"], nIntervalsCheckBox)
+            n = n+1
+            nAlternativesLabel = Qt.QLabel("Alternatives:")
+            add_widg_sizer[:addWidget](nAlternativesLabel, n, 1)
+            nAlternativesChooser = Qt.QComboBox()
+            nAlternativesChooser[:addItems]([string(prm["currentLocale"][:toInt](nIntervalsChooser[:currentText]())[1]-1), nIntervalsChooser[:currentText]()])
+            nAlternativesChooser[:setCurrentIndex](nAlternativesChooser[:findText](string(prm["nAlternatives"])))
+            add_widg_sizer[:addWidget](nAlternativesChooser, n, 2)
+            qconnect(nAlternativesChooser, :activated, (str) -> onNAlternativesChange())
+            nAlternativesCheckBox = Qt.QCheckBox()
+            add_widg_sizer[:addWidget](nAlternativesCheckBox, n, 0)
+            push!(wdc["additionalWidgetsChooserList"], nAlternativesChooser)
+            push!(wdc["additionalWidgetsChooserLabelList"], nAlternativesLabel)
+            push!(wdc["additionalWidgetsChooserCheckBoxList"], nAlternativesCheckBox)
+            n = n+1
+        end
 
         ## #Pre-Trial Interval
-        ## if self.prm[self.currExp]["hasPreTrialInterval"] == True:
-        ##     self.preTrialIntervalChooserLabel = Qt.QLabel(self.tr("Pre-Trial Interval:"), self)
-        ##     self.add_widg_sizer.addWidget(self.preTrialIntervalChooserLabel, n, 1)
-        ##     self.preTrialIntervalChooser = QComboBox()
-        ##     self.preTrialIntervalChooser.addItems([self.tr("Yes"), self.tr("No")])
-        ##     self.preTrialIntervalChooser.setCurrentIndex(1)
-        ##     self.preTrialIntervalChooser.activated[str].connect(self.onPreTrialIntervalChange)
-        ##     self.add_widg_sizer.addWidget(self.preTrialIntervalChooser, n, 2)
-        ##     self.preTrialIntervalCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.preTrialIntervalCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.preTrialIntervalChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.preTrialIntervalChooserLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.preTrialIntervalCheckBox)
+        ## if prm[currExp]["hasPreTrialInterval"] == True:
+        ##     preTrialIntervalChooserLabel = Qt.QLabel(tr("Pre-Trial Interval:"), self)
+        ##     add_widg_sizer.addWidget(preTrialIntervalChooserLabel, n, 1)
+        ##     preTrialIntervalChooser = QComboBox()
+        ##     preTrialIntervalChooser.addItems([tr("Yes"), tr("No")])
+        ##     preTrialIntervalChooser.setCurrentIndex(1)
+        ##     preTrialIntervalChooser.activated[str].connect(onPreTrialIntervalChange)
+        ##     add_widg_sizer.addWidget(preTrialIntervalChooser, n, 2)
+        ##     preTrialIntervalCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(preTrialIntervalCheckBox, n, 0)
+        ##     additionalWidgetsChooserList.append(preTrialIntervalChooser)
+        ##     additionalWidgetsChooserLabelList.append(preTrialIntervalChooserLabel)
+        ##     additionalWidgetsChooserCheckBoxList.append(preTrialIntervalCheckBox)
         ##     n = n+1
-        ##     self.preTrialIntervalISILabel = Qt.QLabel(self.tr("Pre-Trial Interval ISI (ms):"), self)
-        ##     self.add_widg_sizer.addWidget(self.preTrialIntervalISILabel, n, 1)
+        ##     preTrialIntervalISILabel = Qt.QLabel(tr("Pre-Trial Interval ISI (ms):"), self)
+        ##     add_widg_sizer.addWidget(preTrialIntervalISILabel, n, 1)
            
-        ##     self.preTrialIntervalISITF = QLineEdit()
-        ##     self.preTrialIntervalISITF.setText("500")
-        ##     self.preTrialIntervalISITF.setValidator(QIntValidator(self))
-        ##     self.preTrialIntervalISITF.setWhatsThis(self.tr("Sets the duration of the silent interval between the pre-trial interval and the first observation interval"))
+        ##     preTrialIntervalISITF = QLineEdit()
+        ##     preTrialIntervalISITF.setText("500")
+        ##     preTrialIntervalISITF.setValidator(QIntValidator(self))
+        ##     preTrialIntervalISITF.setWhatsThis(tr("Sets the duration of the silent interval between the pre-trial interval and the first observation interval"))
          
-        ##     self.add_widg_sizer.addWidget(self.preTrialIntervalISITF, n, 2)
-        ##     self.preTrialIntervalISICheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.preTrialIntervalISICheckBox, n, 0)
+        ##     add_widg_sizer.addWidget(preTrialIntervalISITF, n, 2)
+        ##     preTrialIntervalISICheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(preTrialIntervalISICheckBox, n, 0)
 
-        ##     self.preTrialIntervalISILabel.hide()
-        ##     self.preTrialIntervalISITF.hide()
-        ##     self.preTrialIntervalISICheckBox.hide()
+        ##     preTrialIntervalISILabel.hide()
+        ##     preTrialIntervalISITF.hide()
+        ##     preTrialIntervalISICheckBox.hide()
             
-        ##     self.additionalWidgetsIntFieldList.append(self.preTrialIntervalISITF)
-        ##     self.additionalWidgetsIntFieldLabelList.append(self.preTrialIntervalISILabel)
-        ##     self.additionalWidgetsIntFieldCheckBoxList.append(self.preTrialIntervalISICheckBox)
+        ##     additionalWidgetsIntFieldList.append(preTrialIntervalISITF)
+        ##     additionalWidgetsIntFieldLabelList.append(preTrialIntervalISILabel)
+        ##     additionalWidgetsIntFieldCheckBoxList.append(preTrialIntervalISICheckBox)
         ##     n = n+1
 
         ## #Precursor Interval
-        ## if self.prm[self.currExp]["hasPrecursorInterval"] == True:
-        ##     self.precursorIntervalChooserLabel = Qt.QLabel(self.tr("Precursor Interval:"), self)
-        ##     self.add_widg_sizer.addWidget(self.precursorIntervalChooserLabel, n, 1)
-        ##     self.precursorIntervalChooser = QComboBox()
-        ##     self.precursorIntervalChooser.addItems([self.tr("Yes"), self.tr("No")])
-        ##     self.precursorIntervalChooser.setCurrentIndex(1)
-        ##     self.precursorIntervalChooser.activated[str].connect(self.onPrecursorIntervalChange)
-        ##     self.add_widg_sizer.addWidget(self.precursorIntervalChooser, n, 2)
-        ##     self.precursorIntervalCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.precursorIntervalCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.precursorIntervalChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.precursorIntervalChooserLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.precursorIntervalCheckBox)
+        ## if prm[currExp]["hasPrecursorInterval"] == True:
+        ##     precursorIntervalChooserLabel = Qt.QLabel(tr("Precursor Interval:"), self)
+        ##     add_widg_sizer.addWidget(precursorIntervalChooserLabel, n, 1)
+        ##     precursorIntervalChooser = QComboBox()
+        ##     precursorIntervalChooser.addItems([tr("Yes"), tr("No")])
+        ##     precursorIntervalChooser.setCurrentIndex(1)
+        ##     precursorIntervalChooser.activated[str].connect(onPrecursorIntervalChange)
+        ##     add_widg_sizer.addWidget(precursorIntervalChooser, n, 2)
+        ##     precursorIntervalCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(precursorIntervalCheckBox, n, 0)
+        ##     additionalWidgetsChooserList.append(precursorIntervalChooser)
+        ##     additionalWidgetsChooserLabelList.append(precursorIntervalChooserLabel)
+        ##     additionalWidgetsChooserCheckBoxList.append(precursorIntervalCheckBox)
         ##     n = n+1
-        ##     self.precursorIntervalISILabel = Qt.QLabel(self.tr("Precursor Interval ISI (ms):"), self)
-        ##     self.add_widg_sizer.addWidget(self.precursorIntervalISILabel, n, 1)
+        ##     precursorIntervalISILabel = Qt.QLabel(tr("Precursor Interval ISI (ms):"), self)
+        ##     add_widg_sizer.addWidget(precursorIntervalISILabel, n, 1)
            
-        ##     self.precursorIntervalISITF = QLineEdit()
-        ##     self.precursorIntervalISITF.setText("500")
-        ##     self.precursorIntervalISITF.setValidator(QIntValidator(self))
-        ##     self.precursorIntervalISITF.setWhatsThis(self.tr("Sets the duration of the silent interval between the precursor interval and the observation interval"))
+        ##     precursorIntervalISITF = QLineEdit()
+        ##     precursorIntervalISITF.setText("500")
+        ##     precursorIntervalISITF.setValidator(QIntValidator(self))
+        ##     precursorIntervalISITF.setWhatsThis(tr("Sets the duration of the silent interval between the precursor interval and the observation interval"))
          
-        ##     self.add_widg_sizer.addWidget(self.precursorIntervalISITF, n, 2)
-        ##     self.precursorIntervalISICheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.precursorIntervalISICheckBox, n, 0)
+        ##     add_widg_sizer.addWidget(precursorIntervalISITF, n, 2)
+        ##     precursorIntervalISICheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(precursorIntervalISICheckBox, n, 0)
 
-        ##     self.precursorIntervalISILabel.hide()
-        ##     self.precursorIntervalISITF.hide()
-        ##     self.precursorIntervalISICheckBox.hide()
+        ##     precursorIntervalISILabel.hide()
+        ##     precursorIntervalISITF.hide()
+        ##     precursorIntervalISICheckBox.hide()
             
-        ##     self.additionalWidgetsIntFieldList.append(self.precursorIntervalISITF)
-        ##     self.additionalWidgetsIntFieldLabelList.append(self.precursorIntervalISILabel)
-        ##     self.additionalWidgetsIntFieldCheckBoxList.append(self.precursorIntervalISICheckBox)
+        ##     additionalWidgetsIntFieldList.append(precursorIntervalISITF)
+        ##     additionalWidgetsIntFieldLabelList.append(precursorIntervalISILabel)
+        ##     additionalWidgetsIntFieldCheckBoxList.append(precursorIntervalISICheckBox)
         ##     n = n+1
 
         ## #Postcursor Interval
-        ## if self.prm[self.currExp]["hasPostcursorInterval"] == True:
-        ##     self.postcursorIntervalChooserLabel = Qt.QLabel(self.tr("Postcursor Interval:"), self)
-        ##     self.add_widg_sizer.addWidget(self.postcursorIntervalChooserLabel, n, 1)
-        ##     self.postcursorIntervalChooser = QComboBox()
-        ##     self.postcursorIntervalChooser.addItems([self.tr("Yes"), self.tr("No")])
-        ##     self.postcursorIntervalChooser.setCurrentIndex(1)
-        ##     self.postcursorIntervalChooser.activated[str].connect(self.onPostcursorIntervalChange)
-        ##     self.add_widg_sizer.addWidget(self.postcursorIntervalChooser, n, 2)
-        ##     self.postcursorIntervalCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.postcursorIntervalCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.postcursorIntervalChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.postcursorIntervalChooserLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.postcursorIntervalCheckBox)
+        ## if prm[currExp]["hasPostcursorInterval"] == True:
+        ##     postcursorIntervalChooserLabel = Qt.QLabel(tr("Postcursor Interval:"), self)
+        ##     add_widg_sizer.addWidget(postcursorIntervalChooserLabel, n, 1)
+        ##     postcursorIntervalChooser = QComboBox()
+        ##     postcursorIntervalChooser.addItems([tr("Yes"), tr("No")])
+        ##     postcursorIntervalChooser.setCurrentIndex(1)
+        ##     postcursorIntervalChooser.activated[str].connect(onPostcursorIntervalChange)
+        ##     add_widg_sizer.addWidget(postcursorIntervalChooser, n, 2)
+        ##     postcursorIntervalCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(postcursorIntervalCheckBox, n, 0)
+        ##     additionalWidgetsChooserList.append(postcursorIntervalChooser)
+        ##     additionalWidgetsChooserLabelList.append(postcursorIntervalChooserLabel)
+        ##     additionalWidgetsChooserCheckBoxList.append(postcursorIntervalCheckBox)
         ##     n = n+1
-        ##     self.postcursorIntervalISILabel = Qt.QLabel(self.tr("Postcursor Interval ISI (ms):"), self)
-        ##     self.add_widg_sizer.addWidget(self.postcursorIntervalISILabel, n, 1)
+        ##     postcursorIntervalISILabel = Qt.QLabel(tr("Postcursor Interval ISI (ms):"), self)
+        ##     add_widg_sizer.addWidget(postcursorIntervalISILabel, n, 1)
            
-        ##     self.postcursorIntervalISITF = QLineEdit()
-        ##     self.postcursorIntervalISITF.setText("500")
-        ##     self.postcursorIntervalISITF.setValidator(QIntValidator(self))
-        ##     self.postcursorIntervalISITF.setWhatsThis(self.tr("Sets the duration of the silent interval between the observation interval and the postcursor interval"))
+        ##     postcursorIntervalISITF = QLineEdit()
+        ##     postcursorIntervalISITF.setText("500")
+        ##     postcursorIntervalISITF.setValidator(QIntValidator(self))
+        ##     postcursorIntervalISITF.setWhatsThis(tr("Sets the duration of the silent interval between the observation interval and the postcursor interval"))
          
-        ##     self.add_widg_sizer.addWidget(self.postcursorIntervalISITF, n, 2)
-        ##     self.postcursorIntervalISICheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.postcursorIntervalISICheckBox, n, 0)
+        ##     add_widg_sizer.addWidget(postcursorIntervalISITF, n, 2)
+        ##     postcursorIntervalISICheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(postcursorIntervalISICheckBox, n, 0)
 
-        ##     self.postcursorIntervalISILabel.hide()
-        ##     self.postcursorIntervalISITF.hide()
-        ##     self.postcursorIntervalISICheckBox.hide()
+        ##     postcursorIntervalISILabel.hide()
+        ##     postcursorIntervalISITF.hide()
+        ##     postcursorIntervalISICheckBox.hide()
             
-        ##     self.additionalWidgetsIntFieldList.append(self.postcursorIntervalISITF)
-        ##     self.additionalWidgetsIntFieldLabelList.append(self.postcursorIntervalISILabel)
-        ##     self.additionalWidgetsIntFieldCheckBoxList.append(self.postcursorIntervalISICheckBox)
+        ##     additionalWidgetsIntFieldList.append(postcursorIntervalISITF)
+        ##     additionalWidgetsIntFieldLabelList.append(postcursorIntervalISILabel)
+        ##     additionalWidgetsIntFieldCheckBoxList.append(postcursorIntervalISICheckBox)
         ##     n = n+1
       
             
-        ## if self.prm[self.currExp]["hasFeedback"] == True:
-        ##     self.responseLightLabel =  Qt.QLabel(self.tr("Response Light:"), self)
-        ##     self.responseLightChooser = QComboBox()
-        ##     self.responseLightChooser.addItems([self.tr("Feedback"), self.tr("Neutral"), self.tr("None")])
-        ##     self.add_widg_sizer.addWidget(self.responseLightLabel, n, 1)
-        ##     self.add_widg_sizer.addWidget(self.responseLightChooser, n, 2)
-        ##     self.responseLightCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.responseLightCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.responseLightChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.responseLightLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.responseLightCheckBox)
+        ## if prm[currExp]["hasFeedback"] == True:
+        ##     responseLightLabel =  Qt.QLabel(tr("Response Light:"), self)
+        ##     responseLightChooser = QComboBox()
+        ##     responseLightChooser.addItems([tr("Feedback"), tr("Neutral"), tr("None")])
+        ##     add_widg_sizer.addWidget(responseLightLabel, n, 1)
+        ##     add_widg_sizer.addWidget(responseLightChooser, n, 2)
+        ##     responseLightCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(responseLightCheckBox, n, 0)
+        ##     additionalWidgetsChooserList.append(responseLightChooser)
+        ##     additionalWidgetsChooserLabelList.append(responseLightLabel)
+        ##     additionalWidgetsChooserCheckBoxList.append(responseLightCheckBox)
         ##     n = n+1
-        ##     self.responseLightDurationLabel = Qt.QLabel(self.tr("Response Light Duration (ms):"), self)
-        ##     self.add_widg_sizer.addWidget(self.responseLightDurationLabel, n, 1)
-        ##     self.responseLightDurationTF = QLineEdit()
-        ##     self.responseLightDurationTF.setText(self.prm["pref"]["general"]["responseLightDuration"])
-        ##     self.responseLightDurationTF.setValidator(QIntValidator(self))
+        ##     responseLightDurationLabel = Qt.QLabel(tr("Response Light Duration (ms):"), self)
+        ##     add_widg_sizer.addWidget(responseLightDurationLabel, n, 1)
+        ##     responseLightDurationTF = QLineEdit()
+        ##     responseLightDurationTF.setText(prm["pref"]["general"]["responseLightDuration"])
+        ##     responseLightDurationTF.setValidator(QIntValidator(self))
 
-        ##     self.add_widg_sizer.addWidget(self.responseLightDurationTF, n, 2)
-        ##     self.responseLightDurationCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.responseLightDurationCheckBox, n, 0)
-        ##     self.additionalWidgetsIntFieldList.append(self.responseLightDurationTF)
-        ##     self.additionalWidgetsIntFieldLabelList.append(self.responseLightDurationLabel)
-        ##     self.additionalWidgetsIntFieldCheckBoxList.append(self.responseLightDurationCheckBox)
+        ##     add_widg_sizer.addWidget(responseLightDurationTF, n, 2)
+        ##     responseLightDurationCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(responseLightDurationCheckBox, n, 0)
+        ##     additionalWidgetsIntFieldList.append(responseLightDurationTF)
+        ##     additionalWidgetsIntFieldLabelList.append(responseLightDurationLabel)
+        ##     additionalWidgetsIntFieldCheckBoxList.append(responseLightDurationCheckBox)
         ##     n = n+1
         ## else:
-        ##     self.responseLightLabel =  QLabel(self.tr("Response Light:"), self)
-        ##     self.responseLightChooser = QComboBox()
-        ##     self.responseLightChooser.addItems([self.tr("Neutral"), self.tr("None")])
-        ##     self.add_widg_sizer.addWidget(self.responseLightLabel, n, 1)
-        ##     self.add_widg_sizer.addWidget(self.responseLightChooser, n, 2)
-        ##     self.responseLightCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.responseLightCheckBox, n, 0)
-        ##     self.additionalWidgetsChooserList.append(self.responseLightChooser)
-        ##     self.additionalWidgetsChooserLabelList.append(self.responseLightLabel)
-        ##     self.additionalWidgetsChooserCheckBoxList.append(self.responseLightCheckBox)
+        ##     responseLightLabel =  QLabel(tr("Response Light:"), self)
+        ##     responseLightChooser = QComboBox()
+        ##     responseLightChooser.addItems([tr("Neutral"), tr("None")])
+        ##     add_widg_sizer.addWidget(responseLightLabel, n, 1)
+        ##     add_widg_sizer.addWidget(responseLightChooser, n, 2)
+        ##     responseLightCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(responseLightCheckBox, n, 0)
+        ##     additionalWidgetsChooserList.append(responseLightChooser)
+        ##     additionalWidgetsChooserLabelList.append(responseLightLabel)
+        ##     additionalWidgetsChooserCheckBoxList.append(responseLightCheckBox)
         ##     n = n+1
-        ##     self.responseLightDurationLabel = QLabel(self.tr("Response Light Duration (ms):"), self)
-        ##     self.add_widg_sizer.addWidget(self.responseLightDurationLabel, n, 1)
-        ##     self.responseLightDurationTF = QLineEdit()
-        ##     self.responseLightDurationTF.setText(self.prm["pref"]["general"]["responseLightDuration"])
-        ##     self.responseLightDurationTF.setValidator(QIntValidator(self))
-        ##     self.additionalWidgetsIntFieldList.append(self.responseLightDurationTF)
-        ##     self.additionalWidgetsIntFieldLabelList.append(self.responseLightDurationLabel)
+        ##     responseLightDurationLabel = QLabel(tr("Response Light Duration (ms):"), self)
+        ##     add_widg_sizer.addWidget(responseLightDurationLabel, n, 1)
+        ##     responseLightDurationTF = QLineEdit()
+        ##     responseLightDurationTF.setText(prm["pref"]["general"]["responseLightDuration"])
+        ##     responseLightDurationTF.setValidator(QIntValidator(self))
+        ##     additionalWidgetsIntFieldList.append(responseLightDurationTF)
+        ##     additionalWidgetsIntFieldLabelList.append(responseLightDurationLabel)
 
-        ##     self.add_widg_sizer.addWidget(self.responseLightDurationTF, n, 2)
-        ##     self.responseLightDurationCheckBox = QCheckBox()
-        ##     self.add_widg_sizer.addWidget(self.responseLightDurationCheckBox, n, 0)
-        ##     self.additionalWidgetsIntFieldCheckBoxList.append(self.responseLightDurationCheckBox)
+        ##     add_widg_sizer.addWidget(responseLightDurationTF, n, 2)
+        ##     responseLightDurationCheckBox = QCheckBox()
+        ##     add_widg_sizer.addWidget(responseLightDurationCheckBox, n, 0)
+        ##     additionalWidgetsIntFieldCheckBoxList.append(responseLightDurationCheckBox)
         ##     n = n+1
 end
 
@@ -625,19 +629,19 @@ function setParadigmWidgets()
     if prm["prevParadigm"] != None
         for i=1:length(wdc["paradigmChooserList"])
             paradigm_widg_sizer[:removeWidget](wdc["paradigmChooserList"][i])
-            wdc["paradigmChooserList"][i][:setParent](None)
+            wdc["paradigmChooserList"][i][:setParent](nothing)
             paradigm_widg_sizer[:removeWidget](wdc["paradigmChooserLabelList"][i])
-            wdc["paradigmChooserLabelList"][i][:setParent](None)
+            wdc["paradigmChooserLabelList"][i][:setParent](nothing)
             paradigm_widg_sizer[:removeWidget](wdc["paradigmChooserCheckBoxList"][i])
-            wdc["paradigmChooserCheckBoxList"][i][:setParent](None)
+            wdc["paradigmChooserCheckBoxList"][i][:setParent](nothing)
         end
         for i=1:length(wdc["paradigmFieldList"])
             paradigm_widg_sizer[:removeWidget](wdc["paradigmFieldList"][i])
-            wdc["paradigmFieldList"][i][:setParent](None)
+            wdc["paradigmFieldList"][i][:setParent](nothing)
             paradigm_widg_sizer[:removeWidget](wdc["paradigmFieldLabelList"][i])
-            wdc["paradigmFieldLabelList"][i][:setParent](None)
+            wdc["paradigmFieldLabelList"][i][:setParent](nothing)
             paradigm_widg_sizer[:removeWidget](wdc["paradigmFieldCheckBoxList"][i])
-            wdc["paradigmFieldCheckBoxList"][i][:setParent](None)
+            wdc["paradigmFieldCheckBoxList"][i][:setParent](nothing)
         end
     end
 
@@ -1012,340 +1016,340 @@ function setParadigmWidgets()
         ##     paradigm_widg_sizer.addWidget(adaptiveTypeCheckBox, n, 0)
         ##     n = n+1
 
-        ##     self.nTracksLabel = Qt.QLabel(self.tr("No. Tracks:"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.nTracksLabel, n, 1)
-        ##     self.nTracksChooser = Qt.QComboBox()
-        ##     self.nTracksOptionsList = list(range(1,101))
-        ##     self.nTracksOptionsList = [str(el) for el in self.nTracksOptionsList]
-        ##     self.nTracksChooser.addItems(self.nTracksOptionsList)
-        ##     nTracks = self.par["nDifferences"]
-        ##     self.nTracksChooser.setCurrentIndex(self.nTracksOptionsList.index(str(nTracks)))
-        ##     self.paradigm_widg_sizer.addWidget(self.nTracksChooser, n, 2)
-        ##     self.nTracksChooser.activated[str].connect(self.onChangeNTracks)
-        ##     self.nTracksCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.nTracksCheckBox, n, 0)
-        ##     if self.prm[self.currExp]["hasNTracksChooser"] == True:
-        ##         self.nTracksLabel.show()
-        ##         self.nTracksChooser.show()
-        ##         self.nTracksCheckBox.show()
+        ##     nTracksLabel = Qt.QLabel(tr("No. Tracks:"), self)
+        ##     paradigm_widg_sizer.addWidget(nTracksLabel, n, 1)
+        ##     nTracksChooser = Qt.QComboBox()
+        ##     nTracksOptionsList = list(range(1,101))
+        ##     nTracksOptionsList = [str(el) for el in nTracksOptionsList]
+        ##     nTracksChooser.addItems(nTracksOptionsList)
+        ##     nTracks = par["nDifferences"]
+        ##     nTracksChooser.setCurrentIndex(nTracksOptionsList.index(str(nTracks)))
+        ##     paradigm_widg_sizer.addWidget(nTracksChooser, n, 2)
+        ##     nTracksChooser.activated[str].connect(onChangeNTracks)
+        ##     nTracksCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(nTracksCheckBox, n, 0)
+        ##     if prm[currExp]["hasNTracksChooser"] == True:
+        ##         nTracksLabel.show()
+        ##         nTracksChooser.show()
+        ##         nTracksCheckBox.show()
         ##     else:
-        ##         self.nTracksLabel.hide()
-        ##         self.nTracksChooser.hide()
-        ##         self.nTracksCheckBox.hide()
+        ##         nTracksLabel.hide()
+        ##         nTracksChooser.hide()
+        ##         nTracksCheckBox.hide()
         ##     n = n+1
-        ##     self.maxConsecutiveTrialsLabel = Qt.QLabel(self.tr("Max. Consecutive Trials x Track:"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.maxConsecutiveTrialsLabel, n, 1)
-        ##     self.maxConsecutiveTrials = Qt.QComboBox()
-        ##     self.maxConsecutiveTrialsOptionsList = list(range(1,101))
-        ##     self.maxConsecutiveTrialsOptionsList = [str(el) for el in self.maxConsecutiveTrialsOptionsList]
-        ##     self.maxConsecutiveTrialsOptionsList.insert(0, self.tr("unlimited"))
+        ##     maxConsecutiveTrialsLabel = Qt.QLabel(tr("Max. Consecutive Trials x Track:"), self)
+        ##     paradigm_widg_sizer.addWidget(maxConsecutiveTrialsLabel, n, 1)
+        ##     maxConsecutiveTrials = Qt.QComboBox()
+        ##     maxConsecutiveTrialsOptionsList = list(range(1,101))
+        ##     maxConsecutiveTrialsOptionsList = [str(el) for el in maxConsecutiveTrialsOptionsList]
+        ##     maxConsecutiveTrialsOptionsList.insert(0, tr("unlimited"))
           
-        ##     self.maxConsecutiveTrials.addItems(self.maxConsecutiveTrialsOptionsList)
-        ##     self.paradigm_widg_sizer.addWidget(self.maxConsecutiveTrials, n, 2)
-        ##     self.maxConsecutiveTrialsCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.maxConsecutiveTrialsCheckBox, n, 0)
+        ##     maxConsecutiveTrials.addItems(maxConsecutiveTrialsOptionsList)
+        ##     paradigm_widg_sizer.addWidget(maxConsecutiveTrials, n, 2)
+        ##     maxConsecutiveTrialsCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(maxConsecutiveTrialsCheckBox, n, 0)
         ##     if nTracks > 1:
-        ##         self.maxConsecutiveTrialsLabel.show()
-        ##         self.maxConsecutiveTrials.show()
-        ##         self.maxConsecutiveTrialsCheckBox.show()
+        ##         maxConsecutiveTrialsLabel.show()
+        ##         maxConsecutiveTrials.show()
+        ##         maxConsecutiveTrialsCheckBox.show()
         ##     else:
-        ##         self.maxConsecutiveTrials.setCurrentIndex(0)#"unlimited"
-        ##         self.maxConsecutiveTrialsLabel.hide()
-        ##         self.maxConsecutiveTrials.hide()
-        ##         self.maxConsecutiveTrialsCheckBox.hide()
+        ##         maxConsecutiveTrials.setCurrentIndex(0)#"unlimited"
+        ##         maxConsecutiveTrialsLabel.hide()
+        ##         maxConsecutiveTrials.hide()
+        ##         maxConsecutiveTrialsCheckBox.hide()
            
 
         ##     n = n+1
-        ##     self.tnpToAverageLabel = Qt.QLabel(self.tr("Turnpoints to average:"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.tnpToAverageLabel, n, 1)
-        ##     self.tnpToAverageChooser = Qt.QComboBox()
-        ##     self.tnpToAverageChooser.addItems(self.prm["tnpToAverageChoices"])
-        ##     self.tnpToAverageChooser.setCurrentIndex(0)
-        ##     self.paradigm_widg_sizer.addWidget(self.tnpToAverageChooser, n, 2)
-        ##     self.tnpToAverageCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.tnpToAverageCheckBox, n, 0)
+        ##     tnpToAverageLabel = Qt.QLabel(tr("Turnpoints to average:"), self)
+        ##     paradigm_widg_sizer.addWidget(tnpToAverageLabel, n, 1)
+        ##     tnpToAverageChooser = Qt.QComboBox()
+        ##     tnpToAverageChooser.addItems(prm["tnpToAverageChoices"])
+        ##     tnpToAverageChooser.setCurrentIndex(0)
+        ##     paradigm_widg_sizer.addWidget(tnpToAverageChooser, n, 2)
+        ##     tnpToAverageCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(tnpToAverageCheckBox, n, 0)
 
         ##     n = n+1
-        ##     self.initialTrackDirChooserLabel = []
-        ##     self.initialTrackDirChooser = []
-        ##     self.trackDirOptionsList = []
-        ##     self.initialTrackDirCheckBox = []
+        ##     initialTrackDirChooserLabel = []
+        ##     initialTrackDirChooser = []
+        ##     trackDirOptionsList = []
+        ##     initialTrackDirCheckBox = []
              
-        ##     self.pcTrackedTF = []
-        ##     self.initialTurnpointsTF = []
-        ##     self.totalTurnpointsTF = []
-        ##     self.stepSize1TF = []
-        ##     self.stepSize2TF = []
+        ##     pcTrackedTF = []
+        ##     initialTurnpointsTF = []
+        ##     totalTurnpointsTF = []
+        ##     stepSize1TF = []
+        ##     stepSize2TF = []
             
-        ##     self.pcTrackedLabel = []
-        ##     self.initialTurnpointsLabel = []
-        ##     self.totalTurnpointsLabel = []
-        ##     self.stepSize1Label = []
-        ##     self.stepSize2Label = []
+        ##     pcTrackedLabel = []
+        ##     initialTurnpointsLabel = []
+        ##     totalTurnpointsLabel = []
+        ##     stepSize1Label = []
+        ##     stepSize2Label = []
 
-        ##     self.pcTrackedCheckBox = []
-        ##     self.initialTurnpointsCheckBox = []
-        ##     self.totalTurnpointsCheckBox = []
-        ##     self.stepSize1CheckBox = []
-        ##     self.stepSize2CheckBox = []
+        ##     pcTrackedCheckBox = []
+        ##     initialTurnpointsCheckBox = []
+        ##     totalTurnpointsCheckBox = []
+        ##     stepSize1CheckBox = []
+        ##     stepSize2CheckBox = []
             
-        ##     for i in range(self.par["nDifferences"]):
-        ##         self.initialTrackDirChooserLabel.append(QLabel(self.tr("Initial Track {0} Direction:".format(str(i+1))), self))
-        ##         self.paradigm_widg_sizer.addWidget(self.initialTrackDirChooserLabel[i], n, 1)
-        ##         self.initialTrackDirChooser.append(QComboBox())
-        ##         self.initialTrackDirChooser[i].addItems([self.tr("Up"), self.tr("Down")])
-        ##         self.initialTrackDirChooser[i].setCurrentIndex(1)
-        ##         self.paradigm_widg_sizer.addWidget(self.initialTrackDirChooser[i], n, 2)
-        ##         self.trackDirOptionsList.append([self.tr("Up"), self.tr("Down")])
-        ##         self.initialTrackDirCheckBox.append(QCheckBox())
-        ##         self.paradigm_widg_sizer.addWidget(self.initialTrackDirCheckBox[i], n, 0)
+        ##     for i in range(par["nDifferences"]):
+        ##         initialTrackDirChooserLabel.append(QLabel(tr("Initial Track {0} Direction:".format(str(i+1))), self))
+        ##         paradigm_widg_sizer.addWidget(initialTrackDirChooserLabel[i], n, 1)
+        ##         initialTrackDirChooser.append(QComboBox())
+        ##         initialTrackDirChooser[i].addItems([tr("Up"), tr("Down")])
+        ##         initialTrackDirChooser[i].setCurrentIndex(1)
+        ##         paradigm_widg_sizer.addWidget(initialTrackDirChooser[i], n, 2)
+        ##         trackDirOptionsList.append([tr("Up"), tr("Down")])
+        ##         initialTrackDirCheckBox.append(QCheckBox())
+        ##         paradigm_widg_sizer.addWidget(initialTrackDirCheckBox[i], n, 0)
         ##         n = n+1
-        ##         self.pcTrackedLabel.append(QLabel(self.tr("Percent Correct Tracked Track " + str(i+1)), self))
-        ##         self.paradigm_widg_sizer.addWidget(self.pcTrackedLabel[i], n, 1)
-        ##         self.pcTrackedTF.append(Qt.QLineEdit())
-        ##         self.pcTrackedTF[i][:setText]("75")
-        ##         self.pcTrackedTF[i][:setValidator](Qt.QDoubleValidator(self))
-        ##         self.paradigm_widg_sizer.addWidget(self.pcTrackedTF[i], n, 2)
-        ##         self.pcTrackedCheckBox.append(QCheckBox())
-        ##         self.paradigm_widg_sizer.addWidget(self.pcTrackedCheckBox[i], n, 0)
+        ##         pcTrackedLabel.append(QLabel(tr("Percent Correct Tracked Track " + str(i+1)), self))
+        ##         paradigm_widg_sizer.addWidget(pcTrackedLabel[i], n, 1)
+        ##         pcTrackedTF.append(Qt.QLineEdit())
+        ##         pcTrackedTF[i][:setText]("75")
+        ##         pcTrackedTF[i][:setValidator](Qt.QDoubleValidator(self))
+        ##         paradigm_widg_sizer.addWidget(pcTrackedTF[i], n, 2)
+        ##         pcTrackedCheckBox.append(QCheckBox())
+        ##         paradigm_widg_sizer.addWidget(pcTrackedCheckBox[i], n, 0)
 
         ##         n = n+1
-        ##         self.initialTurnpointsLabel.append(QLabel(self.tr("Initial Turnpoints Track " + str(i+1)), self))
-        ##         self.paradigm_widg_sizer.addWidget(self.initialTurnpointsLabel[i], n, 1)
-        ##         self.initialTurnpointsTF.append(Qt.QLineEdit())
-        ##         self.initialTurnpointsTF[i][:setText]("4")
-        ##         self.initialTurnpointsTF[i][:setValidator](Qt.QIntValidator(self))
-        ##         self.paradigm_widg_sizer.addWidget(self.initialTurnpointsTF[i], n, 2)
-        ##         self.initialTurnpointsCheckBox.append(QCheckBox())
-        ##         self.paradigm_widg_sizer.addWidget(self.initialTurnpointsCheckBox[i], n, 0)
+        ##         initialTurnpointsLabel.append(QLabel(tr("Initial Turnpoints Track " + str(i+1)), self))
+        ##         paradigm_widg_sizer.addWidget(initialTurnpointsLabel[i], n, 1)
+        ##         initialTurnpointsTF.append(Qt.QLineEdit())
+        ##         initialTurnpointsTF[i][:setText]("4")
+        ##         initialTurnpointsTF[i][:setValidator](Qt.QIntValidator(self))
+        ##         paradigm_widg_sizer.addWidget(initialTurnpointsTF[i], n, 2)
+        ##         initialTurnpointsCheckBox.append(QCheckBox())
+        ##         paradigm_widg_sizer.addWidget(initialTurnpointsCheckBox[i], n, 0)
 
-        ##         self.totalTurnpointsLabel.append(QLabel(self.tr("Total Turnpoints Track " + str(i+1)), self))
-        ##         self.paradigm_widg_sizer.addWidget(self.totalTurnpointsLabel[i], n, 4)
-        ##         self.totalTurnpointsTF.append(Qt.QLineEdit())
-        ##         self.totalTurnpointsTF[i][:setText]("16")
-        ##         self.totalTurnpointsTF[i][:setValidator](Qt.QIntValidator(self))
-        ##         self.paradigm_widg_sizer.addWidget(self.totalTurnpointsTF[i], n, 5)
-        ##         self.totalTurnpointsCheckBox.append(QCheckBox())
-        ##         self.paradigm_widg_sizer.addWidget(self.totalTurnpointsCheckBox[i], n, 3)
+        ##         totalTurnpointsLabel.append(QLabel(tr("Total Turnpoints Track " + str(i+1)), self))
+        ##         paradigm_widg_sizer.addWidget(totalTurnpointsLabel[i], n, 4)
+        ##         totalTurnpointsTF.append(Qt.QLineEdit())
+        ##         totalTurnpointsTF[i][:setText]("16")
+        ##         totalTurnpointsTF[i][:setValidator](Qt.QIntValidator(self))
+        ##         paradigm_widg_sizer.addWidget(totalTurnpointsTF[i], n, 5)
+        ##         totalTurnpointsCheckBox.append(QCheckBox())
+        ##         paradigm_widg_sizer.addWidget(totalTurnpointsCheckBox[i], n, 3)
                 
         ##         n = n+1
-        ##         self.stepSize1Label.append(QLabel(self.tr("Step Size 1 Track " + str(i+1)), self))
-        ##         self.paradigm_widg_sizer.addWidget(self.stepSize1Label[i], n, 1)
-        ##         self.stepSize1TF.append(Qt.QLineEdit())
-        ##         self.stepSize1TF[i][:setText]("4")
-        ##         self.stepSize1TF[i][:setValidator](Qt.QDoubleValidator(self))
-        ##         self.paradigm_widg_sizer.addWidget(self.stepSize1TF[i], n, 2)
-        ##         self.stepSize1CheckBox.append(QCheckBox())
-        ##         self.paradigm_widg_sizer.addWidget(self.stepSize1CheckBox[i], n, 0)
+        ##         stepSize1Label.append(QLabel(tr("Step Size 1 Track " + str(i+1)), self))
+        ##         paradigm_widg_sizer.addWidget(stepSize1Label[i], n, 1)
+        ##         stepSize1TF.append(Qt.QLineEdit())
+        ##         stepSize1TF[i][:setText]("4")
+        ##         stepSize1TF[i][:setValidator](Qt.QDoubleValidator(self))
+        ##         paradigm_widg_sizer.addWidget(stepSize1TF[i], n, 2)
+        ##         stepSize1CheckBox.append(QCheckBox())
+        ##         paradigm_widg_sizer.addWidget(stepSize1CheckBox[i], n, 0)
                 
-        ##         self.stepSize2Label.append(QLabel(self.tr("Step Size 2 Track " + str(i+1)), self))
-        ##         self.paradigm_widg_sizer.addWidget(self.stepSize2Label[i], n, 4)
-        ##         self.stepSize2TF.append(Qt.QLineEdit())
-        ##         self.stepSize2TF[i][:setText]("2")
-        ##         self.stepSize2TF[i][:setValidator](Qt.QDoubleValidator(self))
-        ##         self.paradigm_widg_sizer.addWidget(self.stepSize2TF[i], n, 5)
-        ##         self.stepSize2CheckBox.append(QCheckBox())
-        ##         self.paradigm_widg_sizer.addWidget(self.stepSize2CheckBox[i], n, 3)
+        ##         stepSize2Label.append(QLabel(tr("Step Size 2 Track " + str(i+1)), self))
+        ##         paradigm_widg_sizer.addWidget(stepSize2Label[i], n, 4)
+        ##         stepSize2TF.append(Qt.QLineEdit())
+        ##         stepSize2TF[i][:setText]("2")
+        ##         stepSize2TF[i][:setValidator](Qt.QDoubleValidator(self))
+        ##         paradigm_widg_sizer.addWidget(stepSize2TF[i], n, 5)
+        ##         stepSize2CheckBox.append(QCheckBox())
+        ##         paradigm_widg_sizer.addWidget(stepSize2CheckBox[i], n, 3)
         ##         n = n+1
            
                 
-        ##     self.paradigmChooserList = [self.adaptiveTypeChooser, self.nTracksChooser, self.maxConsecutiveTrials, self.tnpToAverageChooser]
-        ##     self.paradigmChooserLabelList = [self.adaptiveTypeChooserLabel, self.nTracksLabel, self.maxConsecutiveTrialsLabel, self.tnpToAverageLabel]
-        ##     self.paradigmChooserOptionsList = [self.prm["adaptiveTypeChoices"], self.nTracksOptionsList, self.maxConsecutiveTrialsOptionsList, self.prm["tnpToAverageChoices"]]
-        ##     self.paradigmChooserCheckBoxList = [self.adaptiveTypeCheckBox, self.nTracksCheckBox, self.maxConsecutiveTrialsCheckBox, self.tnpToAverageCheckBox]
-        ##     self.paradigmChooserList.extend(self.initialTrackDirChooser)
-        ##     self.paradigmChooserLabelList.extend(self.initialTrackDirChooserLabel)
-        ##     self.paradigmChooserOptionsList.extend(self.trackDirOptionsList)
-        ##     self.paradigmChooserCheckBoxList.extend(self.initialTrackDirCheckBox)
+        ##     paradigmChooserList = [adaptiveTypeChooser, nTracksChooser, maxConsecutiveTrials, tnpToAverageChooser]
+        ##     paradigmChooserLabelList = [adaptiveTypeChooserLabel, nTracksLabel, maxConsecutiveTrialsLabel, tnpToAverageLabel]
+        ##     paradigmChooserOptionsList = [prm["adaptiveTypeChoices"], nTracksOptionsList, maxConsecutiveTrialsOptionsList, prm["tnpToAverageChoices"]]
+        ##     paradigmChooserCheckBoxList = [adaptiveTypeCheckBox, nTracksCheckBox, maxConsecutiveTrialsCheckBox, tnpToAverageCheckBox]
+        ##     paradigmChooserList.extend(initialTrackDirChooser)
+        ##     paradigmChooserLabelList.extend(initialTrackDirChooserLabel)
+        ##     paradigmChooserOptionsList.extend(trackDirOptionsList)
+        ##     paradigmChooserCheckBoxList.extend(initialTrackDirCheckBox)
 
-        ##     self.paradigmFieldList = self.pcTrackedTF
-        ##     self.paradigmFieldList.extend(self.initialTurnpointsTF)
-        ##     self.paradigmFieldList.extend(self.totalTurnpointsTF)
-        ##     self.paradigmFieldList.extend(self.stepSize1TF)
-        ##     self.paradigmFieldList.extend(self.stepSize2TF)
-        ##     self.paradigmFieldLabelList = self.pcTrackedLabel
-        ##     self.paradigmFieldLabelList.extend(self.initialTurnpointsLabel)
-        ##     self.paradigmFieldLabelList.extend(self.totalTurnpointsLabel)
-        ##     self.paradigmFieldLabelList.extend(self.stepSize1Label)
-        ##     self.paradigmFieldLabelList.extend(self.stepSize2Label)
-        ##     self.paradigmFieldCheckBoxList = self.pcTrackedCheckBox
-        ##     self.paradigmFieldCheckBoxList.extend(self.initialTurnpointsCheckBox)
-        ##     self.paradigmFieldCheckBoxList.extend(self.totalTurnpointsCheckBox)
-        ##     self.paradigmFieldCheckBoxList.extend(self.stepSize1CheckBox)
-        ##     self.paradigmFieldCheckBoxList.extend(self.stepSize2CheckBox)
+        ##     paradigmFieldList = pcTrackedTF
+        ##     paradigmFieldList.extend(initialTurnpointsTF)
+        ##     paradigmFieldList.extend(totalTurnpointsTF)
+        ##     paradigmFieldList.extend(stepSize1TF)
+        ##     paradigmFieldList.extend(stepSize2TF)
+        ##     paradigmFieldLabelList = pcTrackedLabel
+        ##     paradigmFieldLabelList.extend(initialTurnpointsLabel)
+        ##     paradigmFieldLabelList.extend(totalTurnpointsLabel)
+        ##     paradigmFieldLabelList.extend(stepSize1Label)
+        ##     paradigmFieldLabelList.extend(stepSize2Label)
+        ##     paradigmFieldCheckBoxList = pcTrackedCheckBox
+        ##     paradigmFieldCheckBoxList.extend(initialTurnpointsCheckBox)
+        ##     paradigmFieldCheckBoxList.extend(totalTurnpointsCheckBox)
+        ##     paradigmFieldCheckBoxList.extend(stepSize1CheckBox)
+        ##     paradigmFieldCheckBoxList.extend(stepSize2CheckBox)
 
         ## #------------------------
         ## #ONE CONSTANT PARADIGM WIDGETS
-        ## if self.currParadigm in [self.tr("Constant 1-Interval 2-Alternatives"), self.tr("Constant 1-Pair Same/Different"), self.tr("Constant m-Intervals n-Alternatives")]:
+        ## if currParadigm in [tr("Constant 1-Interval 2-Alternatives"), tr("Constant 1-Pair Same/Different"), tr("Constant m-Intervals n-Alternatives")]:
         ##     n = 0
-        ##     self.nTrialsLabel = QLabel(self.tr("No. Trials"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.nTrialsLabel, n, 1)
-        ##     self.nTrialsTF = Qt.QLineEdit()
-        ##     self.nTrialsTF[:setText]("25")
-        ##     self.nTrialsTF[:setValidator](Qt.QIntValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.nTrialsTF, n, 2)
-        ##     self.nTrialsCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.nTrialsCheckBox, n, 0)
+        ##     nTrialsLabel = QLabel(tr("No. Trials"), self)
+        ##     paradigm_widg_sizer.addWidget(nTrialsLabel, n, 1)
+        ##     nTrialsTF = Qt.QLineEdit()
+        ##     nTrialsTF[:setText]("25")
+        ##     nTrialsTF[:setValidator](Qt.QIntValidator(self))
+        ##     paradigm_widg_sizer.addWidget(nTrialsTF, n, 2)
+        ##     nTrialsCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(nTrialsCheckBox, n, 0)
 
         ##     n = n+1
-        ##     self.nPracticeTrialsLabel = QLabel(self.tr("No. Practice Trials"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.nPracticeTrialsLabel, n, 1)
-        ##     self.nPracticeTrialsTF = Qt.QLineEdit()
-        ##     self.nPracticeTrialsTF[:setText]("0")
-        ##     self.nPracticeTrialsTF[:setValidator](Qt.QIntValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.nPracticeTrialsTF, n, 2)
-        ##     self.nPracticeTrialsCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.nPracticeTrialsCheckBox, n, 0)
+        ##     nPracticeTrialsLabel = QLabel(tr("No. Practice Trials"), self)
+        ##     paradigm_widg_sizer.addWidget(nPracticeTrialsLabel, n, 1)
+        ##     nPracticeTrialsTF = Qt.QLineEdit()
+        ##     nPracticeTrialsTF[:setText]("0")
+        ##     nPracticeTrialsTF[:setValidator](Qt.QIntValidator(self))
+        ##     paradigm_widg_sizer.addWidget(nPracticeTrialsTF, n, 2)
+        ##     nPracticeTrialsCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(nPracticeTrialsCheckBox, n, 0)
 
-        ##     self.paradigmChooserList = []
-        ##     self.paradigmChooserLabelList = []
-        ##     self.paradigmChooserOptionsList = []
-        ##     self.paradigmChooserCheckBoxList = []
+        ##     paradigmChooserList = []
+        ##     paradigmChooserLabelList = []
+        ##     paradigmChooserOptionsList = []
+        ##     paradigmChooserCheckBoxList = []
 
-        ##     self.paradigmFieldList = [self.nTrialsTF, self.nPracticeTrialsTF]
-        ##     self.paradigmFieldLabelList = [self.nTrialsLabel, self.nPracticeTrialsLabel]
-        ##     self.paradigmFieldCheckBoxList = [self.nTrialsCheckBox, self.nPracticeTrialsCheckBox]
+        ##     paradigmFieldList = [nTrialsTF, nPracticeTrialsTF]
+        ##     paradigmFieldLabelList = [nTrialsLabel, nPracticeTrialsLabel]
+        ##     paradigmFieldCheckBoxList = [nTrialsCheckBox, nPracticeTrialsCheckBox]
 
       
         ## #------------------------
         ## #MULTIPLE CONSTANTS PARADIGM WIDGETS
-        ## if self.currParadigm in [self.tr("Multiple Constants 1-Interval 2-Alternatives"), self.tr("Multiple Constants m-Intervals n-Alternatives"), self.tr("Odd One Out")]:
+        ## if currParadigm in [tr("Multiple Constants 1-Interval 2-Alternatives"), tr("Multiple Constants m-Intervals n-Alternatives"), tr("Odd One Out")]:
         ##     n = 0
-        ##     self.nTrialsLabel = QLabel(self.tr("No. Trials"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.nTrialsLabel, n, 1)
-        ##     self.nTrialsTF = Qt.QLineEdit()
-        ##     self.nTrialsTF[:setText]("25")
-        ##     self.nTrialsTF[:setValidator](Qt.QIntValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.nTrialsTF, n, 2)
-        ##     self.nTrialsCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.nTrialsCheckBox, n, 0)
+        ##     nTrialsLabel = QLabel(tr("No. Trials"), self)
+        ##     paradigm_widg_sizer.addWidget(nTrialsLabel, n, 1)
+        ##     nTrialsTF = Qt.QLineEdit()
+        ##     nTrialsTF[:setText]("25")
+        ##     nTrialsTF[:setValidator](Qt.QIntValidator(self))
+        ##     paradigm_widg_sizer.addWidget(nTrialsTF, n, 2)
+        ##     nTrialsCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(nTrialsCheckBox, n, 0)
 
         ##     n = n+1
-        ##     self.nPracticeTrialsLabel = QLabel(self.tr("No. Practice Trials"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.nPracticeTrialsLabel, n, 1)
-        ##     self.nPracticeTrialsTF = Qt.QLineEdit()
-        ##     self.nPracticeTrialsTF[:setText]("0")
-        ##     self.nPracticeTrialsTF[:setValidator](Qt.QIntValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.nPracticeTrialsTF, n, 2)
-        ##     self.nPracticeTrialsCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.nPracticeTrialsCheckBox, n, 0)
+        ##     nPracticeTrialsLabel = QLabel(tr("No. Practice Trials"), self)
+        ##     paradigm_widg_sizer.addWidget(nPracticeTrialsLabel, n, 1)
+        ##     nPracticeTrialsTF = Qt.QLineEdit()
+        ##     nPracticeTrialsTF[:setText]("0")
+        ##     nPracticeTrialsTF[:setValidator](Qt.QIntValidator(self))
+        ##     paradigm_widg_sizer.addWidget(nPracticeTrialsTF, n, 2)
+        ##     nPracticeTrialsCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(nPracticeTrialsCheckBox, n, 0)
 
         ##     n = n+1
-        ##     self.nDifferencesLabel = QLabel(self.tr("No. Differences:"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.nDifferencesLabel, n, 1)
-        ##     self.nDifferencesChooser = QComboBox()
-        ##     self.nDifferencesOptionsList = list(range(1,101))
-        ##     self.nDifferencesOptionsList = [str(el) for el in self.nDifferencesOptionsList]
-        ##     self.nDifferencesChooser.addItems(self.nDifferencesOptionsList)
+        ##     nDifferencesLabel = QLabel(tr("No. Differences:"), self)
+        ##     paradigm_widg_sizer.addWidget(nDifferencesLabel, n, 1)
+        ##     nDifferencesChooser = QComboBox()
+        ##     nDifferencesOptionsList = list(range(1,101))
+        ##     nDifferencesOptionsList = [str(el) for el in nDifferencesOptionsList]
+        ##     nDifferencesChooser.addItems(nDifferencesOptionsList)
           
-        ##     self.nDifferencesChooser.setCurrentIndex(self.nDifferencesOptionsList.index(str(self.par["nDifferences"])))
-        ##     self.paradigm_widg_sizer.addWidget(self.nDifferencesChooser, n, 2)
-        ##     self.nDifferencesChooser.activated[str].connect(self.onChangeNDifferences)
+        ##     nDifferencesChooser.setCurrentIndex(nDifferencesOptionsList.index(str(par["nDifferences"])))
+        ##     paradigm_widg_sizer.addWidget(nDifferencesChooser, n, 2)
+        ##     nDifferencesChooser.activated[str].connect(onChangeNDifferences)
 
-        ##     self.nDifferencesCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.nDifferencesCheckBox, n, 0)
-        ##     if self.prm[self.currExp]["hasNDifferencesChooser"] == True:
-        ##         self.nDifferencesLabel.show()
-        ##         self.nDifferencesChooser.show()
-        ##         self.nDifferencesCheckBox.show()
+        ##     nDifferencesCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(nDifferencesCheckBox, n, 0)
+        ##     if prm[currExp]["hasNDifferencesChooser"] == True:
+        ##         nDifferencesLabel.show()
+        ##         nDifferencesChooser.show()
+        ##         nDifferencesCheckBox.show()
         ##     else:
-        ##         self.nDifferencesLabel.hide()
-        ##         self.nDifferencesChooser.hide()
-        ##         self.nDifferencesCheckBox.hide()
+        ##         nDifferencesLabel.hide()
+        ##         nDifferencesChooser.hide()
+        ##         nDifferencesCheckBox.hide()
 
-        ##     self.paradigmChooserList = [self.nDifferencesChooser]
-        ##     self.paradigmChooserLabelList = [self.nDifferencesLabel]
-        ##     self.paradigmChooserOptionsList = [self.nDifferencesOptionsList]
-        ##     self.paradigmChooserCheckBoxList = [self.nDifferencesCheckBox]
+        ##     paradigmChooserList = [nDifferencesChooser]
+        ##     paradigmChooserLabelList = [nDifferencesLabel]
+        ##     paradigmChooserOptionsList = [nDifferencesOptionsList]
+        ##     paradigmChooserCheckBoxList = [nDifferencesCheckBox]
 
-        ##     self.paradigmFieldList = [self.nTrialsTF, self.nPracticeTrialsTF]
-        ##     self.paradigmFieldLabelList = [self.nTrialsLabel, self.nPracticeTrialsLabel]
-        ##     self.paradigmFieldCheckBoxList = [self.nTrialsCheckBox, self.nPracticeTrialsCheckBox]
+        ##     paradigmFieldList = [nTrialsTF, nPracticeTrialsTF]
+        ##     paradigmFieldLabelList = [nTrialsLabel, nPracticeTrialsLabel]
+        ##     paradigmFieldCheckBoxList = [nTrialsCheckBox, nPracticeTrialsCheckBox]
 
         ## #------------------------------------
         ## #PEST PARADIGM WIDGETS
-        ## if self.currParadigm == self.tr("PEST"):
+        ## if currParadigm == tr("PEST"):
         ##     n = 0
-        ##     self.adaptiveTypeChooserLabel = QLabel(self.tr("Procedure:"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.adaptiveTypeChooserLabel, n, 1)
-        ##     self.adaptiveTypeChooser = QComboBox()
-        ##     self.adaptiveTypeChooser.addItems(self.prm["adaptiveTypeChoices"])
-        ##     self.adaptiveTypeChooser.setCurrentIndex(0)
-        ##     self.paradigm_widg_sizer.addWidget(self.adaptiveTypeChooser, n, 2)
-        ##     self.adaptiveTypeCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.adaptiveTypeCheckBox, n, 0)
+        ##     adaptiveTypeChooserLabel = QLabel(tr("Procedure:"), self)
+        ##     paradigm_widg_sizer.addWidget(adaptiveTypeChooserLabel, n, 1)
+        ##     adaptiveTypeChooser = QComboBox()
+        ##     adaptiveTypeChooser.addItems(prm["adaptiveTypeChoices"])
+        ##     adaptiveTypeChooser.setCurrentIndex(0)
+        ##     paradigm_widg_sizer.addWidget(adaptiveTypeChooser, n, 2)
+        ##     adaptiveTypeCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(adaptiveTypeCheckBox, n, 0)
 
         ##     n = n+1
-        ##     self.initialTrackDirChooserLabel = QLabel(self.tr("Initial Track Direction:"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.initialTrackDirChooserLabel, n, 1)
-        ##     self.initialTrackDirChooser = QComboBox()
-        ##     self.initialTrackDirChooser.addItems([self.tr("Up"), self.tr("Down")])
-        ##     self.initialTrackDirChooser.setCurrentIndex(1)
-        ##     self.paradigm_widg_sizer.addWidget(self.initialTrackDirChooser, n, 2)
-        ##     self.initialTrackDirCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.initialTrackDirCheckBox, n, 0)
+        ##     initialTrackDirChooserLabel = QLabel(tr("Initial Track Direction:"), self)
+        ##     paradigm_widg_sizer.addWidget(initialTrackDirChooserLabel, n, 1)
+        ##     initialTrackDirChooser = QComboBox()
+        ##     initialTrackDirChooser.addItems([tr("Up"), tr("Down")])
+        ##     initialTrackDirChooser.setCurrentIndex(1)
+        ##     paradigm_widg_sizer.addWidget(initialTrackDirChooser, n, 2)
+        ##     initialTrackDirCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(initialTrackDirCheckBox, n, 0)
 
         ##     n = n+1
-        ##     self.pcTrackedLabel = QLabel(self.tr("Percent Correct Tracked"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.pcTrackedLabel, n, 1)
-        ##     self.pcTrackedTF = Qt.QLineEdit()
-        ##     self.pcTrackedTF[:setText]("75")
-        ##     self.pcTrackedTF[:setValidator](Qt.QDoubleValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.pcTrackedTF, n, 2)
-        ##     self.pcTrackedCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.pcTrackedCheckBox, n, 0)
+        ##     pcTrackedLabel = QLabel(tr("Percent Correct Tracked"), self)
+        ##     paradigm_widg_sizer.addWidget(pcTrackedLabel, n, 1)
+        ##     pcTrackedTF = Qt.QLineEdit()
+        ##     pcTrackedTF[:setText]("75")
+        ##     pcTrackedTF[:setValidator](Qt.QDoubleValidator(self))
+        ##     paradigm_widg_sizer.addWidget(pcTrackedTF, n, 2)
+        ##     pcTrackedCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(pcTrackedCheckBox, n, 0)
 
         ##     #n = n+1
-        ##     self.initialStepSizeLabel = QLabel(self.tr("Initial Step Size"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.initialStepSizeLabel, n, 4)
-        ##     self.initialStepSizeTF = Qt.QLineEdit()
-        ##     self.initialStepSizeTF[:setText]("5")
-        ##     self.initialStepSizeTF[:setValidator](Qt.QIntValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.initialStepSizeTF, n, 5)
-        ##     self.initialStepSizeCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.initialStepSizeCheckBox, n, 3)
+        ##     initialStepSizeLabel = QLabel(tr("Initial Step Size"), self)
+        ##     paradigm_widg_sizer.addWidget(initialStepSizeLabel, n, 4)
+        ##     initialStepSizeTF = Qt.QLineEdit()
+        ##     initialStepSizeTF[:setText]("5")
+        ##     initialStepSizeTF[:setValidator](Qt.QIntValidator(self))
+        ##     paradigm_widg_sizer.addWidget(initialStepSizeTF, n, 5)
+        ##     initialStepSizeCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(initialStepSizeCheckBox, n, 3)
 
         ##     n = n+1
-        ##     self.minStepSizeLabel = QLabel(self.tr("Minimum Step Size"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.minStepSizeLabel, n, 1)
-        ##     self.minStepSizeTF = Qt.QLineEdit()
-        ##     self.minStepSizeTF[:setText]("1")
-        ##     self.minStepSizeTF[:setValidator](Qt.QDoubleValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.minStepSizeTF, n, 2)
-        ##     self.minStepSizeCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.minStepSizeCheckBox, n, 0)
+        ##     minStepSizeLabel = QLabel(tr("Minimum Step Size"), self)
+        ##     paradigm_widg_sizer.addWidget(minStepSizeLabel, n, 1)
+        ##     minStepSizeTF = Qt.QLineEdit()
+        ##     minStepSizeTF[:setText]("1")
+        ##     minStepSizeTF[:setValidator](Qt.QDoubleValidator(self))
+        ##     paradigm_widg_sizer.addWidget(minStepSizeTF, n, 2)
+        ##     minStepSizeCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(minStepSizeCheckBox, n, 0)
 
         ##     #n = n+1
-        ##     self.maxStepSizeLabel = QLabel(self.tr("Maximum Step Size"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.maxStepSizeLabel, n, 4)
-        ##     self.maxStepSizeTF = Qt.QLineEdit()
-        ##     self.maxStepSizeTF[:setText]("10")
-        ##     self.maxStepSizeTF[:setValidator](Qt.QDoubleValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.maxStepSizeTF, n, 5)
-        ##     self.maxStepSizeCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.maxStepSizeCheckBox, n, 3)
+        ##     maxStepSizeLabel = QLabel(tr("Maximum Step Size"), self)
+        ##     paradigm_widg_sizer.addWidget(maxStepSizeLabel, n, 4)
+        ##     maxStepSizeTF = Qt.QLineEdit()
+        ##     maxStepSizeTF[:setText]("10")
+        ##     maxStepSizeTF[:setValidator](Qt.QDoubleValidator(self))
+        ##     paradigm_widg_sizer.addWidget(maxStepSizeTF, n, 5)
+        ##     maxStepSizeCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(maxStepSizeCheckBox, n, 3)
 
         ##     n = n+1
-        ##     self.WLabel = QLabel(self.tr("W"), self)
-        ##     self.paradigm_widg_sizer.addWidget(self.WLabel, n, 1)
-        ##     self.WTF = Qt.QLineEdit()
-        ##     self.WTF[:setText]("1.5")
-        ##     self.WTF[:setValidator](Qt.QDoubleValidator(self))
-        ##     self.paradigm_widg_sizer.addWidget(self.WTF, n, 2)
-        ##     self.WCheckBox = QCheckBox()
-        ##     self.paradigm_widg_sizer.addWidget(self.WCheckBox, n, 0)
+        ##     WLabel = QLabel(tr("W"), self)
+        ##     paradigm_widg_sizer.addWidget(WLabel, n, 1)
+        ##     WTF = Qt.QLineEdit()
+        ##     WTF[:setText]("1.5")
+        ##     WTF[:setValidator](Qt.QDoubleValidator(self))
+        ##     paradigm_widg_sizer.addWidget(WTF, n, 2)
+        ##     WCheckBox = QCheckBox()
+        ##     paradigm_widg_sizer.addWidget(WCheckBox, n, 0)
 
-        ##     self.paradigmChooserList = [self.adaptiveTypeChooser, self.initialTrackDirChooser]
-        ##     self.paradigmChooserLabelList = [self.adaptiveTypeChooserLabel, self.initialTrackDirChooserLabel]
-        ##     self.paradigmChooserOptionsList = [self.prm["adaptiveTypeChoices"], [self.tr("Up"), self.tr("Down")]]
-        ##     self.paradigmChooserCheckBoxList = [self.adaptiveTypeCheckBox, self.initialTrackDirCheckBox]
+        ##     paradigmChooserList = [adaptiveTypeChooser, initialTrackDirChooser]
+        ##     paradigmChooserLabelList = [adaptiveTypeChooserLabel, initialTrackDirChooserLabel]
+        ##     paradigmChooserOptionsList = [prm["adaptiveTypeChoices"], [tr("Up"), tr("Down")]]
+        ##     paradigmChooserCheckBoxList = [adaptiveTypeCheckBox, initialTrackDirCheckBox]
 
-        ##     self.paradigmFieldList = [self.initialStepSizeTF, self.minStepSizeTF, self.maxStepSizeTF,
-        ##                               self.WTF, self.pcTrackedTF]
-        ##     self.paradigmFieldLabelList = [self.initialStepSizeLabel, self.minStepSizeLabel,
-        ##                                    self.maxStepSizeLabel, self.WLabel, self.pcTrackedLabel]
-        ##     self.paradigmFieldCheckBoxList = [self.initialStepSizeCheckBox, self.minStepSizeCheckBox,
-        ##                                       self.maxStepSizeCheckBox, self.WCheckBox, self.pcTrackedCheckBox]
+        ##     paradigmFieldList = [initialStepSizeTF, minStepSizeTF, maxStepSizeTF,
+        ##                               WTF, pcTrackedTF]
+        ##     paradigmFieldLabelList = [initialStepSizeLabel, minStepSizeLabel,
+        ##                                    maxStepSizeLabel, WLabel, pcTrackedLabel]
+        ##     paradigmFieldCheckBoxList = [initialStepSizeCheckBox, minStepSizeCheckBox,
+        ##                                       maxStepSizeCheckBox, WCheckBox, pcTrackedCheckBox]
 
 end
 function toggleResTableCheckBox()
@@ -1667,7 +1671,7 @@ def_widg_sizer[:addWidget](saveResultsButton, n, 1, 1, 1)
 add_widg_sizer = Qt.QGridLayout()
 add_widg_sizer[:addItem](Qt.QSpacerItem(10,10, szp[:Expanding]), 0, 2)
 add_widg_sizer[:addItem](Qt.QSpacerItem(10,10, szp[:Expanding]), 0, 3)
-setAdditionalWidgets() 
+#setAdditionalWidgets() 
 
 ## #def widgets 2
 def_widg_sizer2 = Qt.QGridLayout()

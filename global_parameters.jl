@@ -15,7 +15,7 @@
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
 
 function set_global_parameters(prm)
-   locale = QtCore[:QLocale]()[:system]()[:name]()
+    locale = QtCore[:QLocale]()[:system]()[:name]()
     prm["currentLocale"] = QtCore[:QLocale](locale)
     prm["tmpParametersFile"] = ".tmp_prm.prm"
     ## prm["nAlternatives"] = 3
@@ -42,7 +42,7 @@ function set_global_parameters(prm)
             end
         end
     end
-    ## prm["nIntervalsChoices"] = ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    prm["nIntervalsChoices"] = ["2", "3", "4", "5", "6", "7", "8", "9"]
     prm["adaptiveTypeChoices"] = ["Arithmetic", "Geometric"]
     prm["tnpToAverageChoices"] = ["All final stepsize (even)", "First N final stepsize", "Last N final stepsize",""]
     prm["nBitsChoices"] = ["16", "32"]
