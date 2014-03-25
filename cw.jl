@@ -1379,6 +1379,8 @@ par = (Any)[]
 w = Qt.QMainWindow()
 cw = Qt.QFrame()
 pw = Qt.QFrame()#dropFrame(None)
+cw[:Sunken]#.setFrameStyle(QFrame.StyledPanel|QFrame.Sunken)
+pw[:Sunken]#.setFrameStyle(QFrame.StyledPanel|QFrame.Sunken)
 splitter = Qt.QSplitter()
 cw_sizer = Qt.QVBoxLayout()
 def_widg_sizer = Qt.QGridLayout()
@@ -1472,16 +1474,16 @@ experimentLabelLabel = Qt.QLabel("Experiment Label")
 experimentLabelTF = Qt.QLineEdit("")
 def_widg_sizer[:addWidget](experimentLabelLabel, n, 0)
 def_widg_sizer[:addWidget](experimentLabelTF, n, 1)
-n = n+1
-sessionLabelLabel = Qt.QLabel("Session Label")
+#n = n+1
+sessionLabelLabel = Qt.QLabel("Session")
 sessionLabelTF = Qt.QLineEdit("")
 if haskey(prm, "sessionLabel")
     sessionLabelTF[:setText](prm["sessionLabel"])
 end
 sessionLabelTF[:setWhatsThis]("Set a label for the current experimental session. It can be a number or a descriptive word.")
 sessionLabelTF[:editingFinished][:connect](onSessionLabelChange)
-def_widg_sizer[:addWidget](sessionLabelLabel, n, 0)
-def_widg_sizer[:addWidget](sessionLabelTF, n, 1)
+def_widg_sizer[:addWidget](sessionLabelLabel, n, 2)
+def_widg_sizer[:addWidget](sessionLabelTF, n, 3)
 n = n+1
 conditionLabelLabel = Qt.QLabel("Condition Label")
 conditionLabelTF = Qt.QLineEdit("")
@@ -1893,8 +1895,8 @@ pw_prm_sizer = Qt.QHBoxLayout()
 pw_prm_sizer_0 = Qt.QGridLayout()
 pw_prm_sizer_1 = Qt.QGridLayout()
 
-#pw_prm_sizer_0[:setAlignment](Qt.AlignTop)
-#pw_prm_sizer_1[:setAlignment](Qt.AlignTop)
+pw_prm_sizer_0[:setAlignment](qt_enum("AlignTop"))
+pw_prm_sizer_1[:setAlignment](qt_enum("AlignTop"))
 cw_sizer[:addLayout](def_widg_sizer)
 cw_sizer[:addLayout](add_widg_sizer)
 cw_sizer[:addLayout](def_widg_sizer2)
@@ -1912,12 +1914,18 @@ pw_prm_sizer[:addLayout](pw_prm_sizer_0)
 pw_prm_sizer[:addLayout](pw_prm_sizer_1)
 pw_sizer[:addLayout](pw_prm_sizer)
 pw[:setLayout](pw_sizer)
+pw[:layout]()[:SetFixedSize]
+cw[:layout]()[:SetFixedSize] 
+#pw[:layout]()[:setSizeConstraint](qt_enum("SetFixedSize"))
 #pw[:layout]()[:setSizeConstraint](Qt[:QLayout][:SetFixedSize])
 #cw[:layout]()[:setSizeConstraint](QLayout.SetFixedSize)
 pw_scrollarea = Qt.QScrollArea()
 pw_scrollarea[:setWidget](pw)
 splitter[:addWidget](pw_scrollarea)
-#splitter[:setSizes]([(2/6)*screen.width(), (2/6)*screen.width()])
+
+screen = Qt.QDesktopWidget()[:screenGeometry]()
+w[:setGeometry](80, 100, int((2/3)*screen[:width]()), int((7/10)*screen[:height]()))
+splitter[:setSizes]([(2/6)*screen[:width](), (2/6)*screen[:width]()])
 
 
 
