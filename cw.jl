@@ -17,6 +17,13 @@
 include("global_parameters.jl")
 include("default_experiments/default_experiments.jl")
 using PySide
+pysis = pyimport("sys") 
+pyos = pyimport("os") 
+pysis["path"][:insert](0, "foo")
+pysis["path"][:insert](0, pyos["path"][:abspath]("."))
+PyCall.pyimport("qrc_resources") 
+
+QtGui = PyCall.pyimport("PySide.QtGui") 
 
 szp = Qt.QSizePolicy()
 
@@ -26,9 +33,6 @@ wdc = (String => Any)[] #widget containers (like lists of widgets)
 prm = get_prefs(prm)
 prm = set_global_parameters(prm)
 
-## prm["fieldsToHide"] = (Any)[]; prm["fieldsToShow"] = (Any)[]
-## prm["choosersToHide"] = (Any)[]; prm["choosersToShow"] = (Any)[];
-## prm["fileChoosersToHide"] = (Any)[]; prm["fileChoosersToShow"] = (Any)[];
 
 function onChooserChange()
     prm["fieldsToHide"] = (Any)[]; prm["fieldsToShow"] = (Any)[]
@@ -1403,8 +1407,7 @@ statusBar = w[:statusBar]()
 menubar = w[:menuBar]()
 
 fileMenu = menubar[:addMenu]("&File")
-#exitButton = Qt.QAction(Qt.QIcon[:fromTheme]("application-exit", Qt.QIcon(":/application-exit")), "Exit", w)
-exitButton = Qt.QAction("Exit", w)
+exitButton = Qt.QAction(QtGui["QIcon"][:fromTheme]("application-exit", Qt.QIcon(":/application-exit")), "Exit", w)
 exitButton[:setShortcut]("Ctrl+Q")
 exitButton[:setStatusTip]("Exit application")
 #@exitButton[:triggered][:connect](close)
@@ -1420,8 +1423,7 @@ processResultsTableButton[:setStatusTip]("Process Results Table")
 #@processResultsTableButton[:triggered][:connect](processResultsTableDialog)
 
 
-## openResultsButton = QAction(QIcon.fromTheme("document-open", QIcon(":/document-open")), tr("Open Results File"), self)
-openResultsButton = Qt.QAction("Open Results File", w)
+openResultsButton = Qt.QAction(QtGui["QIcon"][:fromTheme]("document-open", Qt.QIcon(":/document-open")), "Open Results File", w)
 openResultsButton[:setStatusTip]("Open Results File")
 #@openResultsButton[:triggered][:connect](onClickOpenResultsButton)
 
@@ -1433,18 +1435,15 @@ fileMenu[:addAction](exitButton)
         
 #EDIT MENU
 editMenu = menubar[:addMenu]("&Edit")
-#editPrefAction = Qt.QAction(QIcon.fromTheme("preferences-other", QIcon(":/preferences-other")), tr("Preferences"), self)
-editPrefAction = Qt.QAction("Preferences", w)
+editPrefAction = Qt.QAction(QtGui["QIcon"][:fromTheme]("preferences-other", Qt.QIcon(":/preferences-other")), "Preferences", w)
 editMenu[:addAction](editPrefAction)
 #@editPrefAction[:triggered][:connect](onEditPref)
 
-## editPhonesAction = Qt.QAction(QIcon.fromTheme("audio-headphones", QIcon(":/audio-headphones")), tr("Phones"), self)
-editPhonesAction = Qt.QAction("Phones", w)
+editPhonesAction = Qt.QAction(QtGui["QIcon"][:fromTheme]("audio-headphones", Qt.QIcon(":/audio-headphones")), "Phones", w)
 editMenu[:addAction](editPhonesAction)
 #@editPhonesAction[:triggered][:connect](onEditPhones)
 
-#editExperimentersAction = Qt.QAction(QIcon.fromTheme("system-users", QIcon(":/system-users")), tr("Experimenters"), self)
-editExperimentersAction = Qt.QAction("Experimenters", w)
+editExperimentersAction = Qt.QAction(QtGui["QIcon"][:fromTheme]("system-users", Qt.QIcon(":/system-users")), "Experimenters", w)
 editMenu[:addAction](editExperimentersAction)
 #@editExperimentersAction[:triggered][:connect](onEditExperimenters)
 
@@ -1469,8 +1468,7 @@ onShowFortuneAction = Qt.QAction("Fortunes", w)
 helpMenu[:addAction](onShowFortuneAction)
 #@ onShowFortuneAction[:triggered][:connect](onShowFortune)
         
-#onAboutAction = Qt.QAction(QIcon.fromTheme("help-about", QIcon(":/help-about")), tr("About pychoacoustics"), self)
-onAboutAction = Qt.QAction("About pychoacoustics", w)
+onAboutAction = Qt.QAction(QtGui["QIcon"][:fromTheme]("help-about", Qt.QIcon(":/help-about")), "About pychoacoustics", w)
 helpMenu[:addAction](onAboutAction)
 #@ onAboutAction[:triggered][:connect](onAbout)
 
@@ -1673,8 +1671,8 @@ min_pw_icon_size = 20
 def_widg_sizer[:setRowMinimumHeight](0, min_pw_butt_size)
 saveResultsButton = Qt.QPushButton("Choose Results File")
 saveResultsButton[:clicked][:connect](onClickSaveResultsButton)
-#saveResultsButton[:setIcon](Qt.QIcon.fromTheme("document-save", QIcon(":/document-save")))
-## saveResultsButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+saveResultsButton[:setIcon](QtGui["QIcon"][:fromTheme]("document-save", Qt.QIcon(":/document-save")))
+saveResultsButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 saveResultsButton[:setToolTip]("Choose file to save results")
 def_widg_sizer[:addWidget](saveResultsButton, n, 1, 1, 1)
 
@@ -1727,17 +1725,17 @@ pw_sizer = Qt.QVBoxLayout()
 pw_buttons_sizer = Qt.QGridLayout()
 min_pw_butt_size = 22
 min_pw_icon_size = 20
-## pw_buttons_sizer[:setRowMinimumHeight](0, min_pw_butt_size)
-## pw_buttons_sizer[:setRowMinimumHeight](1, min_pw_butt_size)
-## pw_buttons_sizer[:setRowMinimumHeigh](2, min_pw_butt_size)
+pw_buttons_sizer[:setRowMinimumHeight](0, min_pw_butt_size)
+pw_buttons_sizer[:setRowMinimumHeight](1, min_pw_butt_size)
+pw_buttons_sizer[:setRowMinimumHeight](2, min_pw_butt_size)
 
 
 ## #---- FIRST ROW
 n = 0
 #LOAD PARAMETERS BUTTON
 loadParametersButton = Qt.QPushButton("Load Prm")
-## loadParametersButton.setIcon(QIcon.fromTheme("document-open", QIcon(":/document-open")))
-## loadParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+loadParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("document-open", Qt.QIcon(":/document-open")))
+loadParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 loadParametersButton[:clicked][:connect](onClickLoadParametersButton)
 loadParametersButton[:setToolTip]("Load a parameters file")
 loadParametersButton[:setWhatsThis]("Load a file containing the parameters for an experimental session")
@@ -1746,8 +1744,8 @@ pw_buttons_sizer[:addWidget](loadParametersButton, n, 0)
 
 #SAVE PARAMETERS BUTTON
 saveParametersButton = Qt.QPushButton("Save Prm")
-## saveParametersButton.setIcon(QIcon.fromTheme("document-save", QIcon(":/document-save")))
-## saveParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+saveParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("document-save", Qt.QIcon(":/document-save")))
+saveParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 saveParametersButton[:clicked][:connect](onClickSaveParametersButton)
 saveParametersButton[:setToolTip]("Save a parameters file")
 saveParametersButton[:setWhatsThis]("Save the current experimental parameters to a file")
@@ -1757,8 +1755,8 @@ pw_buttons_sizer[:addWidget](saveParametersButton, n, 1)
 #DELETE PARAMETERS BUTTON
 deleteParametersButton = Qt.QPushButton("Delete")
 deleteParametersButton[:clicked][:connect](onClickDeleteParametersButton)
-## deleteParametersButton.setIcon(QIcon.fromTheme("edit-delete", QIcon(":/edit-delete")))
-## deleteParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+deleteParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("edit-delete", Qt.QIcon(":/edit-delete")))
+deleteParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 deleteParametersButton[:setToolTip]("Delete current Block")
 deleteParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](deleteParametersButton, n, 2)
@@ -1766,8 +1764,8 @@ pw_buttons_sizer[:addWidget](deleteParametersButton, n, 2)
 
 undoUnsavedButton = Qt.QPushButton("Undo Unsaved")
 ## undoUnsavedButton[:clicked][:connect](onClickUndoUnsavedButton)
-## undoUnsavedButton.setIcon(QIcon.fromTheme("edit-undo", QIcon(":/edit-undo")))
-## undoUnsavedButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+undoUnsavedButton[:setIcon](QtGui["QIcon"][:fromTheme]("edit-undo", Qt.QIcon(":/edit-undo")))
+undoUnsavedButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 undoUnsavedButton[:setToolTip]("Undo unsaved changes")
 undoUnsavedButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](undoUnsavedButton, n, 3)
@@ -1776,8 +1774,8 @@ pw_buttons_sizer[:addWidget](undoUnsavedButton, n, 3)
 n = n+1
 storeParametersButton = Qt.QPushButton("Store")
 ## storeParametersButton[:clicked][:connect](onClickStoreParametersButton)
-## storeParametersButton.setIcon(QIcon.fromTheme("media-flash-memory-stick", QIcon(":/media-flash-memory-stick")))
-## storeParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+storeParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("media-flash-memory-stick", Qt.QIcon(":/media-flash-memory-stick")))
+storeParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 storeParametersButton[:setToolTip]("Store current Block")
 storeParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeParametersButton, n, 0)
@@ -1796,8 +1794,8 @@ pw_buttons_sizer[:addWidget](storeandgoParametersButton, n, 2)
 
 newBlockButton = Qt.QPushButton("New Block")
 ##newBlockButton[:clicked][:connect](onClickNewBlockButton)
-## newBlockButton.setIcon(QIcon.fromTheme("document-new", QIcon(":/document-new")))
-## newBlockButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+newBlockButton[:setIcon](QtGui["QIcon"][:fromTheme]("document-new", Qt.QIcon(":/document-new")))
+newBlockButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 newBlockButton[:setToolTip]("Append a new block")
 newBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](newBlockButton, n, 3)
@@ -1809,32 +1807,32 @@ pw_buttons_sizer[:addWidget](newBlockButton, n, 3)
 n = n+1
 prevBlockButton = Qt.QPushButton("Previous")
 ## prevBlockButton[:clicked][:connect](onClickPrevBlockButton)
-## prevBlockButton.setIcon(QIcon.fromTheme("go-previous", QIcon(":/go-previous")))
-## prevBlockButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+prevBlockButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-previous", Qt.QIcon(":/go-previous")))
+prevBlockButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 prevBlockButton[:setToolTip]("Move to previous block")
 prevBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](prevBlockButton, n, 0)
 
 nextBlockButton = Qt.QPushButton("Next")
 ##nextBlockButton[:clicked][:connect](onClickNextBlockButton)
-## nextBlockButton.setIcon(QIcon.fromTheme("go-next", QIcon(":/go-next")))
-## nextBlockButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+nextBlockButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-next", Qt.QIcon(":/go-next")))
+nextBlockButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 nextBlockButton[:setToolTip]("Move to next block")
 nextBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](nextBlockButton, n, 1)
 
 shuffleBlocksButton = Qt.QPushButton("Shuffle")
 ## shuffleBlocksButton[:clicked][:connect](onClickShuffleBlocksButton)
-## shuffleBlocksButton.setIcon(QIcon.fromTheme("media-playlist-shuffle", QIcon(":/media-playlist-shuffle")))
-## shuffleBlocksButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+shuffleBlocksButton[:setIcon](QtGui["QIcon"][:fromTheme]("media-playlist-shuffle", Qt.QIcon(":/media-playlist-shuffle")))
+shuffleBlocksButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 shuffleBlocksButton[:setToolTip]("Shuffle blocks")
 shuffleBlocksButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](shuffleBlocksButton, n, 2)
 
 resetParametersButton = Qt.QPushButton("Reset")
 ## resetParametersButton[:clicked][:connect](onClickResetParametersButton)
-## resetParametersButton.setIcon(QIcon.fromTheme("go-home", QIcon(":/go-home")))
-## resetParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
+resetParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-home", Qt.QIcon(":/go-home")))
+resetParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 resetParametersButton[:setToolTip]("Reset parameters")
 resetParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](resetParametersButton, n, 3)
@@ -1872,13 +1870,13 @@ pw_buttons_sizer[:addWidget](jumpToBlockChooser, n, 3)
 n = n+1
 prevBlockPositionButton = Qt.QPushButton("Previous Position")
 ## prevBlockPositionButton[:clicked][:connect](onClickPrevBlockPositionButton)
-## prevBlockPositionButton.setIcon(QIcon.fromTheme("go-previous", QIcon(":/go-previous")))
+prevBlockPositionButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-previous", Qt.QIcon(":/go-previous")))
 prevBlockPositionButton[:setToolTip]("Move to previous block position")
 pw_buttons_sizer[:addWidget](prevBlockPositionButton, n, 0)
 
 nextBlockPositionButton = Qt.QPushButton("Next Position")
 ## nextBlockPositionButton[:clicked][:connect](onClickNextBlockPositionButton)
-## nextBlockPositionButton.setIcon(QIcon.fromTheme("go-next", QIcon(":/go-next")))
+nextBlockPositionButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-next", Qt.QIcon(":/go-next")))
 nextBlockPositionButton[:setToolTip]("Move to next block position")
 pw_buttons_sizer[:addWidget](nextBlockPositionButton, n, 1)
 
@@ -1929,8 +1927,9 @@ pw_prm_sizer[:addLayout](pw_prm_sizer_0)
 pw_prm_sizer[:addLayout](pw_prm_sizer_1)
 pw_sizer[:addLayout](pw_prm_sizer)
 pw[:setLayout](pw_sizer)
-pw[:layout]()[:SetFixedSize]
-cw[:layout]()[:SetFixedSize] 
+
+pw[:layout]()[:setSizeConstraint](QtGui["QLayout"][:SetFixedSize])
+cw[:layout]()[:setSizeConstraint](QtGui["QLayout"][:SetFixedSize])
 
 pw_scrollarea = Qt.QScrollArea()
 pw_scrollarea[:setWidget](pw)
@@ -1941,7 +1940,7 @@ w[:setGeometry](80, 100, int((2/3)*screen[:width]()), int((7/10)*screen[:height]
 splitter[:setSizes]([(2/6)*screen[:width](), (2/6)*screen[:width]()])
 
 
-
+w[:setWindowIcon](Qt.QIcon(":/Machovka_Headphones.svg"))
 w[:setCentralWidget](splitter)
 raise(w)
 
