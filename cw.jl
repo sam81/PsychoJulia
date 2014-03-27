@@ -26,50 +26,58 @@ wdc = (String => Any)[] #widget containers (like lists of widgets)
 prm = get_prefs(prm)
 prm = set_global_parameters(prm)
 
-function onChooserChange(selectedOption)
-        ## fieldsToHide = []; fieldsToShow = []
-        ## choosersToHide = []; choosersToShow = [];
-        ## fileChoosersToHide = []; fileChoosersToShow = [];
+## prm["fieldsToHide"] = (Any)[]; prm["fieldsToShow"] = (Any)[]
+## prm["choosersToHide"] = (Any)[]; prm["choosersToShow"] = (Any)[];
+## prm["fileChoosersToHide"] = (Any)[]; prm["fileChoosersToShow"] = (Any)[];
 
-        ## execString = prm[currExp]['execString']
+function onChooserChange()
+    prm["fieldsToHide"] = (Any)[]; prm["fieldsToShow"] = (Any)[]
+    prm["choosersToHide"] = (Any)[]; prm["choosersToShow"] = (Any)[];
+    prm["fileChoosersToHide"] = (Any)[]; prm["fileChoosersToShow"] = (Any)[];
 
-        ## try:
-        ##     methodToCall1 = getattr(default_experiments, execString)
-        ## except:
-        ##     pass
-        ## try:
-        ##     methodToCall1 = getattr(labexp, execString)
-        ## except:
-        ##     pass
-
-        ## if hasattr(methodToCall1, 'get_fields_to_hide_'+ execString):
-        ##     methodToCall2 = getattr(methodToCall1, 'get_fields_to_hide_'+ execString)
-        ##     tmp = methodToCall2(self)
-
-        ##     for i in range(len(fieldsToHide)):
-        ##         field[fieldsToHide[i]][:hide]()
-        ##         fieldLabel[fieldsToHide[i]][:hide]()
-        ##         fieldCheckBox[fieldsToHide[i]][:hide]()
-        ##     for i in range(len(fieldsToShow)):
-        ##         field[fieldsToShow[i]][:show]()
-        ##         fieldLabel[fieldsToShow[i]][:show]()
-        ##         fieldCheckBox[fieldsToShow[i]][:show]()
-        ##     for i in range(len(choosersToHide)):
-        ##         chooser[choosersToHide[i]][:hide]()
-        ##         chooserLabel[choosersToHide[i]][:hide]()
-        ##         chooserCheckBox[choosersToHide[i]][:hide]()
-        ##     for i in range(len(choosersToShow)):
-        ##         chooser[choosersToShow[i]][:show]()
-        ##         chooserLabel[choosersToShow[i]][:show]()
-        ##         chooserCheckBox[choosersToShow[i]][:show]()
-        ##     for i in range(len(fileChoosersToHide)):
-        ##         fileChooser[fileChoosersToHide[i]][:hide]()
-        ##         fileChooserButton[fileChoosersToHide[i]][:hide]()
-        ##         fileChooserCheckBox[fileChoosersToHide[i]][:hide]()
-        ##     for i in range(len(fileChoosersToShow)):
-        ##         fileChooser[fileChoosersToHide[i]][:show]()
-        ##         fileChooserButton[fileChoosersToHide[i]][:show]()
-        ##         fileChooserCheckBox[fileChoosersToHide[i]][:show]()
+    #would be good to check if get_fields_to_hide_ function exists so that it
+    #can be made optional
+    
+    execString = prm[prm["currExp"]]["execString"]
+    eval(parse(string("default_experiments.get_fields_to_hide_", execString, "(prm, wd)")))
+    fieldsToHide = prm["fieldsToHide"]
+    fieldsToShow = prm["fieldsToShow"]
+    choosersToHide = prm["choosersToHide"]
+    choosersToShow = prm["choosersToShow"]
+    fileChoosersToHide = prm["fileChoosersToHide"]
+    fileChoosersToShow = prm["fileChoosersToShow"] 
+    
+ 
+    for i in 1:length(fieldsToHide)
+        wd["field"][fieldsToHide[i]][:hide]()
+        wd["fieldLabel"][fieldsToHide[i]][:hide]()
+        wd["fieldCheckBox"][fieldsToHide[i]][:hide]()
+    end
+    for i in 1:length(fieldsToShow)
+        wd["field"][fieldsToShow[i]][:show]()
+        wd["fieldLabel"][fieldsToShow[i]][:show]()
+        wd["fieldCheckBox"][fieldsToShow[i]][:show]()
+    end
+    for i in 1:length(choosersToHide)
+        wd["chooser"][choosersToHide[i]][:hide]()
+        wd["chooserLabel"][choosersToHide[i]][:hide]()
+        wd["chooserCheckBox"][choosersToHide[i]][:hide]()
+    end
+    for i in 1:length(choosersToShow)
+        wd["chooser"][choosersToShow[i]][:show]()
+        wd["chooserLabel"][choosersToShow[i]][:show]()
+        wd["chooserCheckBox"][choosersToShow[i]][:show]()
+    end
+    for i in 1:length(fileChoosersToHide)
+        wd["fileChooser"][fileChoosersToHide[i]][:hide]()
+        wd["fileChooserButton"][fileChoosersToHide[i]][:hide]()
+        wd["fileChooserCheckBox"][fileChoosersToHide[i]][:hide]()
+    end
+    for i in 1:length(fileChoosersToShow)
+        wd["fileChooser"][fileChoosersToHide[i]][:show]()
+        wd["fileChooserButton"][fileChoosersToHide[i]][:show]()
+        wd["fileChooserCheckBox"][fileChoosersToHide[i]][:show]()
+    end
 end
 
 
@@ -150,7 +158,7 @@ function onClickSaveParametersButton()
     ##     else
     ##         ftow = QFileDialog.getSaveFileName(self, tr("Choose file to write prm"), parametersFile, tr("All Files (*)"))[0]
     ##     end
-    ##     if len(ftow) > 0 and prm["storedBlocks"] > 0:
+    ##     if length(ftow) > 0 and prm["storedBlocks"] > 0:
     ##         saveParametersToFile(ftow)
     ##         saveParametersToFile(prm["tmpParametersFile"])
     ##         #if parametersFile == prm["tmpParametersFile"]:
@@ -563,9 +571,9 @@ function setDefaultParameters(experiment, paradigm, par)
     end
     prm["nFileChoosers"] = length(prm["fileChooser"])
     # SET UP TEXT FIELDS
-    wd["field"] = (Any)[] #list(range(prm["nFields"]))
-    wd["fieldLabel"] = (Any)[] #list(range(prm["nFields"]))
-    wd["fieldCheckBox"] = (Any)[] #list(range(prm["nFields"]))
+    wd["field"] = (Any)[] 
+    wd["fieldLabel"] = (Any)[] 
+    wd["fieldCheckBox"] = (Any)[] 
     for f in 1:prm["nFields"]
         push!(wd["fieldLabel"], Qt.QLabel(prm["fieldLabel"][f]))
         pw_prm_sizer_0[:addWidget](wd["fieldLabel"][f], f, 1)
@@ -577,23 +585,23 @@ function setDefaultParameters(experiment, paradigm, par)
         pw_prm_sizer_0[:addWidget](wd["fieldCheckBox"][f], f, 0)
     end
     # SET UP CHOOSERS
-    wd["chooser"] = (Any)[] #list(range(prm["nChoosers"]))
-    wd["chooserLabel"] = (Any)[] #list(range(prm["nChoosers"]))
-    wd["chooserOptions"] = (Any)[] #list(range(prm["nChoosers"]))
-    wd["chooserCheckBox"] = (Any)[] #list(range(prm["nChoosers"]))
+    wd["chooser"] = (Any)[] 
+    wd["chooserLabel"] = (Any)[] 
+    wd["chooserOptions"] = (Any)[] 
+    wd["chooserCheckBox"] = (Any)[] 
     for c in 1:prm["nChoosers"]
         push!(wd["chooserLabel"], Qt.QLabel(prm["chooserLabel"][c]))
         pw_prm_sizer_1[:addWidget](wd["chooserLabel"][c], c, 4)
         push!(wd["chooserOptions"], prm["chooserOptions"][c])
         push!(wd["chooser"], Qt.QComboBox())
         wd["chooser"][c][:addItems](wd["chooserOptions"][c])
-        wd["chooser"][c][:setCurrentIndex](find(wd["chooserOptions"][c] .== prm["chooser"][c]))
+        wd["chooser"][c][:setCurrentIndex](find(wd["chooserOptions"][c] .== prm["chooser"][c])-1)
         pw_prm_sizer_1[:addWidget](wd["chooser"][c], c, 5)
         push!(wd["chooserCheckBox"], Qt.QCheckBox())
         pw_prm_sizer_1[:addWidget](wd["chooserCheckBox"][c], c, 3)
     end
     for c in 1:length(wd["chooser"])
-        qconnect(wd["chooser"][c], :activated, (str) -> oChooserChange())
+        qconnect(wd["chooser"][c], :activated, (str) -> onChooserChange())
     end
  
     #SET UP FILE CHOOSERS
@@ -624,7 +632,7 @@ function setDefaultParameters(experiment, paradigm, par)
     prm["nIntervals"] = prm[prm["currExp"]]["defaultNIntervals"]  #tmp["nIntervals"]
     prm["nAlternatives"] = prm[prm["currExp"]]["defaultNAlternatives"]#tmp["nAlternatives"]
     setAdditionalWidgets()
-    onChooserChange(None)
+    onChooserChange()
 end
 
 
@@ -1733,7 +1741,7 @@ loadParametersButton = Qt.QPushButton("Load Prm")
 loadParametersButton[:clicked][:connect](onClickLoadParametersButton)
 loadParametersButton[:setToolTip]("Load a parameters file")
 loadParametersButton[:setWhatsThis]("Load a file containing the parameters for an experimental session")
-## loadParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+loadParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](loadParametersButton, n, 0)
 
 #SAVE PARAMETERS BUTTON
@@ -1743,7 +1751,7 @@ saveParametersButton = Qt.QPushButton("Save Prm")
 saveParametersButton[:clicked][:connect](onClickSaveParametersButton)
 saveParametersButton[:setToolTip]("Save a parameters file")
 saveParametersButton[:setWhatsThis]("Save the current experimental parameters to a file")
-## saveParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+saveParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](saveParametersButton, n, 1)
 
 #DELETE PARAMETERS BUTTON
@@ -1752,7 +1760,7 @@ deleteParametersButton[:clicked][:connect](onClickDeleteParametersButton)
 ## deleteParametersButton.setIcon(QIcon.fromTheme("edit-delete", QIcon(":/edit-delete")))
 ## deleteParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 deleteParametersButton[:setToolTip]("Delete current Block")
-## deleteParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+deleteParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](deleteParametersButton, n, 2)
 
 
@@ -1761,7 +1769,7 @@ undoUnsavedButton = Qt.QPushButton("Undo Unsaved")
 ## undoUnsavedButton.setIcon(QIcon.fromTheme("edit-undo", QIcon(":/edit-undo")))
 ## undoUnsavedButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 undoUnsavedButton[:setToolTip]("Undo unsaved changes")
-## undoUnsavedButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+undoUnsavedButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](undoUnsavedButton, n, 3)
 
 ## #---- SECOND ROW
@@ -1771,19 +1779,19 @@ storeParametersButton = Qt.QPushButton("Store")
 ## storeParametersButton.setIcon(QIcon.fromTheme("media-flash-memory-stick", QIcon(":/media-flash-memory-stick")))
 ## storeParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 storeParametersButton[:setToolTip]("Store current Block")
-## storeParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+storeParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeParametersButton, n, 0)
 
 storeandaddParametersButton = Qt.QPushButton("Store 'n' add!")
 ## storeandaddParametersButton[:clicked][:connect](onClickStoreandaddParametersButton)
 storeandaddParametersButton[:setToolTip]("Store current Block and add a new one")
-## storeandaddParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+storeandaddParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeandaddParametersButton, n, 1)
 
 storeandgoParametersButton = Qt.QPushButton("Store 'n' go!")
 ## storeandgoParametersButton[:clicked][:connect](onClickStoreandgoParametersButton)
 storeandgoParametersButton[:setToolTip]("Store current Block and move to the next")
-## storeandgoParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+storeandgoParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeandgoParametersButton, n, 2)
 
 newBlockButton = Qt.QPushButton("New Block")
@@ -1791,7 +1799,7 @@ newBlockButton = Qt.QPushButton("New Block")
 ## newBlockButton.setIcon(QIcon.fromTheme("document-new", QIcon(":/document-new")))
 ## newBlockButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 newBlockButton[:setToolTip]("Append a new block")
-## newBlockButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+newBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](newBlockButton, n, 3)
 
       
@@ -1804,7 +1812,7 @@ prevBlockButton = Qt.QPushButton("Previous")
 ## prevBlockButton.setIcon(QIcon.fromTheme("go-previous", QIcon(":/go-previous")))
 ## prevBlockButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 prevBlockButton[:setToolTip]("Move to previous block")
-## prevBlockButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+prevBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](prevBlockButton, n, 0)
 
 nextBlockButton = Qt.QPushButton("Next")
@@ -1812,7 +1820,7 @@ nextBlockButton = Qt.QPushButton("Next")
 ## nextBlockButton.setIcon(QIcon.fromTheme("go-next", QIcon(":/go-next")))
 ## nextBlockButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 nextBlockButton[:setToolTip]("Move to next block")
-## nextBlockButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+nextBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](nextBlockButton, n, 1)
 
 shuffleBlocksButton = Qt.QPushButton("Shuffle")
@@ -1820,7 +1828,7 @@ shuffleBlocksButton = Qt.QPushButton("Shuffle")
 ## shuffleBlocksButton.setIcon(QIcon.fromTheme("media-playlist-shuffle", QIcon(":/media-playlist-shuffle")))
 ## shuffleBlocksButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 shuffleBlocksButton[:setToolTip]("Shuffle blocks")
-## shuffleBlocksButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+shuffleBlocksButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](shuffleBlocksButton, n, 2)
 
 resetParametersButton = Qt.QPushButton("Reset")
@@ -1828,10 +1836,10 @@ resetParametersButton = Qt.QPushButton("Reset")
 ## resetParametersButton.setIcon(QIcon.fromTheme("go-home", QIcon(":/go-home")))
 ## resetParametersButton.setIconSize(QtCore.QSize(min_pw_icon_size, min_pw_icon_size))
 resetParametersButton[:setToolTip]("Reset parameters")
-## resetParametersButton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+resetParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](resetParametersButton, n, 3)
-## n = n+1
-## pw_buttons_sizer.addItem(QSpacerItem(10,10,QSizePolicy.Expanding), n, 0, 1, 4)
+n = n+1
+pw_buttons_sizer[:addItem](Qt.QSpacerItem(10,10,szp[:Expanding]), n, 0, 1, 4)
 
 
 ## #----FOURTH ROW
@@ -1893,9 +1901,9 @@ shiftBlockUpButton[:setToolTip]("Shift Block Up")
 pw_buttons_sizer[:addWidget](shiftBlockUpButton, n, 3)
 
 
-## n = n+1
+n = n+1
 ## #spacer
-## pw_buttons_sizer.addItem(QSpacerItem(10,10,QSizePolicy.Expanding), n, 5)
+pw_buttons_sizer[:addItem](Qt.QSpacerItem(10,10,szp[:Expanding]), n, 5)
 
 
 pw_prm_sizer = Qt.QHBoxLayout()
@@ -1923,9 +1931,7 @@ pw_sizer[:addLayout](pw_prm_sizer)
 pw[:setLayout](pw_sizer)
 pw[:layout]()[:SetFixedSize]
 cw[:layout]()[:SetFixedSize] 
-#pw[:layout]()[:setSizeConstraint](qt_enum("SetFixedSize"))
-#pw[:layout]()[:setSizeConstraint](Qt[:QLayout][:SetFixedSize])
-#cw[:layout]()[:setSizeConstraint](QLayout.SetFixedSize)
+
 pw_scrollarea = Qt.QScrollArea()
 pw_scrollarea[:setWidget](pw)
 splitter[:addWidget](pw_scrollarea)

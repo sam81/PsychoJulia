@@ -85,6 +85,10 @@ function select_default_parameters_freq(prm, par)
 
     return prm
 end
+
+function get_fields_to_hide_freq(prm, wd)
+
+end
     
 function doTrial_freq(prm)
     currBlock = "b"+ string(prm["currentBlock"])

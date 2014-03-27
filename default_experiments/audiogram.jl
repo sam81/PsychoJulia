@@ -79,13 +79,14 @@ function select_default_parameters_audiogram(prm, par)
     return prm
 end
 
-## function get_fields_to_hide_audiogram(parent)
-##     if parent.chooser[parent.prm["chooserLabel"].index("Signal Type:")].currentText() == "Sinusoid"
-##         parent.fieldsToHide = [parent.prm["fieldLabel"].index("Bandwidth (Hz)")]
-##     else
-##         parent.fieldsToShow = [parent.prm["fieldLabel"].index("Bandwidth (Hz)")]
-##     end
-## end
+function get_fields_to_hide_audiogram(prm, wd)
+## println( find(wd["chooserLabel"] .== "Signal Type:"))
+    if wd["chooser"][find(prm["chooserLabel"] .== "Signal Type:")[1]][:currentText]() == "Sinusoid"
+        prm["fieldsToHide"] = [find(prm["fieldLabel"] .== "Bandwidth (Hz)")]
+    else
+        prm["fieldsToShow"] = [find(prm["fieldLabel"] .== "Bandwidth (Hz)")]
+    end
+end
 
 function doTrial_audiogram(prm)
 
