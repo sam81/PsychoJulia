@@ -1,4 +1,3 @@
-
 #   Copyright (C) 2013-2014 Samuele Carcagno <sam.carcagno@gmail.com>
 #   This file is part of PsychoJulia
 
@@ -15,49 +14,49 @@
 #    You should have received a copy of the GNU General Public License
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
 
-py_class = pyimport("py_class") 
+py_class = pyimport("py_class")
 include("response_box_functions.jl")
 
-
-
 rbw = Qt.QMainWindow(w)
+rbw[:setWindowFlags](qt_enum(["Window", "CustomizeWindowHint", "WindowMinimizeButtonHint", "WindowMaximizeButtonHint"], how="|"))
+rbw[:setWindowModality](PySide.QtNamespace[:NonModal])
 
 
-#rbw[:setWindowFlags](QtCore["Qt"]["Window"] | QtCore["Qt"]["CustomizeWindowHint"] | QtCore["Qt"]["WindowMinimizeButtonHint"] | QtCore["Qt"]["WindowMaximizeButtonHint"])
-#rbw[:setWindowModality](Qt.NonModal)
-##         self.prm = parent.prm
 
+                     
 rbw[:setWindowTitle]("Response Box")
 spx = prm["pref"]["interface"]["responseButtonSize"]
 rbw[:setStyleSheet]("QPushButton[responseBoxButton='true'] {font-weight:bold; font-size: $spx;} ")
 ##         self.menubar = self.menuBar()
+rbwMenubar = rbw[:menuBar]()
 ##         #FILE MENU
-##         self.fileMenu = self.menubar.addMenu(self.tr('-'))
+fileMenu = rbwMenubar[:addMenu]("-")
        
-##         self.toggleControlWin = QAction(self.tr('Show/Hide Control Window'), self)
-##         self.toggleControlWin.setShortcut('Ctrl+C')
-##         self.toggleControlWin.setCheckable(True)
-##         #self.toggleControlWin.setStatusTip(self.tr('Toggle Control Window'))
-##         self.toggleControlWin.triggered.connect(self.onToggleControlWin)
-##         if self.prm['hideWins'] == True:
-##             self.toggleControlWin.setChecked(False)
-##         else:
-##             self.toggleControlWin.setChecked(True)
+toggleControlWin = Qt.QAction(w[:tr]("Show/Hide Control Window"), w)
+toggleControlWin[:setShortcut]("Ctrl+C")
+toggleControlWin[:setCheckable](true)
+toggleControlWin[:setStatusTip]("Toggle Control Window")
+toggleControlWin[:triggered][:connect](onToggleControlWin)
+if prm["hideWins"] == true
+    toggleControlWin[:setChecked](false)
+else
+    toggleControlWin[:setChecked](true)
+end
         
-##         self.toggleGauge = QAction(self.tr('Show/Hide Progress Bar'), self)
-##         self.toggleGauge.setShortcut('Ctrl+P')
-##         self.toggleGauge.setCheckable(True)
-##         self.toggleGauge.triggered.connect(self.onToggleGauge)
+toggleGauge = Qt.QAction("Show/Hide Progress Bar", w)
+toggleGauge[:setShortcut]("Ctrl+P")
+toggleGauge[:setCheckable](true)
+toggleGauge[:triggered][:connect](onToggleGauge)
 
-##         self.toggleBlockGauge = QAction(self.tr('Show/Hide Block Progress Bar'), self)
-##         self.toggleBlockGauge.setShortcut('Ctrl+B')
-##         self.toggleBlockGauge.setCheckable(True)
-##         self.toggleBlockGauge.triggered.connect(self.onToggleBlockGauge)
+toggleBlockGauge = Qt.QAction("Show/Hide Block Progress Bar", w)
+toggleBlockGauge[:setShortcut]("Ctrl+B")
+toggleBlockGauge[:setCheckable](true)
+toggleBlockGauge[:triggered][:connect](onToggleBlockGauge)
 
-##         #self.statusBar()
-##         self.fileMenu.addAction(self.toggleControlWin)
-##         self.fileMenu.addAction(self.toggleGauge)
-##         self.fileMenu.addAction(self.toggleBlockGauge)
+##         #statusBar()
+fileMenu[:addAction](toggleControlWin)
+fileMenu[:addAction](toggleGauge)
+fileMenu[:addAction](toggleBlockGauge)
         
 rb = Qt.QFrame()
 rb[:setFrameStyle](QtGui["QFrame"]["StyledPanel"])
@@ -79,6 +78,7 @@ responseLight = py_class[:responseLight](rbw)
 gauge = Qt.QProgressBar()
 gauge[:setRange](0, 100)
 blockGauge = Qt.QProgressBar()
+
         
 rb_sizer[:addWidget](statusButton)
 rb_sizer[:addSpacing](20)
@@ -94,28 +94,28 @@ rb_sizer[:addSpacing](20)
 rb_sizer[:addWidget](gauge)
 rb_sizer[:addWidget](blockGauge)
 
-## if prm["progbar"] == true
-##     toggleGauge[:setChecked](true)
-##     onToggleGauge()
-## else
-##     toggleGauge[:setChecked](false)
-##     onToggleGauge()
-## end
-## if prm["blockProgbar"] == true
-##     toggleBlockGauge[:setChecked](true)
-##     onToggleBlockGauge()
-## else
-##     toggleBlockGauge[:setChecked](false)
-##     onToggleBlockGauge()
-## end
+if prm["progbar"] == true
+    toggleGauge[:setChecked](true)
+    onToggleGauge()
+else
+    toggleGauge[:setChecked](false)
+    onToggleGauge()
+end
+if prm["blockProgbar"] == true
+    toggleBlockGauge[:setChecked](true)
+    onToggleBlockGauge()
+else
+    toggleBlockGauge[:setChecked](false)
+    onToggleBlockGauge()
+end
 
 rb[:setLayout](rb_sizer)
 rbw[:setCentralWidget](rb)
 prm["listener"] = listenerTF[:text]()
 prm["sessionLabel"] = sessionLabelTF[:text]()
-## if prm["hideWins"] == true
-##     w[:hide]()
-## end
+if prm["hideWins"] == true
+    w[:hide]()
+end
    
 rbw[:resize](int((1/4)*screen[:width]()), int((1/3)*screen[:height]()))
 raise(rbw) 

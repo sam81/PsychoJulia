@@ -1,3 +1,43 @@
+function close_w()
+    w[:close]()
+    rbw[:close]()
+end
+
+function closeEvent(self, event):
+        ## #here we need to check if parameters file and temporary parameters file are the same or not
+        ## self.compareGuiStoredParameters()
+        ## if self.prm['storedBlocks'] > 0:
+        ##     if self.parametersFile == None:
+        ##         ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                         self.tr("The parameters have not been saved to a file. \n Do you want to save them before exiting?"),
+        ##                                         QMessageBox.Yes | QMessageBox.No)
+        ##         if ret == QMessageBox.Yes:
+        ##             self.onClickSaveParametersButton()
+        ##     else:
+        ##         f1 = open(self.parametersFile, 'r'); f2 = open(self.prm["tmpParametersFile"], 'r')
+        ##         l1c = f1.readlines(); l2c = f2.readlines()
+        ##         f1.close(); f2.close()
+        ##         l1 = []; l2 = []
+
+        ##         for line in l1c:
+        ##             if line[0:14] != 'Block Position':
+        ##                 l1.append(line)
+        ##         for line in l2c:
+        ##             if line[0:14] != 'Block Position':
+        ##                 l2.append(line)
+        ##         if  l1 != l2:
+        ##             ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                             self.tr("The parameters in memory differ from the parameters on file. \n Do you want to save the parameters stored in memory them before exiting?"),
+        ##                                             QMessageBox.Yes | QMessageBox.No)
+        ##             if ret == QMessageBox.Yes:
+        ##                 self.onClickSaveParametersButton()
+        ##     #else:
+        ##     #    if os.path.exists(self.parametersFile) == True:
+        ##     #        os.remove(self.parametersFile)
+
+        ## event.accept()
+end
+
 function onChooserChange()
     prm["fieldsToHide"] = (Any)[]; prm["fieldsToShow"] = (Any)[]
     prm["choosersToHide"] = (Any)[]; prm["choosersToShow"] = (Any)[];
@@ -1363,3 +1403,4 @@ function togglePdfPlotCheckBox()
         procResTableCheckBox[:setChecked](true)
     end
 end
+

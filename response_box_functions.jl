@@ -164,7 +164,7 @@ function setupLights()
                     r = r+1
                 end
                 wdc["responseButton"][i][:clicked][:connect](sortResponseButton)
-                #wdc["responseButton"][i][:setFocusPolicy](Qt.NoFocus)
+                wdc["responseButton"][i][:setFocusPolicy](PySide.QtNamespace[:NoFocus])
            
             end
             
@@ -185,7 +185,7 @@ function setupLights()
                 wdc["responseButton"][i][:setProperty]("responseBoxButton", true)
                 r = r+1
                 wdc["responseButton"][i][:clicked][:connect](sortResponseButton)
-                #wdc["responseButton"][i][:setFocusPolicy](Qt.NoFocus)
+                wdc["responseButton"][i][:setFocusPolicy](PySide.QtNamespace[:NoFocus])
                 if prm[prm["currExp"]]["hasPostcursorInterval"] == true
                     responseButtonSizer[:addItem](Qt.QSpacerItem(-1, -1, szp[:Expanding]), 0, r)
                     r = r+1
@@ -245,11 +245,12 @@ end
 ##             for light in intervalLight:
 ##                 light.hide()
 
-##     def onToggleControlWin(self):
-##         if toggleControlWin.isChecked() == True:
-##             parent().show()
-##         elif toggleControlWin.isChecked() == False:
-##             parent().hide()
+function onToggleControlWin()
+    if toggleControlWin[:isChecked]() == true
+        w[:show]()
+    elseif toggleControlWin[:isChecked]() == false
+        w[:hide]()
+    end
 ##             if prm["storedBlocks"] > 0:
 ##                 if parent().listenerTF.text() == "" and prm["pref"]["general"]["listenerNameWarn"] == True:
 ##                     msg = prm["rbTrans"].translate("rb", "Please, enter the listener"s name:") 
@@ -266,6 +267,7 @@ end
 ##                 if "resultsFile" not in prm:
 ##                     onAskSaveResultsButton()
 
+end
 ##     def onAskSaveResultsButton(self):
 ##         ftow = QFileDialog.getSaveFileName(self, tr("Choose file to write results"), "", tr("All Files (*)"), "", QFileDialog.DontConfirmOverwrite)[0]
 ##         if os.path.exists(ftow) == False and len(ftow) > 0:
@@ -278,17 +280,21 @@ end
 ##             prm["resultsFile"] = ftow
 ##             parent().statusBar().showMessage(tr("Saving results to file: ") + prm["resultsFile"])
            
-##     def onToggleGauge(self):
-##         if toggleGauge.isChecked() == True:
-##             gauge.show()
-##         elif toggleGauge.isChecked() == False:
-##             gauge.hide()
+function onToggleGauge()
+    if toggleGauge[:isChecked]() == true
+        gauge[:show]()
+    elseif toggleGauge[:isChecked]() == false
+        gauge[:hide]()
+    end
+end
 
-##     def onToggleBlockGauge(self):
-##         if toggleBlockGauge.isChecked() == True:
-##             blockGauge.show()
-##         elif toggleBlockGauge.isChecked() == False:
-##             blockGauge.hide()
+function onToggleBlockGauge()
+    if toggleBlockGauge[:isChecked]() == true
+        blockGauge[:show]()
+    elseif toggleBlockGauge[:isChecked]() == false
+        blockGauge[:hide]()
+    end
+end
 
 
 

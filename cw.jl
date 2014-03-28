@@ -14,13 +14,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
 
-include("global_parameters.jl")
-include("default_experiments/default_experiments.jl")
+
 using PyCall
 #pyinitialize("python3")
 using PySide
 
 
+include("global_parameters.jl")
+include("default_experiments/default_experiments.jl")
 pysis = pyimport("sys") 
 pyos = pyimport("os") 
 pysis["path"][:insert](0, "foo")
@@ -36,6 +37,9 @@ wdc = (String => Any)[] #widget containers (like lists of widgets)
 prm = get_prefs(prm)
 prm = set_global_parameters(prm)
 
+prm["hideWins"] = false
+prm["progbar"] = false
+prm["blockProgbar"] = false
 
 #-------------------
 #LOCALE SETTINGS
@@ -85,8 +89,15 @@ prm["prevParadigm"] = None
 prm["currentBlock"] = 1
 prm["storedBlocks"] = 0
 par = (Any)[]
-
-w = Qt.QMainWindow()
+qnew_class("pychowin", "QtGui.QMainWindow") ## QtGui -- not just Qt.
+w = qnew_class_instance("pychowin")
+qset_method(w, :closeEvent) do e
+ w[:close]()
+ rbw[:close]()
+ notify(closeCondition)
+ 
+end
+#w = Qt.QMainWindow()
 cw = Qt.QFrame()
 pw = Qt.QFrame()#dropFrame(None)
 cw[:Sunken]#.setFrameStyle(QFrame.StyledPanel|QFrame.Sunken)
@@ -97,11 +108,12 @@ def_widg_sizer = Qt.QGridLayout()
 statusBar = w[:statusBar]()
 menubar = w[:menuBar]()
 
+
 fileMenu = menubar[:addMenu]("&File")
 exitButton = Qt.QAction(QtGui["QIcon"][:fromTheme]("application-exit", Qt.QIcon(":/application-exit")), "Exit", w)
 exitButton[:setShortcut]("Ctrl+Q")
 exitButton[:setStatusTip]("Exit application")
-#@exitButton[:triggered][:connect](close)
+exitButton[:triggered][:connect](close_w)
 
 processResultsMenu = fileMenu[:addMenu]("&Process Results")
 
@@ -634,6 +646,15 @@ splitter[:setSizes]([(2/6)*screen[:width](), (2/6)*screen[:width]()])
 w[:setWindowIcon](Qt.QIcon(":/Machovka_Headphones.svg"))
 w[:setWindowTitle]("PsychoJulia")
 w[:setCentralWidget](splitter)
-raise(w)
 
+raise(w)
 include("response_box.jl")
+## while true
+    
+## end
+closeCondition = Condition()
+wait(closeCondition)
+
+
+
+#end
