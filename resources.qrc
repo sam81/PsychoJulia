@@ -1,5 +1,11 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
+<file>translations/pychoacoustics_it.qm</file>
+<file>translations/pychoacoustics_fr.qm</file>
+<file>translations/pychoacoustics_es.qm</file>
+<file>translations/pychoacoustics_el.qm</file>
+<file>translations/pychoacoustics_en_US.qm</file>
+<file>translations/pychoacoustics_en_GB.qm</file>
 <file alias="Machovka_Headphones.svg">icons/Machovka_Headphones.svg</file>
 <file alias="audio-headphones">icons/audio-headphones.svgz</file>
 <file alias="application-exit">icons/application-exit.svgz</file>

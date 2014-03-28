@@ -164,7 +164,7 @@ function def_pref(prm)
     ## prm["pref"]["sound"] = {}
     ## prm["pref"]["email"] = {}
     ## prm["pref"]["exp"] = {}
-    ## prm["pref"]["interface"] = {}
+    prm["pref"]["interface"] = (String => Any)[]
 
     ## prm["pref"]["general"]["triggerONOFF"] = False
     ## prm["pref"]["general"]["ONTrigger"] = 254
@@ -187,14 +187,14 @@ function def_pref(prm)
     prm["pref"]["general"]["sessionLabelWarn"] = true
     prm["pref"]["general"]["playEndMessage"] = false
     prm["pref"]["general"]["processResultsEnd"] = true
-    #prm["pref"]["interface"]["responseButtonSize"] = 20
-    ## prm['pref']["general"]['resFileFormat'] = 'fixed'
-    ## prm['pref']["general"]['resFileFixedString'] = 'test.txt'
-    ## prm['pref']["general"]["csvSeparator"] = ';'
-    ## prm['pref']["general"]["fullFileSuffix"] = '_full'
-    ## prm['pref']["general"]["resFileSuffix"] = '_res'
-    ## prm['pref']["general"]["resTableFileSuffix"] = '_table'
-    ## prm['pref']["general"]["automaticFileExtension"] = True
+    prm["pref"]["interface"]["responseButtonSize"] = 20
+    ## prm["pref"]["general"]["resFileFormat"] = "fixed"
+    ## prm["pref"]["general"]["resFileFixedString"] = "test.txt"
+    ## prm["pref"]["general"]["csvSeparator"] = ";"
+    ## prm["pref"]["general"]["fullFileSuffix"] = "_full"
+    ## prm["pref"]["general"]["resFileSuffix"] = "_res"
+    ## prm["pref"]["general"]["resTableFileSuffix"] = "_table"
+    ## prm["pref"]["general"]["automaticFileExtension"] = True
     ## prm["pref"]["general"]["nBlocksCustomCommand"] = ""
     ## prm["pref"]["general"]["atEndCustomCommand"] = ""
     ## prm["pref"]["general"]["dprimeCorrection"] = True
@@ -203,12 +203,12 @@ function def_pref(prm)
     ## # 'variable'
     ## prm["pref"]["email"]["notifyEnd"] = False
     ## prm["pref"]["email"]["nBlocksNotify"] = 1
-    ## prm["pref"]["email"]['sendData'] = False
-    ## prm["pref"]["email"]['SMTPServer'] = 'localhost'
-    ## prm["pref"]["email"]['SMTPServerPort'] = 25
-    ## prm["pref"]["email"]['SMTPServerSecurity'] = "TLS/SSL (a)"
+    ## prm["pref"]["email"]["sendData"] = False
+    ## prm["pref"]["email"]["SMTPServer"] = "localhost"
+    ## prm["pref"]["email"]["SMTPServerPort"] = 25
+    ## prm["pref"]["email"]["SMTPServerSecurity"] = "TLS/SSL (a)"
     ## prm["pref"]["email"]["serverRequiresAuthentication"] = True
-    ## prm["pref"]["email"]['fromUsername'] = ''
+    ## prm["pref"]["email"]["fromUsername"] = ""
     ## if sys.version_info[0] == 2: #with python2.x there are problems here
     ##     passwd = ""
     ##     encoded_passwd = ""
@@ -219,22 +219,22 @@ function def_pref(prm)
     ## prm["pref"]["email"]['fromPassword'] = encoded_passwd
    
 
-    ## prm['pref']['language'] = QApplication.translate("","en","")
-    ## prm['pref']['country'] = QApplication.translate("","US","")
-    ## prm['pref']['responseBoxLanguage'] = QApplication.translate("","en","")
-    ## prm['pref']['responseBoxCountry'] = QApplication.translate("","US","")
+    ## prm["pref"]["language"] = QApplication.translate("","en","")
+    ## prm["pref"]["country"] = QApplication.translate("","US","")
+    prm["pref"]["responseBoxLanguage"] = "en"
+    prm["pref"]["responseBoxCountry"] = "US"
 
     ## #Sound preferences
     prm["pref"]["sound"] = (String => Any)[]
     prm["pref"]["sound"]["defaultNBits"] = "32"
     prm["pref"]["sound"]["defaultSampleRate"] = "48000"
-    ## prm["pref"]["sound"]["writewav"] = True
-    ## prm["pref"]["sound"]["writeSndSeqSegments"] = False
+    prm["pref"]["sound"]["writewav"] = true
+    prm["pref"]["sound"]["writeSndSeqSegments"] = false
     ## prm["pref"]["sound"]["wavmanager"] = "scipy"
     ## prm["pref"]["sound"]["bufferSize"] = 1024
-    ## prm["pref"]["sound"]["appendSilence"] = 0
+    prm["pref"]["sound"]["appendSilence"] = 0
 
-    ## if platform.system() == 'Windows':
+    ## if platform.system() == "Windows":
     ##     prm["pref"]["sound"]["playCommand"] = "winsound"
     ##     prm["pref"]["sound"]["playCommandType"] = "winsound"
     ## else:
@@ -251,7 +251,7 @@ function def_pref(prm)
     prm["phones"] = (String => Any)[]
     prm["phones"]["phonesChoices"] = ["Phones 1", "Phones 2"]
     prm["phones"]["phonesMaxLevel"] = [100, 100]
-    prm["phones"]["phonesID"] = ['0', '1']
+    prm["phones"]["phonesID"] = ["0", "1"]
     prm["phones"]["defaultPhones"] = ["\u2713", "\u2012"]
 
     ## #EXPERIMENTERS
@@ -278,53 +278,53 @@ end
 
 function get_prefs(prm)
     prm = def_pref(prm)
-##     prm['prefFile'] = os.path.expanduser("~") +'/.config/pychoacoustics/preferences.py'
-##     prm['phonesPrefFile'] = os.path.expanduser("~") +'/.config/pychoacoustics/phones.py'
-##     prm['experimenterPrefFile'] = os.path.expanduser("~") +'/.config/pychoacoustics/experimenter.py'
-##     if os.path.exists(os.path.expanduser("~") +'/.config/') == False:
-##         os.mkdir(os.path.expanduser("~") +'/.config/')
-##     if os.path.exists(os.path.expanduser("~") +'/.config/pychoacoustics/') == False:
-##         os.mkdir(os.path.expanduser("~") +'/.config/pychoacoustics/')
+##     prm["prefFile"] = os.path.expanduser("~") +"/.config/pychoacoustics/preferences.py"
+##     prm["phonesPrefFile"] = os.path.expanduser("~") +"/.config/pychoacoustics/phones.py"
+##     prm["experimenterPrefFile"] = os.path.expanduser("~") +"/.config/pychoacoustics/experimenter.py"
+##     if os.path.exists(os.path.expanduser("~") +"/.config/") == False:
+##         os.mkdir(os.path.expanduser("~") +"/.config/")
+##     if os.path.exists(os.path.expanduser("~") +"/.config/pychoacoustics/") == False:
+##         os.mkdir(os.path.expanduser("~") +"/.config/pychoacoustics/")
 
-##     local_dir = os.path.expanduser("~") +'/.local/share/data/pychoacoustics/'
+##     local_dir = os.path.expanduser("~") +"/.local/share/data/pychoacoustics/"
 ##     if os.path.exists(local_dir) == False:
 ##         os.makedirs(local_dir)
-##     stdoutFile = os.path.expanduser("~") +'/.local/share/data/pychoacoustics/pychoacoustics_stdout_log.txt'
+##     stdoutFile = os.path.expanduser("~") +"/.local/share/data/pychoacoustics/pychoacoustics_stdout_log.txt"
 ##     sys.stdout = redirectStreamToFile(stdoutFile)
 ##     #sys.stderr = redirectStreamToFile(stdoutFile)
 ##     # if there is a preferences file stored load it
-##     cmdOutFileName = os.path.expanduser("~") +'/.local/share/data/pychoacoustics/pychoacoustics_cmdout_log.txt'
-##     prm['cmdOutFileHandle'] = open(cmdOutFileName, 'a')
-##     if os.path.exists(prm['prefFile']):
-##         fIn = open(prm['prefFile'], 'rb')
-##         prm['tmp'] = pickle.load(fIn)
+##     cmdOutFileName = os.path.expanduser("~") +"/.local/share/data/pychoacoustics/pychoacoustics_cmdout_log.txt"
+##     prm["cmdOutFileHandle"] = open(cmdOutFileName, "a")
+##     if os.path.exists(prm["prefFile"]):
+##         fIn = open(prm["prefFile"], "rb")
+##         prm["tmp"] = pickle.load(fIn)
 ##         fIn.close()
-##         for k in prm['pref'].keys():
-##             if k in prm['tmp']:
-##                 if type(prm['pref'][k]).__name__=='dict':
-##                     for j in prm['pref'][k].keys():
-##                         if j in prm['tmp'][k]:
-##                             prm['pref'][k][j] = prm['tmp'][k][j]
+##         for k in prm["pref"].keys():
+##             if k in prm["tmp"]:
+##                 if type(prm["pref"][k]).__name__=="dict":
+##                     for j in prm["pref"][k].keys():
+##                         if j in prm["tmp"][k]:
+##                             prm["pref"][k][j] = prm["tmp"][k][j]
 ##                 else:
-##                      prm['pref'][k] = prm['tmp'][k]
+##                      prm["pref"][k] = prm["tmp"][k]
 
 ##     # if there are phones settings stored, load them
-##     if os.path.exists(prm['phonesPrefFile']):
-##         fIn = open(prm['phonesPrefFile'], 'rb')
-##         prm['tmp'] = pickle.load(fIn)
+##     if os.path.exists(prm["phonesPrefFile"]):
+##         fIn = open(prm["phonesPrefFile"], "rb")
+##         prm["tmp"] = pickle.load(fIn)
 ##         fIn.close()
-##         for k in prm['phones'].keys():
-##             if k in prm['tmp']:
-##                 prm['phones'][k] = prm['tmp'][k]
+##         for k in prm["phones"].keys():
+##             if k in prm["tmp"]:
+##                 prm["phones"][k] = prm["tmp"][k]
 
 ##     # if there are experimenter settings stored, load them
-##     if os.path.exists(prm['experimenterPrefFile']):
-##         fIn = open(prm['experimenterPrefFile'], 'rb')
-##         prm['tmp'] = pickle.load(fIn)
+##     if os.path.exists(prm["experimenterPrefFile"]):
+##         fIn = open(prm["experimenterPrefFile"], "rb")
+##         prm["tmp"] = pickle.load(fIn)
 ##         fIn.close()
-##         for k in prm['experimenter'].keys():
-##             if k in prm['tmp']:
-##                 prm['experimenter'][k] = prm['tmp'][k]
+##         for k in prm["experimenter"].keys():
+##             if k in prm["tmp"]:
+##                 prm["experimenter"][k] = prm["tmp"][k]
     return prm
 
 end
