@@ -18,8 +18,9 @@
 
 function onClickStatusButton()
 ##         parent().compareGuiStoredParameters()
-##         if prm["storedBlocks"] == 0 or statusButton.text() == prm["rbTrans"].translate("rb", "Running") or statusButton.text() == prm["rbTrans"].translate("rb", "Finished"):
-##             return
+    if (prm["storedBlocks"] == 0) | (statusButton[:text]() == prm["rbTrans"][:translate]("rb", "Running")) | (statusButton[:text]() == prm["rbTrans"][:translate]("rb", "Finished"))
+        return
+    end
 
 ##         if prm["currentBlock"] > prm["storedBlocks"]: #the user did not choose to store the unsaved block, move to first block
 ##             parent().moveToBlockPosition(1)    
@@ -65,7 +66,7 @@ function onClickStatusButton()
 ##         if prm["currentBlock"] > prm["storedBlocks"]:
 ##             parent().onClickNextBlockPositionButton()
         
-##         doTrial()
+    doTrial()
 end
 
 
@@ -402,10 +403,10 @@ end
 ##             if i < nIntervals-1:
 ##                 time.sleep(prm["isi"]/1000)
 
-##     def doTrial(self):
-##         prm["trialRunning"] = True
-##         prm["sortingResponse"] = False
-##         currBlock = "b"+ str(prm["currentBlock"])
+function doTrial()
+    prm["trialRunning"] = true
+    prm["sortingResponse"] = false
+    currBlock = string("b", prm["currentBlock"])
 ##         #for compatibility otherwise need to change in all experiments
 ##         prm["maxLevel"] = prm["allBlocks"]["maxLevel"]
 ##         prm["sampRate"] = prm["allBlocks"]["sampRate"]
@@ -588,7 +589,8 @@ end
 ##             else:
 ##                 sortResponse(random.choice(numpy.delete(numpy.arange(prm["nAlternatives"])+1, correctButton-1)))
 ##        #==================================================================
-       
+end
+
 function sortResponseButton()
 ##         buttonClicked = responseButton.index(sender())+1
 ##         sortResponse(buttonClicked)

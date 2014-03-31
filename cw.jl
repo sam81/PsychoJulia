@@ -154,7 +154,7 @@ editMenu[:addAction](editExperimentersAction)
 toolsMenu = menubar[:addMenu]("&Tools")
 swapBlocksAction = Qt.QAction("Swap Blocks", w)
 toolsMenu[:addAction](swapBlocksAction)
-#@ swapBlocksAction[:triggered][:connect](onSwapBlocksAction)
+swapBlocksAction[:triggered][:connect](onSwapBlocksAction)
 
 #HELP MENU
 helpMenu = menubar[:addMenu]("&Help")
@@ -274,7 +274,7 @@ paradigmChooser = Qt.QComboBox()
 paradigmChooser[:addItems](prm["Audiogram"]["paradigmChoices"])
 paradigmChooser[:setCurrentIndex](0)#qt index
 def_widg_sizer[:addWidget](paradigmChooser, n, 1)
-##@ paradigmChooser.activated[str].connect(onParadigmChange)
+qconnect(paradigmChooser, :activated, (str) -> onParadigmChange(prm[prm["currExp"]["paradigmChoices"]][str+1]))
 
 ## #PHONES
 n = n+1
@@ -476,7 +476,7 @@ pw_buttons_sizer[:addWidget](undoUnsavedButton, n, 3)
 ## #---- SECOND ROW
 n = n+1
 storeParametersButton = Qt.QPushButton("Store")
-## storeParametersButton[:clicked][:connect](onClickStoreParametersButton)
+storeParametersButton[:clicked][:connect](onClickStoreParametersButton)
 storeParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("media-flash-memory-stick", Qt.QIcon(":/media-flash-memory-stick")))
 storeParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 storeParametersButton[:setToolTip]("Store current Block")
@@ -561,8 +561,8 @@ pw_buttons_sizer[:addWidget](storedBlocksLabel, n, 2)
 n = n+1
 currentBlockPositionLabelLabel = Qt.QLabel("Block Position:")
 pw_buttons_sizer[:addWidget](currentBlockPositionLabelLabel, n, 0)
-#@currentBlockPositionLabel = Qt.QLabel(string(prm["currentBlock"]))
-#@pw_buttons_sizer[:addWidget](currentBlockPositionLabel, n, 1)
+currentBlockPositionLabel = Qt.QLabel(string(prm["currentBlock"]))
+pw_buttons_sizer[:addWidget](currentBlockPositionLabel, n, 1)
 
 jumpToBlockLabel = Qt.QLabel("Jump to Block:")
 jumpToBlockChooser = Qt.QComboBox()

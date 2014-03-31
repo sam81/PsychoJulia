@@ -1,3 +1,54 @@
+#   Copyright (C) 2013-2014 Samuele Carcagno <sam.carcagno@gmail.com>
+#   This file is part of PsychoJulia
+
+#    PsychoJulia is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    PsychoJulia is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
+
+function advanced_shuffle(seq)
+        ## seq = self.parseShuffleSeq(seq)
+        ## try:
+        ##     seq = eval(seq)
+        ## except:
+        ##     print('could not evaluate seq')
+        ##     return
+
+        ## x = self.check_and_shuffle(seq)
+
+        ## return x
+end
+
+function autoSetGaugeValue()
+    bp = int(prm[string("b", prm["currentBlock"])]["blockPosition"])
+    pcThisRep = (bp-1)/prm["storedBlocks"]*100
+    pcTot = (prm["currentRepetition"] - 1) / prm["allBlocks"]["repetitions"]*100 + 1 / prm["allBlocks"]["repetitions"]*pcThisRep
+    gauge[:setValue](pcTot)
+    blockGauge[:setRange](0, prm["storedBlocks"]*prm["allBlocks"]["repetitions"])
+
+    cb = (prm["currentRepetition"]-1)*prm["storedBlocks"]+bp
+    blockGauge[:setValue](cb-1)
+    blockGauge[:setFormat](string(prm["rbTrans"][:translate]("rb", "Completed"), " ", cb-1, "/", prm["storedBlocks"]*prm["allBlocks"]["repetitions"], " ", prm["rbTrans"][:translate]("rb", "Blocks")))
+    #self.responseBox.blockGauge.setFormat(self.prm['rbTrans'].translate('rb', "Completed") +  ' ' + str(cb-1) + '/' + str(self.prm['storedBlocks']*self.prm['allBlocks']['repetitions']) + ' ' + self.prm['rbTrans'].translate('rb', "Blocks"))
+end
+
+function check_and_shuffle(seq)
+        ## if isinstance(seq, list) == True:
+        ##     random.shuffle(seq)
+        ## for i in range(len(seq)):
+        ##     if isinstance(seq[i], list) == True or isinstance(seq[i], tuple) == True:
+        ##         self.check_and_shuffle(seq[i])
+        ## return seq
+end
+            
 function close_w()
     w[:close]()
     rbw[:close]()
@@ -6,7 +57,7 @@ end
 function closeEvent(self, event):
         ## #here we need to check if parameters file and temporary parameters file are the same or not
         ## self.compareGuiStoredParameters()
-        ## if self.prm['storedBlocks'] > 0:
+        ## if self.prm["storedBlocks"] > 0:
         ##     if self.parametersFile == None:
         ##         ret = QMessageBox.warning(self, self.tr("Warning"),
         ##                                         self.tr("The parameters have not been saved to a file. \n Do you want to save them before exiting?"),
@@ -14,16 +65,16 @@ function closeEvent(self, event):
         ##         if ret == QMessageBox.Yes:
         ##             self.onClickSaveParametersButton()
         ##     else:
-        ##         f1 = open(self.parametersFile, 'r'); f2 = open(self.prm["tmpParametersFile"], 'r')
+        ##         f1 = open(self.parametersFile, "r"); f2 = open(self.prm["tmpParametersFile"], "r")
         ##         l1c = f1.readlines(); l2c = f2.readlines()
         ##         f1.close(); f2.close()
         ##         l1 = []; l2 = []
 
         ##         for line in l1c:
-        ##             if line[0:14] != 'Block Position':
+        ##             if line[0:14] != "Block Position":
         ##                 l1.append(line)
         ##         for line in l2c:
-        ##             if line[0:14] != 'Block Position':
+        ##             if line[0:14] != "Block Position":
         ##                 l2.append(line)
         ##         if  l1 != l2:
         ##             ret = QMessageBox.warning(self, self.tr("Warning"),
@@ -36,6 +87,544 @@ function closeEvent(self, event):
         ##     #        os.remove(self.parametersFile)
 
         ## event.accept()
+end
+
+function compareGuiStoredParameters()
+        ## tmpPrm = copy.copy(self.prm)
+        ## nStoredDifferent = False
+        ## prmChanged = False
+        
+        ## if tmpPrm["currentBlock"] > tmpPrm["storedBlocks"]:
+        ##     #this needs to be controlled first of all, because otherwise we may indavertently call an unstored block
+        ##     nStoredDifferent = True
+        ## elif self.tr(self.experimentChooser.currentText()) != self.prm["b" + str(tmpPrm["currentBlock"])]["experiment"]:
+        ##     #the experiment has changed, this needs to be checked before the other things, because the keys to compare differ between different experiments
+        ##     # and anyway if the experiment is different we can skip all other checks
+        ##     prmChanged = True
+        ## ## elif self.warningInterval.isChecked() != self.prm["b" + str(tmpPrm["currentBlock"])]["warningInterval"]:
+        ## ##     prmChanged = True
+        ## else:
+        ##     currExp =  self.tr(self.experimentChooser.currentText())
+
+        ##     tmpPrm["allBlocks"] = {}
+        ##     tmpPrm["allBlocks"]["experimentLabel"] = self.experimentLabelTF.text()
+        ##     tmpPrm["allBlocks"]["endExpCommand"] = self.endExpCommandTF.text()
+        ##     tmpPrm["allBlocks"]["currentExperimenter"] = self.experimenterChooser.currentText()
+        ##     tmpPrm["allBlocks"]["currentPhones"] = self.phonesChooser.currentText()
+        ##     tmpPrm["allBlocks"]["maxLevel"] = float(self.prm["phones"]["phonesMaxLevel"][self.phonesChooser[:currentIndex]()])
+        ##     tmpPrm["allBlocks"]["sampRate"] =  self.currLocale[:toInt](self.sampRateTF.text())[0]
+        ##     tmpPrm["allBlocks"]["nBits"] = self.currLocale[:toInt](self.nBitsChooser.currentText())[0]
+        ##     tmpPrm["allBlocks"]["responseMode"] = self.responseModeChooser.currentText()
+        ##     tmpPrm["allBlocks"]["autoPCCorr"] = self.currLocale.toDouble(self.autoPCorrTF.text())[0]/100
+        ##     tmpPrm["allBlocks"]["sendTriggers"] = self.triggerCheckBox.isChecked()
+        ##     tmpPrm["allBlocks"]["shuffleMode"] = self.shuffleChooser.currentText()
+        ##     tmpPrm["allBlocks"]["repetitions"] =  self.currLocale[:toInt](self.repetitionsTF.text())[0]
+        ##     tmpPrm["allBlocks"]["procRes"] = self.procResCheckBox.isChecked()
+        ##     tmpPrm["allBlocks"]["procResTable"] = self.procResTableCheckBox.isChecked()
+        ##     tmpPrm["allBlocks"]["winPlot"] = self.winPlotCheckBox.isChecked()
+        ##     tmpPrm["allBlocks"]["pdfPlot"] = self.pdfPlotCheckBox.isChecked()
+            
+
+
+        ##     currParadigm = self.tr(self.paradigmChooser.currentText())
+        ##     currBlock = "b" + str(tmpPrm["currentBlock"])
+        ##     tmpPrm[currBlock] = {}
+        ##     tmpPrm[currBlock]["conditionLabel"] = self.conditionLabelTF.text()
+        ##     tmpPrm[currBlock]["experiment"] = currExp
+        ##     tmpPrm[currBlock]["paradigm"] = currParadigm
+        ##     tmpPrm[currBlock]["field"] = list(range(tmpPrm["nFields"]))
+        ##     tmpPrm[currBlock]["fieldCheckBox"] = list(range(tmpPrm["nFields"]))
+        ##     tmpPrm[currBlock]["chooser"] = list(range(tmpPrm["nChoosers"]))
+        ##     tmpPrm[currBlock]["chooserCheckBox"] = list(range(tmpPrm["nChoosers"]))
+        ##     tmpPrm[currBlock]["fileChooser"] = list(range(tmpPrm["nFileChoosers"]))
+        ##     tmpPrm[currBlock]["fileChooserCheckBox"] = list(range(tmpPrm["nFileChoosers"]))
+        ##     tmpPrm[currBlock]["paradigmChooser"] = []
+        ##     tmpPrm[currBlock]["paradigmField"] = []
+        ##     tmpPrm[currBlock]["paradigmChooserCheckBox"] = []
+        ##     tmpPrm[currBlock]["paradigmFieldCheckBox"] = []
+         
+
+        ##     otherKeysToCompare = ["preTrialSilence", "intervalLights", "responseLight", "responseLightDuration", "conditionLabel", "warningInterval", "warningIntervalDur", "warningIntervalISI"]
+        
+        ##     tmpPrm[currBlock]["preTrialSilence"] = self.currLocale[:toInt](self.preTrialSilenceTF.text())[0]
+        ##     tmpPrm[currBlock]["intervalLights"] = self.intervalLightsChooser.currentText()
+        ##     tmpPrm[currBlock]["warningInterval"] = self.warningIntervalChooser.currentText()
+        ##     tmpPrm[currBlock]["warningIntervalDur"] = self.currLocale[:toInt](self.warningIntervalDurTF.text())[0]
+        ##     tmpPrm[currBlock]["warningIntervalISI"] = self.currLocale[:toInt](self.warningIntervalISITF.text())[0]
+        ##     tmpPrm[currBlock]["responseLight"] = self.responseLightChooser.currentText()
+        ##     tmpPrm[currBlock]["responseLightCheckBox"] = self.responseLightCheckBox.isChecked()
+        ##     tmpPrm[currBlock]["responseLightDuration"] = self.currLocale[:toInt](self.responseLightDurationTF.text())[0]
+        ##     tmpPrm[currBlock]["responseLightDurationCheckBox"] = self.responseLightDurationCheckBox.isChecked()
+        
+        ##     if tmpPrm[currExp]["hasISIBox"] == True:
+        ##         tmpPrm[currBlock]["ISIVal"] = self.currLocale[:toInt](self.ISIBox.text())[0]
+        ##         tmpPrm[currBlock]["ISIValCheckBox"] = self.ISIBoxCheckBox.isChecked()
+        ##         otherKeysToCompare.append("ISIVal")
+        ##     if tmpPrm[currExp]["hasPreTrialInterval"] == True:
+        ##         tmpPrm[currBlock]["preTrialInterval"] = self.preTrialIntervalChooser.currentText()
+        ##         tmpPrm[currBlock]["preTrialIntervalCheckBox"] = self.preTrialIntervalCheckBox.isChecked()
+        ##         otherKeysToCompare.append("preTrialInterval")
+        ##         tmpPrm[currBlock]["preTrialIntervalISI"] = self.currLocale[:toInt](self.preTrialIntervalISITF.text())[0]
+        ##         tmpPrm[currBlock]["preTrialIntervalISICheckBox"] = self.preTrialIntervalISICheckBox.isChecked()
+        ##         otherKeysToCompare.append("preTrialIntervalISI")
+        ##     if tmpPrm[currExp]["hasPrecursorInterval"] == True:
+        ##         tmpPrm[currBlock]["precursorInterval"] = self.precursorIntervalChooser.currentText()
+        ##         tmpPrm[currBlock]["precursorIntervalCheckBox"] = self.precursorIntervalCheckBox.isChecked()
+        ##         otherKeysToCompare.append("precursorInterval")
+        ##         tmpPrm[currBlock]["precursorIntervalISI"] = self.currLocale[:toInt](self.precursorIntervalISITF.text())[0]
+        ##         tmpPrm[currBlock]["precursorIntervalISICheckBox"] = self.precursorIntervalISICheckBox.isChecked()
+        ##         otherKeysToCompare.append("precursorIntervalISI")
+        ##     if tmpPrm[currExp]["hasPostcursorInterval"] == True:
+        ##         tmpPrm[currBlock]["postcursorInterval"] = self.postcursorIntervalChooser.currentText()
+        ##         tmpPrm[currBlock]["postcursorIntervalCheckBox"] = self.postcursorIntervalCheckBox.isChecked()
+        ##         otherKeysToCompare.append("postcursorInterval")
+        ##         tmpPrm[currBlock]["postcursorIntervalISI"] = self.currLocale[:toInt](self.postcursorIntervalISITF.text())[0]
+        ##         tmpPrm[currBlock]["postcursorIntervalISICheckBox"] = self.postcursorIntervalISICheckBox.isChecked()
+        ##         otherKeysToCompare.append("postcursorIntervalISI")
+        ##     if tmpPrm[currExp]["hasAlternativesChooser"] == True:
+        ##         tmpPrm[currBlock]["nIntervals"] = self.currLocale[:toInt](self.nIntervalsChooser.currentText())[0]
+        ##         tmpPrm[currBlock]["nIntervalsCheckBox"] = self.nIntervalsCheckBox.isChecked()
+        ##         tmpPrm[currBlock]["nAlternatives"] = self.currLocale[:toInt](self.nAlternativesChooser.currentText())[0]
+        ##         tmpPrm[currBlock]["nAlternativesCheckBox"] = self.nAlternativesCheckBox.isChecked()
+        ##         otherKeysToCompare.extend(["nIntervals", "nAlternatives"])
+        ##     if tmpPrm[currExp]["hasAltReps"] == True:
+        ##         tmpPrm[currBlock]["altReps"] = self.currLocale[:toInt](self.altRepsBox.text())[0]
+        ##         tmpPrm[currBlock]["altRepsCheckBox"] = self.altRepsBoxCheckBox.isChecked()
+        ##         tmpPrm[currBlock]["altRepsISI"] = self.currLocale[:toInt](self.altRepsISIBox.text())[0]
+        ##         tmpPrm[currBlock]["altRepsISICheckBox"] = self.altRepsISIBoxCheckBox.isChecked()
+          
+
+        ##     for f in range(tmpPrm["nFields"]):
+        ##         tmpPrm[currBlock]["field"][f] = self.currLocale.toDouble(self.field[f].text())[0]
+        ##         tmpPrm[currBlock]["fieldCheckBox"][f] = self.fieldCheckBox[f].isChecked()
+            
+        ##     for c in range(tmpPrm["nChoosers"]):
+        ##         tmpPrm[currBlock]["chooser"][c] =  self.chooserOptions[c][self.chooser[c][:currentIndex]()]
+        ##         tmpPrm[currBlock]["chooserCheckBox"][c] =  self.chooserCheckBox[c].isChecked()
+
+        ##     for f in range(tmpPrm["nFileChoosers"]):
+        ##         tmpPrm[currBlock]["fileChooser"][f] = self.fileChooser[f].text()
+        ##         tmpPrm[currBlock]["fileChooserCheckBox"][f] = self.fileChooserCheckBox[f].isChecked()
+            
+        ##     for i in range(len(self.paradigmFieldList)):
+        ##         tmpPrm[currBlock]["paradigmField"].append(self.currLocale.toDouble(self.paradigmFieldList[i].text())[0])
+        ##         tmpPrm[currBlock]["paradigmFieldCheckBox"].append(self.paradigmFieldCheckBoxList[i].isChecked())
+
+        ##     for i in range(len(self.paradigmChooserList)):
+        ##         tmpPrm[currBlock]["paradigmChooser"].append(self.paradigmChooserOptionsList[i][self.paradigmChooserList[i][:currentIndex]()])
+        ##         tmpPrm[currBlock]["paradigmChooserCheckBox"].append(self.paradigmChooserCheckBoxList[i].isChecked())
+
+
+        ##     i = tmpPrm["currentBlock"] -1
+        ##     if tmpPrm["b"+str(i+1)]["field"] != self.prm["b"+str(i+1)]["field"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["chooser"] != self.prm["b"+str(i+1)]["chooser"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["fileChooser"] != self.prm["b"+str(i+1)]["fileChooser"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["fieldCheckBox"] != self.prm["b"+str(i+1)]["fieldCheckBox"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["chooserCheckBox"] != self.prm["b"+str(i+1)]["chooserCheckBox"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["fileChooserCheckBox"] != self.prm["b"+str(i+1)]["fileChooserCheckBox"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["paradigmField"] != self.prm["b"+str(i+1)]["paradigmField"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["paradigmFieldCheckBox"] != self.prm["b"+str(i+1)]["paradigmFieldCheckBox"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["paradigmChooser"] != self.prm["b"+str(i+1)]["paradigmChooser"]:
+        ##         prmChanged = True
+        ##     if tmpPrm["b"+str(i+1)]["paradigmChooserCheckBox"] != self.prm["b"+str(i+1)]["paradigmChooserCheckBox"]:
+        ##         prmChanged = True
+
+        ##     for j in range(len(otherKeysToCompare)):
+        ##         thisKey = otherKeysToCompare[j]
+        ##         if tmpPrm["b"+str(i+1)][otherKeysToCompare[j]] != self.prm["b"+str(i+1)][thisKey]:
+        ##             prmChanged = True
+        ##         if thisKey not in ["conditionLabel", "preTrialSilence", "warningInterval", #these ones don"t have check boxes
+        ##                            "warningIntervalDur", "warningIntervalISI", "intervalLights"]:
+        ##             if tmpPrm["b"+str(i+1)][otherKeysToCompare[j]+"CheckBox"] != self.prm["b"+str(i+1)][thisKey+"CheckBox"]:
+        ##                 prmChanged = True
+
+        ##     for key in tmpPrm["allBlocks"]:
+        ##         if tmpPrm["allBlocks"][key] != self.prm["allBlocks"][key]:
+        ##             prmChanged = True
+
+                
+        ## if nStoredDifferent == True:
+        ##     ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                     self.tr("Last block has not been stored. Do you want to store it?"),
+        ##                                     QMessageBox.Yes | QMessageBox.No)
+        ##     if ret == QMessageBox.Yes:
+        ##         self.onClickStoreParametersButton()
+        ## elif prmChanged == True:
+           
+        ##     ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                     self.tr("Some parameters have been modified but not stored. Do you want to store them?"),
+        ##                                     QMessageBox.Yes | QMessageBox.No)
+        ##     if ret == QMessageBox.Yes:
+        ##         self.onClickStoreParametersButton()
+end
+
+function fileChooserButtonClicked()
+        ## sender = self.sender()
+        ## fName = QFileDialog.getOpenFileName(self, self.tr("Choose file"), "", self.tr("file;;All Files (*)"))[0]
+        ## lbls = []
+ 
+        ## if len(fName) > 0: #if the user didn"t press cancel
+        ##     for i in range(self.prm["nFileChoosers"]):
+        ##         lbls.append(self.fileChooserButton[i].text())
+        ##     self.fileChooser[lbls.index(sender.text())].setText(fName)
+        ## #print(sender.text())
+end
+            
+function loadParameters(fName)
+        ## self.parametersFile = fName
+        ## self.prm["shuffled"] = False
+        ## self.prm["currentRepetition"] = 1
+        ## fStream = open(fName, "r")
+        ## allLines = fStream.readlines()
+        ## fStream.close()
+        ## tmp = {}
+        ## foo = {}
+        ## blockNumber = 0
+        ## for i in range(len(allLines)):
+        ##     if allLines[i].split(":")[0] == "Phones":
+        ##         phonesToSelect = allLines[i].split(":")[1].strip()
+        ##         try:
+        ##             self.phonesChooser.setCurrentIndex(self.prm["phones"]["phonesChoices"].index(phonesToSelect))
+        ##         except:
+        ##             errMsg = self.tr("Phones stored in prm file {} not found in database\n Leaving phones chooser untouched".format(phonesToSelect))
+        ##             print(errMsg, file=sys.stderr)
+        ##             QMessageBox.warning(self, self.tr("Warning"), errMsg)
+        ##     elif allLines[i].split(":")[0] == "Shuffle Mode":
+        ##         shuffleMode = allLines[i].split(":")[1].strip()
+        ##         self.shuffleChooser.setCurrentIndex(self.prm["shuffleChoices"].index(shuffleMode))
+        ##     elif allLines[i].split(":")[0] == "Response Mode":
+        ##         responseMode = allLines[i].split(":")[1].strip()
+        ##         self.responseModeChooser.setCurrentIndex(self.prm["responseModeChoices"].index(responseMode))
+        ##     elif allLines[i].split(":")[0] == "Auto Resp. Mode Perc. Corr.":
+        ##         autoRespPercCorr = allLines[i].split(":")[1].strip()
+        ##         self.autoPCorrTF.setText(autoRespPercCorr)
+        ##     elif allLines[i].split(":")[0] == "Sample Rate":
+        ##         sampRateToSet = allLines[i].split(":")[1].strip()
+        ##         self.sampRateTF.setText(sampRateToSet)
+        ##     elif allLines[i].split(":")[0] == "No. Repetitions":
+        ##         repetitionsToSet = allLines[i].split(":")[1].strip()
+        ##         self.repetitionsTF.setText(repetitionsToSet)
+        ##     elif allLines[i].split(":")[0] == "Bits":
+        ##         bitsToSet = allLines[i].split(":")[1].strip()
+        ##         self.nBitsChooser.setCurrentIndex(self.prm["nBitsChoices"].index(bitsToSet))
+        ##     elif allLines[i].split(":")[0] == "Experiment Label":
+        ##         experimentLabelToSet = allLines[i].split(":")[1].strip()
+        ##         self.experimentLabelTF.setText(experimentLabelToSet)
+        ##     elif allLines[i].split(":")[0] == "End Command":
+        ##         endExpCommandToSet = allLines[i].split(":")[1].strip()
+        ##         self.endExpCommandTF.setText(endExpCommandToSet)
+        ##     elif allLines[i].split(":")[0] == "Shuffling Scheme":
+        ##         shufflingSchemeToSet = allLines[i].split(":")[1].strip()
+        ##         self.shufflingSchemeTF.setText(shufflingSchemeToSet)
+        ##     elif allLines[i].split(":")[0] == "Trigger On/Off":
+        ##         triggerOnOff = allLines[i].split(":")[1].strip()
+        ##         if triggerOnOff == "True":
+        ##             self.triggerCheckBox.setChecked(True)
+        ##         else:
+        ##             self.triggerCheckBox.setChecked(False)
+        ##     elif allLines[i].split(":")[0] == "Proc. Res.":
+        ##         procResOnOff = allLines[i].split(":")[1].strip()
+        ##         if procResOnOff == "True":
+        ##             self.procResCheckBox.setChecked(True)
+        ##         else:
+        ##             self.procResCheckBox.setChecked(False)
+        ##     elif allLines[i].split(":")[0] == "Proc. Res. Table":
+        ##         procResTableOnOff = allLines[i].split(":")[1].strip()
+        ##         if procResTableOnOff == "True":
+        ##             self.procResTableCheckBox.setChecked(True)
+        ##         else:
+        ##             self.procResTableCheckBox.setChecked(False)
+        ##     elif allLines[i].split(":")[0] == "Plot":
+        ##         winPlotOnOff = allLines[i].split(":")[1].strip()
+        ##         ## if self.prm["appData"]["plotting_available"] == False:
+        ##         ##      winPlotOnOff = "False"
+        ##         if winPlotOnOff == "True":
+        ##             self.winPlotCheckBox.setChecked(True)
+        ##         else:
+        ##             self.winPlotCheckBox.setChecked(False)
+        ##     elif allLines[i].split(":")[0] == "PDF Plot":
+        ##         pdfPlotOnOff = allLines[i].split(":")[1].strip()
+        ##         ## if self.prm["appData"]["plotting_available"] == False:
+        ##         ##      pdfPlotOnOff = "False"
+        ##         if pdfPlotOnOff == "True":
+        ##             self.pdfPlotCheckBox.setChecked(True)
+        ##         else:
+        ##             self.pdfPlotCheckBox.setChecked(False)
+        ##     if allLines[i] == "*******************************************************\n":
+        ##         startBlock = True
+        ##         blockNumber = blockNumber + 1
+        ##         currBlock = "b"+str(blockNumber)
+        ##         tmp["b"+str(blockNumber)] = {}
+        ##         foo["b"+str(blockNumber)] = {}
+
+        ##         #assign some default values to be overwritten if present in file
+        ##         tmp["b"+str(blockNumber)]["warningIntervalDur"] = 500
+        ##         tmp["b"+str(blockNumber)]["warningIntervalISI"] = 500
+        ##         tmp["b"+str(blockNumber)]["preTrialIntervalISI"] = 500
+        ##         tmp["b"+str(blockNumber)]["preTrialIntervalISICheckBox"] = False
+        ##         tmp["b"+str(blockNumber)]["precursorIntervalISI"] = 500
+        ##         tmp["b"+str(blockNumber)]["precursorIntervalISICheckBox"] = False
+        ##         tmp["b"+str(blockNumber)]["postcursorIntervalISI"] = 500
+        ##         tmp["b"+str(blockNumber)]["postcursorIntervalISICheckBox"] = False
+                
+        ##     if allLines[i].split(":")[0] == "Block Position":
+        ##         tmp["b"+str(blockNumber)]["blockPosition"] = allLines[i].split(":")[1].strip()
+        ##     if allLines[i].split(":")[0] == "Condition Label":
+        ##         tmp["b"+str(blockNumber)]["conditionLabel"] = allLines[i].split(":")[1].strip()
+        ##     if allLines[i].split(":")[0] == "Experiment":
+        ##         tmp["b"+str(blockNumber)]["experiment"] = allLines[i].split(":")[1].strip()
+        ##     if allLines[i].split(":")[0] == "Paradigm":
+        ##         tmp["b"+str(blockNumber)]["paradigm"] = allLines[i].split(":")[1].strip()
+        ##     if allLines[i].split(":")[0] == "Alternatives":
+        ##         tmp["b"+str(blockNumber)]["nAlternatives"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["nAlternativesCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Intervals":
+        ##         tmp["b"+str(blockNumber)]["nIntervals"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["nIntervalsCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Pre-Trial Silence (ms)":
+        ##         tmp["b"+str(blockNumber)]["preTrialSilence"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##     if allLines[i].split(":")[0] == "Interval Lights":
+        ##         tmp["b"+str(blockNumber)]["intervalLights"] = allLines[i].split(":")[1].strip()
+        ##     if allLines[i].split(":")[0] == "Warning Interval":
+        ##          tmp["b"+str(blockNumber)]["warningInterval"] = allLines[i].split(":")[1].strip()#strToBoolean(allLines[i].split(":")[1].strip())
+        ##     if allLines[i].split(":")[0] == "Warning Interval Duration (ms)":
+        ##         tmp["b"+str(blockNumber)]["warningIntervalDur"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##     if allLines[i].split(":")[0] == "Warning Interval ISI (ms)":
+        ##         tmp["b"+str(blockNumber)]["warningIntervalISI"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##     if allLines[i].split(":")[0] == "ISI (ms)":
+        ##         tmp["b"+str(blockNumber)]["ISIVal"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["ISIValCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Pre-Trial Interval":
+        ##         tmp["b"+str(blockNumber)]["preTrialInterval"] = allLines[i].split(":")[1].strip()
+        ##         tmp["b"+str(blockNumber)]["preTrialIntervalCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Pre-Trial Interval ISI (ms)":
+        ##         tmp["b"+str(blockNumber)]["preTrialIntervalISI"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["preTrialIntervalISICheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Precursor Interval":
+        ##         tmp["b"+str(blockNumber)]["precursorInterval"] = allLines[i].split(":")[1].strip()
+        ##         tmp["b"+str(blockNumber)]["precursorIntervalCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Precursor Interval ISI (ms)":
+        ##         tmp["b"+str(blockNumber)]["precursorIntervalISI"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["precursorIntervalISICheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Postcursor Interval":
+        ##         tmp["b"+str(blockNumber)]["postcursorInterval"] = allLines[i].split(":")[1].strip()
+        ##         tmp["b"+str(blockNumber)]["postcursorIntervalCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Postcursor Interval ISI (ms)":
+        ##         tmp["b"+str(blockNumber)]["postcursorIntervalISI"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["postcursorIntervalISICheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Alternated (AB) Reps.":
+        ##         tmp["b"+str(blockNumber)]["altReps"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["altRepsCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Alternated (AB) Reps. ISI (ms)":
+        ##         tmp["b"+str(blockNumber)]["altRepsISI"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["altRepsISICheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Response Light":
+        ##         tmp["b"+str(blockNumber)]["responseLight"] = allLines[i].split(":")[1].strip()
+        ##         tmp["b"+str(blockNumber)]["responseLightCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].split(":")[0] == "Response Light Duration (ms)":
+        ##         tmp["b"+str(blockNumber)]["responseLightDuration"] = self.currLocale[:toInt](allLines[i].split(":")[1].strip())[0]
+        ##         tmp["b"+str(blockNumber)]["responseLightDurationCheckBox"] = strToBoolean(allLines[i].split(":")[2].strip())
+        ##     if allLines[i].strip() == ".":
+        ##         foo["b"+str(blockNumber)]["startParadigmChooser"] = i+1
+        ##     if allLines[i].strip() == "..":
+        ##         foo["b"+str(blockNumber)]["startParadigmField"] = i+1
+        ##     if allLines[i].strip() == "...":
+        ##         foo["b"+str(blockNumber)]["startChooser"] = i+1
+        ##     if allLines[i].strip() == "....":
+        ##         foo["b"+str(blockNumber)]["startFileChooser"] = i+1
+        ##     if allLines[i].strip() == ".....":
+        ##         foo["b"+str(blockNumber)]["startField"] = i+1
+        ##     if allLines[i] == ("+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"):
+        ##         foo["b"+str(blockNumber)]["endField"] = i
+
+        ## nBlocks = blockNumber
+        ## for j in range(blockNumber):
+        ##     blockNumber = j+1
+        ##     tmp["b"+str(blockNumber)]["paradigmChooser"] = []
+        ##     tmp["b"+str(blockNumber)]["paradigmChooserCheckBox"] = []
+        ##     tmp["b"+str(blockNumber)]["paradigmChooserLabel"] = []
+        ##     tmp["b"+str(blockNumber)]["paradigmField"] = []
+        ##     tmp["b"+str(blockNumber)]["paradigmFieldLabel"] = []
+        ##     tmp["b"+str(blockNumber)]["paradigmFieldCheckBox"] = []
+        ##     tmp["b"+str(blockNumber)]["chooser"] = []
+        ##     tmp["b"+str(blockNumber)]["chooserLabel"] = []
+        ##     tmp["b"+str(blockNumber)]["chooserCheckBox"] = []
+        ##     tmp["b"+str(blockNumber)]["field"] = []
+        ##     tmp["b"+str(blockNumber)]["fieldCheckBox"] = []
+        ##     tmp["b"+str(blockNumber)]["fieldLabel"] = []
+        ##     tmp["b"+str(blockNumber)]["fileChooser"] = []
+        ##     tmp["b"+str(blockNumber)]["fileChooserCheckBox"] = []
+        ##     tmp["b"+str(blockNumber)]["fileChooserButton"] = []
+        ##     for i in range(foo["b"+str(blockNumber)]["startParadigmField"] - foo["b"+str(blockNumber)]["startParadigmChooser"] -1):
+        ##         tmp["b"+str(blockNumber)]["paradigmChooser"].append(allLines[foo["b"+str(blockNumber)]["startParadigmChooser"]+i].split(":")[1].strip())
+        ##         tmp["b"+str(blockNumber)]["paradigmChooserLabel"].append(allLines[foo["b"+str(blockNumber)]["startParadigmChooser"]+i].split(":")[0].strip()+":")
+        ##         tmp["b"+str(blockNumber)]["paradigmChooserCheckBox"].append(strToBoolean(allLines[foo["b"+str(blockNumber)]["startParadigmChooser"]+i].split(":")[2].strip()))
+
+        ##     for i in range(foo["b"+str(blockNumber)]["startChooser"] - foo["b"+str(blockNumber)]["startParadigmField"] -1):
+        ##         tmp["b"+str(blockNumber)]["paradigmField"].append(self.currLocale.toDouble(allLines[foo["b"+str(blockNumber)]["startParadigmField"]+i].split(":")[1].strip())[0])
+        ##         tmp["b"+str(blockNumber)]["paradigmFieldLabel"].append(allLines[foo["b"+str(blockNumber)]["startParadigmField"]+i].split(":")[0].strip())
+        ##         tmp["b"+str(blockNumber)]["paradigmFieldCheckBox"].append(strToBoolean(allLines[foo["b"+str(blockNumber)]["startParadigmField"]+i].split(":")[2].strip()))
+
+        ##     for i in range(foo["b"+str(blockNumber)]["startFileChooser"] - foo["b"+str(blockNumber)]["startChooser"] -1):
+        ##         tmp["b"+str(blockNumber)]["chooser"].append(allLines[foo["b"+str(blockNumber)]["startChooser"]+i].split(":")[1].strip())
+        ##         tmp["b"+str(blockNumber)]["chooserLabel"].append(allLines[foo["b"+str(blockNumber)]["startChooser"]+i].split(":")[0].strip()+":")
+        ##         tmp["b"+str(blockNumber)]["chooserCheckBox"].append(strToBoolean(allLines[foo["b"+str(blockNumber)]["startChooser"]+i].split(":")[2].strip()))
+
+        ##     for i in range(foo["b"+str(blockNumber)]["startField"] - foo["b"+str(blockNumber)]["startFileChooser"] -1):
+        ##         tmp["b"+str(blockNumber)]["fileChooser"].append(allLines[foo["b"+str(blockNumber)]["startFileChooser"]+i].split(":")[1].strip())
+        ##         tmp["b"+str(blockNumber)]["fileChooserButton"].append(allLines[foo["b"+str(blockNumber)]["startFileChooser"]+i].split(":")[0].strip()+":")
+        ##         tmp["b"+str(blockNumber)]["fileChooserCheckBox"].append(strToBoolean(allLines[foo["b"+str(blockNumber)]["startFileChooser"]+i].split(":")[2].strip()))
+
+        ##     for i in range(foo["b"+str(blockNumber)]["endField"] - foo["b"+str(blockNumber)]["startField"] ):
+        ##         tmp["b"+str(blockNumber)]["field"].append(self.currLocale.toDouble(allLines[foo["b"+str(blockNumber)]["startField"]+i].split(":")[1].strip())[0])
+        ##         tmp["b"+str(blockNumber)]["fieldLabel"].append(allLines[foo["b"+str(blockNumber)]["startField"]+i].split(":")[0].strip())
+        ##         tmp["b"+str(blockNumber)]["fieldCheckBox"].append(strToBoolean(allLines[foo["b"+str(blockNumber)]["startField"]+i].split(":")[2].strip()))
+
+
+              
+                    
+        ## for i in range(self.prm["storedBlocks"]):
+        ##     del self.prm["b"+str(i+1)]
+        ## for i in range(nBlocks):
+        ##     self.prm["b"+str(i+1)] = tmp["b"+str(i+1)]
+        ## self.prm["storedBlocks"] = nBlocks
+
+        ## self.prm["allBlocks"] = {}
+        ## self.prm["allBlocks"]["experimentLabel"] = self.experimentLabelTF.text()
+        ## self.prm["allBlocks"]["endExpCommand"] = self.endExpCommandTF.text()
+        ## self.prm["allBlocks"]["currentExperimenter"] = self.experimenterChooser.currentText()
+        ## self.prm["allBlocks"]["currentPhones"] = self.phonesChooser.currentText()
+        ## self.prm["allBlocks"]["maxLevel"] = float(self.prm["phones"]["phonesMaxLevel"][self.phonesChooser[:currentIndex]()])
+        ## self.prm["allBlocks"]["sampRate"] =  self.currLocale[:toInt](self.sampRateTF.text())[0]
+        ## self.prm["allBlocks"]["nBits"] = self.currLocale[:toInt](self.nBitsChooser.currentText())[0]
+        ## self.prm["allBlocks"]["responseMode"] = self.responseModeChooser.currentText()
+        ## self.prm["allBlocks"]["autoPCCorr"] = self.currLocale.toDouble(self.autoPCorrTF.text())[0]/100
+        ## self.prm["allBlocks"]["sendTriggers"] = self.triggerCheckBox.isChecked()
+        ## self.prm["allBlocks"]["shuffleMode"] = self.shuffleChooser.currentText()
+        ## self.prm["allBlocks"]["repetitions"] =  self.currLocale[:toInt](self.repetitionsTF.text())[0]
+        ## self.prm["allBlocks"]["procRes"] = self.procResCheckBox.isChecked()
+        ## self.prm["allBlocks"]["procResTable"] = self.procResTableCheckBox.isChecked()
+        ## self.prm["allBlocks"]["winPlot"] = self.winPlotCheckBox.isChecked()
+        ## self.prm["allBlocks"]["pdfPlot"] = self.pdfPlotCheckBox.isChecked()
+        ## #self.prm["allBlocks"]["listener"] = self.listenerTF.text()
+        ## #self.prm["allBlocks"]["sessionLabel"] = self.sessionLabelTF.text()
+
+        ## self.moveToBlockPosition(1)
+        ## self.updateParametersWin()
+        ## #for the moment here, but maybe should have a function for updating all possible dynamic default control widgets
+        ## self.onResponseModeChange(responseMode)
+        ## self.autoSetGaugeValue()
+        ## self.responseBox.statusButton.setText(self.prm["rbTrans"].translate("rb", "Start"))
+        ## self.saveParametersToFile(self.prm["tmpParametersFile"])
+        ## self.audioManager.initializeAudio()
+end
+
+function moveNextBlock()
+    if prm["storedBlocks"] > 0
+        lastBlock = string("b", self.prm["currentBlock"])
+        if prm["currentBlock"] >= prm["storedBlocks"]
+            prm["currentBlock"] = 1
+            string(lastBlock = "b", prm["storedBlocks"])
+        else
+            prm["currentBlock"] = prm["currentBlock"] +1
+        end
+        if prm["storedBlocks"] > 0
+            wd["statusButton"][:setText](prm["rbTrans"][:translate]("rb", "Start"))
+        end
+        updateParametersWin()
+        autoSetGaugeValue()
+    end
+end
+
+function moveToBlockPosition(position)
+    if prm["storedBlocks"] < 1
+        return
+    end
+    if position > prm["storedBlocks"]
+        position = 1
+    elseif position < 1
+        position = prm["storedBlocks"]
+    end
+    
+    for k=1:prm["storedBlocks"]
+        if prm[string("b", k+1)]["blockPosition"] == string(position)
+            blockNumber = k+1
+        end
+    end
+                
+    prm["currentBlock"] = blockNumber
+    prm["tmpBlockPosition"] = prm[string("b", prm["currentBlock"])]["blockPosition"]
+    setNewBlock(string("b", prm["currentBlock"]))
+    if prm["storedBlocks"] > 0
+        statusButton[:setText](prm["rbTrans"][:translate]("rb", "Start"))
+        autoSetGaugeValue()
+    end
+end
+
+
+function onAbout()
+        ## if pyqtversion in [4, 5]:
+        ##     QMessageBox.about(self, self.tr("About pychoacoustics"),
+        ##                       self.tr("""<b>Python app for psychoacoustics</b> <br>
+        ##                       - version: {0}; <br>
+        ##                       - build date: {1} <br>
+        ##                       <p> Copyright &copy; 2010-2013 Samuele Carcagno. <a href="mailto:sam.carcagno@gmail.com">sam.carcagno@gmail.com</a> 
+        ##                       All rights reserved. <p>
+        ##                       This program is free software: you can redistribute it and/or modify
+        ##                       it under the terms of the GNU General Public License as published by
+        ##                       the Free Software Foundation, either version 3 of the License, or
+        ##                       (at your option) any later version.
+        ##                       <p>
+        ##                       This program is distributed in the hope that it will be useful,
+        ##                       but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ##                       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ##                       GNU General Public License for more details.
+        ##                       <p>
+        ##                       You should have received a copy of the GNU General Public License
+        ##                       along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
+        ##                       <p>Python {2} - Qt {3} - PyQt {4} on {5}""").format(__version__, self.prm["builddate"], platform.python_version(), QtCore.QT_VERSION_STR, QtCore.PYQT_VERSION_STR, platform.system()))
+        ## elif pyqtversion in [-4]:
+        ##     QMessageBox.about(self, self.tr("About pychoacoustics"),
+        ##                       self.tr("""<b>Python app for psychoacoustics</b> <br>
+        ##                       - version: {0}; <br>
+        ##                       - build date: {1} <br>
+        ##                       <p> Copyright &copy; 2010-2014 Samuele Carcagno. <a href="mailto:sam.carcagno@gmail.com">sam.carcagno@gmail.com</a> 
+        ##                       All rights reserved. <p>
+        ##                       This program is free software: you can redistribute it and/or modify
+        ##                       it under the terms of the GNU General Public License as published by
+        ##                       the Free Software Foundation, either version 3 of the License, or
+        ##                       (at your option) any later version.
+        ##                       <p>
+        ##                       This program is distributed in the hope that it will be useful,
+        ##                       but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ##                       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ##                       GNU General Public License for more details.
+        ##                       <p>
+        ##                       You should have received a copy of the GNU General Public License
+        ##                       along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
+        ##                       <p>Python {2} - Qt {3} - PySide {4} on {5}""").format(__version__, self.prm["builddate"], platform.python_version(), PySide.QtCore.__version__, PySide.__version__, platform.system()))
+end            
+
+function onChangeNDifferences()
+        ## nDifferences = self.currLocale[:toInt](self.nDifferencesChooser.currentText())[0]
+        ## self.removePrmWidgets()
+        ## self.par["nDifferences"] = nDifferences
+        ## self.setDefaultParameters(self.currExp, self.currParadigm, self.par)
+end
+
+function onChangeNTracks()
+        ## nTracks = self.currLocale[:toInt](self.nTracksChooser.currentText())[0]
+        ## self.removePrmWidgets()
+        ## self.par["nDifferences"] = nTracks
+        ## self.setDefaultParameters(self.currExp, self.currParadigm, self.par)
 end
 
 function onChooserChange()
@@ -89,6 +678,215 @@ function onChooserChange()
 end
 
 
+function onClickNextBlockButton()
+    compareGuiStoredParameters()
+    moveNextBlock()
+end
+
+function onClickNextBlockPositionButton()
+    compareGuiStoredParameters()
+    if self.prm["currentBlock"] > self.prm["storedBlocks"]
+        position = 1
+    else
+        position = int(prm[string("b", prm["currentBlock"])]["blockPosition"])+1
+    end
+    moveToBlockPosition(position)
+end
+    
+function onClickNewBlockButton()
+    if prm["storedBlocks"] >= prm["currentBlock"]
+        compareGuiStoredParameters()
+        block =  currBlock = string("b", prm["currentBlock"])
+        self.prm["currentBlock"] = prm["storedBlocks"] + 1
+        self.prm["tmpBlockPosition"] = prm["storedBlocks"] + 1
+        setNewBlock(block)
+    else
+        ret = Qt.QMessageBox[:warning](w, "Warning",
+                                       "You need to store the current block before adding a new one.",
+                                       Qt.QMessageBox.Ok)
+    end
+end
+
+function onClickPrevBlockButton()
+    compareGuiStoredParameters()
+    if prm["storedBlocks"] > 0
+        lastBlock = string("b", prm["currentBlock"])
+        if (prm["currentBlock"] < 2) & (prm["storedBlocks"] > 0)
+            prm["currentBlock"] = prm["storedBlocks"]
+        elseif (prm["currentBlock"] < 2) & (prm["storedBlocks"] == 0)
+            prm["currentBlock"] = 1
+        else
+            if prm["currentBlock"] > self.prm["storedBlocks"]
+                lastBlock = string("b", prm["currentBlock"]-1)
+                prm["currentBlock"] = prm["currentBlock"] -1
+            end
+        end
+        statusButton[:setText](prm["rbTrans"][:translate]("rb", "Start"))
+        updateParametersWin()
+        autoSetGaugeValue()
+    end
+end
+
+function onClickPrevBlockPositionButton()
+    compareGuiStoredParameters()
+    if prm["currentBlock"] > self.prm["storedBlocks"]
+        position = self.prm["currentBlock"]-1
+    else
+        position = int(prm[string("b", prm["currentBlock"])]["blockPosition"])-1
+    end
+    moveToBlockPosition(position)
+end
+        
+function onClickStoreParametersButton()
+    currExp =  experimentChooser[:currentText]()
+    currParadigm = paradigmChooser[:currentText]()
+    currBlock = string("b", prm["currentBlock"])
+
+    ## #FOR ALL BLOCKS
+    prm["allBlocks"] =  (String => Any)[]
+    prm["allBlocks"]["experimentLabel"] = experimentLabelTF[:text]()
+    prm["allBlocks"]["endExpCommand"] = endExpCommandTF[:text]()
+    prm["allBlocks"]["currentExperimenter"] = experimenterChooser[:currentText]()
+    prm["allBlocks"]["currentPhones"] = phonesChooser[:currentText]()
+    #prm["allBlocks"]["maxLevel"] = float(prm["phones"]["phonesMaxLevel"][phonesChooser[:currentIndex]()])
+    prm["allBlocks"]["sampRate"] =  prm["currentLocale"][:toInt](sampRateTF[:text]())[1]
+    prm["allBlocks"]["nBits"] = prm["currentLocale"][:toInt](nBitsChooser[:currentText]())[1]
+    prm["allBlocks"]["responseMode"] = responseModeChooser[:currentText]()
+    prm["allBlocks"]["autoPCCorr"] = prm["currentLocale"][:toDouble](autoPCorrTF[:text]())[1]/100
+    prm["allBlocks"]["sendTriggers"] = triggerCheckBox[:isChecked]()
+    prm["allBlocks"]["shuffleMode"] = shuffleChooser[:currentText]()
+    prm["allBlocks"]["repetitions"] =  prm["currentLocale"][:toInt](repetitionsTF[:text]())[1]
+    prm["allBlocks"]["procRes"] = procResCheckBox[:isChecked]()
+    prm["allBlocks"]["procResTable"] = procResTableCheckBox[:isChecked]()
+    prm["allBlocks"]["winPlot"] = winPlotCheckBox[:isChecked]()
+    prm["allBlocks"]["pdfPlot"] = pdfPlotCheckBox[:isChecked]()
+    #prm["allBlocks"]["listener"] = listenerTF"][:text]()
+    #prm["allBlocks"]["sessionLabel"] = sessionLabelTF"][:text]()
+
+
+    ## #BLOCK SPECIFIC
+    prm[currBlock] = (String => Any)[]
+    prm[currBlock]["conditionLabel"] = conditionLabelTF[:text]()
+    prm[currBlock]["experiment"] = currExp
+    prm[currBlock]["paradigm"] = currParadigm
+    prm[currBlock]["field"] = (Any)[] #list(range(prm["nFields"]))
+    prm[currBlock]["fieldLabel"] = (Any)[] #list(range(prm["nFields"]))
+    prm[currBlock]["fieldCheckBox"] = (Any)[] #list(range(prm["nFields"]))
+    prm[currBlock]["chooser"] = (Any)[] #list(range(prm["nChoosers"]))
+    prm[currBlock]["chooserOptions"] = (Any)[] #list(range(prm["nChoosers"]))
+    prm[currBlock]["chooserCheckBox"] = (Any)[] #list(range(prm["nChoosers"]))
+    prm[currBlock]["chooserLabel"] = (Any)[] #list(range(prm["nChoosers"]))
+    prm[currBlock]["fileChooser"] = (Any)[] #list(range(prm["nFileChoosers"]))
+    prm[currBlock]["fileChooserButton"] = (Any)[] #list(range(prm["nFileChoosers"]))
+    prm[currBlock]["fileChooserCheckBox"] = (Any)[] #list(range(prm["nFileChoosers"]))
+    prm[currBlock]["paradigmChooser"] = (Any)[] #[]
+    prm[currBlock]["paradigmChooserCheckBox"] = (Any)[] #[]
+    prm[currBlock]["paradigmField"] = (Any)[] #[]
+    prm[currBlock]["paradigmFieldCheckBox"] = (Any)[] #[]
+    prm[currBlock]["paradigmChooserLabel"] = (Any)[] #[]
+    prm[currBlock]["paradigmChooserOptions"] = (Any)[] #[]
+    prm[currBlock]["paradigmFieldLabel"] = (Any)[] #[]
+    prm[currBlock]["blockPosition"] = currentBlockPositionLabel[:text]()
+    
+    prm[currBlock]["preTrialSilence"] = prm["currentLocale"][:toInt](preTrialSilenceTF[:text]())[1]
+    prm[currBlock]["intervalLights"] = intervalLightsChooser[:currentText]()
+    prm[currBlock]["warningInterval"] = warningIntervalChooser[:currentText]()
+    prm[currBlock]["warningIntervalDur"] = prm["currentLocale"][:toInt](warningIntervalDurTF[:text]())[1]
+    prm[currBlock]["warningIntervalISI"] = prm["currentLocale"][:toInt](warningIntervalISITF[:text]())[1]
+    if prm[currExp]["hasISIBox"] == true
+        prm[currBlock]["ISIVal"] = prm["currentLocale"][:toInt](wd["ISIBox"][:text]())[1]
+        prm[currBlock]["ISIValCheckBox"] = wd["ISIBoxCheckBox"][:isChecked]()
+    end
+    ## if prm[currExp]["hasPreTrialInterval"] == true
+    ##     prm[currBlock]["preTrialInterval"] = preTrialIntervalChooser[:currentText]()
+    ##     prm[currBlock]["preTrialIntervalCheckBox"] = preTrialIntervalCheckBox[:isChecked]()
+    ##     prm[currBlock]["preTrialIntervalISI"] = prm["currentLocale"][:toInt](preTrialIntervalISITF[:text]())[1]
+    ##     prm[currBlock]["preTrialIntervalISICheckBox"] = preTrialIntervalISICheckBox[:isChecked]()
+    ## end
+    ## if prm[currExp]["hasPrecursorInterval"] == true
+    ##     prm[currBlock]["precursorInterval"] = precursorIntervalChooser[:currentText]()
+    ##     prm[currBlock]["precursorIntervalCheckBox"] = precursorIntervalCheckBox[:isChecked]()
+    ##     prm[currBlock]["precursorIntervalISI"] = prm["currentLocale"][:toInt](precursorIntervalISITF[:text]())[1]
+    ##     prm[currBlock]["precursorIntervalISICheckBox"] = precursorIntervalISICheckBox[:isChecked]()
+    ## end
+    ## if prm[currExp]["hasPostcursorInterval"] == true
+    ##     prm[currBlock]["postcursorInterval"] = postcursorIntervalChooser[:currentText]()
+    ##     prm[currBlock]["postcursorIntervalCheckBox"] = postcursorIntervalCheckBox[:isChecked]()
+    ##     prm[currBlock]["postcursorIntervalISI"] = prm["currentLocale"][:toInt](postcursorIntervalISITF[:text]())[1]
+    ##     prm[currBlock]["postcursorIntervalISICheckBox"] = postcursorIntervalISICheckBox[:isChecked]()
+    ## end
+    ## if prm[currExp]["hasAlternativesChooser"] == true
+    ##     prm[currBlock]["nIntervals"] = prm["currentLocale"][:toInt](nIntervalsChooser[:currentText]())[1]
+    ##     prm[currBlock]["nIntervalsCheckBox"] = nIntervalsCheckBox[:isChecked]()
+    ##     prm[currBlock]["nAlternatives"] = prm["currentLocale"][:toInt](nAlternativesChooser[:currentText]())[1]
+    ##     prm[currBlock]["nAlternativesCheckBox"] = nAlternativesCheckBox[:isChecked]()
+    ## end
+    ## if prm[currExp]["hasAltReps"] == true
+    ##     prm[currBlock]["altReps"] = prm["currentLocale"][:toInt](altRepsBox[:text]())[1]
+    ##     prm[currBlock]["altRepsCheckBox"] = altRepsBoxCheckBox[:isChecked]()
+    ##     prm[currBlock]["altRepsISI"] = prm["currentLocale"][:toInt](altRepsISIBox[:text]())[1]
+    ##     prm[currBlock]["altRepsISICheckBox"] = altRepsISIBoxCheckBox[:isChecked]()
+    ## end
+    
+    ## prm[currBlock]["responseLight"] = responseLightChooser[:currentText]()
+    ## prm[currBlock]["responseLightCheckBox"] = responseLightCheckBox[:isChecked]()
+    ## prm[currBlock]["responseLightDuration"] = prm["currentLocale"][:toInt](responseLightDurationTF[:text]())[1]
+    ## prm[currBlock]["responseLightDurationCheckBox"] = responseLightDurationCheckBox[:isChecked]()
+    
+    ## for f in range(prm["nFields"]):
+    ##     prm[currBlock]["field"][f] = prm["currentLocale"].toDouble(field[f][:text]())[1]
+    ##     prm[currBlock]["fieldLabel"][f] =  fieldLabel[f][:text]()
+    ##     prm[currBlock]["fieldCheckBox"][f] =  fieldCheckBox[f][:isChecked]()
+    
+    ## for c in range(prm["nChoosers"]):
+    ##     prm[currBlock]["chooser"][c] =  chooserOptions[c][chooser[c][:currentIndex]()]
+    ##     prm[currBlock]["chooserOptions"][c] =  chooserOptions[c]
+    ##     prm[currBlock]["chooserLabel"][c] =  chooserLabel[c][:text]()
+    ##     prm[currBlock]["chooserCheckBox"][c] =  chooserCheckBox[c][:isChecked]()
+    
+    ## for f in range(prm["nFileChoosers"]):
+    ##     prm[currBlock]["fileChooser"][f] = fileChooser[f][:text]()
+    ##     prm[currBlock]["fileChooserButton"][f] =  fileChooserButton[f][:text]()
+    ##     prm[currBlock]["fileChooserCheckBox"][f] =  fileChooserCheckBox[f][:isChecked]()
+    
+    ## for i in range(len(paradigmFieldList)):
+    ##     prm[currBlock]["paradigmField"].append(prm["currentLocale"].toDouble(paradigmFieldList[i][:text]())[1])
+    ##     prm[currBlock]["paradigmFieldLabel"].append(paradigmFieldLabelList[i][:text]())
+    ##     prm[currBlock]["paradigmFieldCheckBox"].append(paradigmFieldCheckBoxList[i][:isChecked]())
+    ## for i in range(len(paradigmChooserList)):
+    ##     prm[currBlock]["paradigmChooser"].append(paradigmChooserOptionsList[i][paradigmChooserList[i][:currentIndex]()])
+    ##     prm[currBlock]["paradigmChooserLabel"].append(paradigmChooserLabelList[i][:text]())
+    ##     prm[currBlock]["paradigmChooserOptions"].append(paradigmChooserOptionsList[i])
+    ##     prm[currBlock]["paradigmChooserCheckBox"].append(paradigmChooserCheckBoxList[i][:isChecked]())
+    
+    ## if prm["currentBlock"] > prm["storedBlocks"]:    
+    ##     prm["storedBlocks"] = prm["storedBlocks"] + 1
+    ## storedBlocksCountLabel.setText(str(prm["storedBlocks"]))
+    ## for i in range(jumpToBlockChooser.count()):
+    ##     jumpToBlockChooser.removeItem(0)
+    ##     jumpToPositionChooser.removeItem(0)
+    ## for i in range(prm["storedBlocks"]):
+    ##     jumpToBlockChooser.addItem(str(i+1))
+    ##     jumpToPositionChooser.addItem(str(i+1))
+    ## jumpToBlockChooser.setCurrentIndex(prm["currentBlock"]-1)
+    ## jumpToPositionChooser.setCurrentIndex(int(prm[currBlock]["blockPosition"])-1)
+    ## responseBox.statusButton.setText(prm["rbTrans"].translate("rb", "Start"))
+    #saveParametersToFile(prm["tmpParametersFile"])
+    #autoSetGaugeValue()
+end
+
+function onClickStoreandaddParametersButton()
+    onClickStoreParametersButton()
+    onClickNewBlockButton()
+end
+
+function onClickStoreandgoParametersButton()
+    onClickStoreParametersButton()
+    moveNextBlock()
+end
+
+
+
 function onClickDeleteParametersButton()
         ## if prm["storedBlocks"] > 1:
         ##     if prm["currentBlock"] <= prm["storedBlocks"] and prm["storedBlocks"] > 0:
@@ -127,31 +925,39 @@ function onClickDeleteParametersButton()
         ##     moveNextBlock()
 end
 
+
+function onClickOpenResultsButton(self)
+        ## if "resultsFile" in self.prm:
+        ##     fileToOpen = self.prm["resultsFile"]
+        ##     QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(fileToOpen))
+        ## else:
+        ##     ret = QMessageBox.information(self, self.tr("message"),
+        ##                                         self.tr("No results file has been selected"),
+        ##                                         QMessageBox.Ok | QMessageBox.Cancel)
+end
+
 function onClickResetParametersButton()
-    ##    if prm["storedBlocks"] == 0:
-    ##         pass
-    ##     else:
-    ##         prm["currentBlock"] = 1
-    ##         for i in range(prm["storedBlocks"]):
-    ##             prm["b"+str(i+1)]["blockPosition"] = str(i+1)
-    ##         updateParametersWin()
-    ##         prm["shuffled"] = False
-    ##         saveParametersToFile(prm["tmpParametersFile"])
-    ##         prm["currentRepetition"] = 1
-    ##         autoSetGaugeValue()
-    ##         responseBox.statusButton[:setText](prm["rbTrans"].translate("rb", "Start"))
-    ## def onClickUndoUnsavedButton(self):
-    ##     if prm["currentBlock"] > prm["storedBlocks"]:
-    ##         onExperimentChange(experimentChooser.currentText())
-    ##     else:
-    ##         updateParametersWin()
+    if prm["storedBlocks"] == 0
+        #pass
+    else
+        prm["currentBlock"] = 1
+        for i=1: prm["storedBlocks"]
+            prm[string("b", i+1)]["blockPosition"] = string(i+1)
+        end
+        updateParametersWin()
+        prm["shuffled"] = false
+        saveParametersToFile(prm["tmpParametersFile"])
+        prm["currentRepetition"] = 1
+        autoSetGaugeValue()
+        statusButton[:setText](prm["rbTrans"][:translate]("rb", "Start"))
+    end
 end
 
 function onClickLoadParametersButton()
     fd = Qt.QFileDialog()
     fName = fd[:getOpenFileName](w, "Choose parameters file to load", "", "prm files (*.prm *PRM *Prm);;All Files (*)")[1]
     if length(fName) > 0 #if the user didn't press cancel
-        #@     loadParameters(fName)
+        loadParameters(fName)
     end
 end
 
@@ -170,7 +976,7 @@ function onClickSaveParametersButton()
     ##         saveParametersToFile(ftow)
     ##         saveParametersToFile(prm["tmpParametersFile"])
     ##         #if parametersFile == prm["tmpParametersFile"]:
-    ##         #    if os.path.exists(parametersFile) == True:
+    ##         #    if os.path.exists(parametersFile) == true
     ##         #        os.remove(parametersFile)
     ##         parametersFile = ftow
     ##     end
@@ -197,12 +1003,91 @@ function onClickSaveResultsButton()
 end
 
 function onClickShiftBlockDownButton()
-    #@shiftBlock(prm["currentBlock"], "down")
+    shiftBlock(prm["currentBlock"], "down")
 end    
 
 function onClickShiftBlockUpButton()
-    #@shiftBlock(prm["currentBlock"], "up")
+    shiftBlock(prm["currentBlock"], "up")
 end
+
+function onClickShuffleBlocksButton()
+        ## self.compareGuiStoredParameters()
+        ## if self.prm["storedBlocks"] > 1:
+        ##     if len(self.shufflingSchemeTF[:text]()) == 0:
+        ##         blockPositions = list(range(self.prm["storedBlocks"]))
+        ##         random.shuffle(blockPositions)
+        ##         for k in range(self.prm["storedBlocks"]):
+        ##             self.prm["b"+str(k+1)]["blockPosition"] = str(blockPositions[k]+1)
+        ##     else:
+        ##         try:
+        ##             shuffledSeq = self.advanced_shuffle(self.shufflingSchemeTF[:text]())
+        ##             blockPositions = self.unpack_seq(shuffledSeq)
+        ##         except:
+        ##             ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                             self.tr("Shuffling failed :-( Something may be wrong with your shuffling scheme."),
+        ##                                             QMessageBox.Ok | QMessageBox.Cancel)
+        ##             return
+        ##         if len(numpy.unique(blockPositions)) != self.prm["storedBlocks"]:
+        ##             ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                             self.tr("Shuffling failed :-( The length of the shuffling sequence seems to be different than the number of stored blocks. Maybe you recently added of deleted a block."),
+        ##                                             QMessageBox.Ok | QMessageBox.Cancel)
+        ##             return
+                    
+        ##         for k in range(self.prm["storedBlocks"]):
+        ##             self.prm["b"+str(k+1)]["blockPosition"] = str(blockPositions[k])
+
+        ##     self.moveToBlockPosition(1)
+        ##     self.prm["shuffled"] = True
+        ##     self.saveParametersToFile(self.prm["tmpParametersFile"])
+        ##     self.updateParametersWin()
+        ##     self.responseBox.statusButton.setText(self.prm["rbTrans"].translate("rb", "Start"))
+        ##     self.autoSetGaugeValue()
+end
+
+function onClickUndoUnsavedButton()
+        ## if self.prm["currentBlock"] > self.prm["storedBlocks"]:
+        ##     self.onExperimentChange(self.experimentChooser[:currentText]())
+        ## else:
+        ##     self.updateParametersWin()
+end
+
+function onDropPrmFile(l)
+        ## lastFileDropped = l #l[len(l)-1]
+        ## if os.path.exists(lastFileDropped):
+        ##     reply = QMessageBox.question(self, self.tr("Message"), self.tr("Do you want to load the parameters file {0} ?").format(lastFileDropped), QMessageBox.Yes | 
+        ##                                        QMessageBox.No, QMessageBox.Yes)
+        ##     if reply == QMessageBox.Yes:
+        ##         self.loadParameters(lastFileDropped)
+        ##     else:
+        ##         pass
+end
+
+function onEditExperimenters()
+        ## dialog = experimentersDialog(self)
+        ## if dialog.exec_():
+        ##     dialog.onClickApplyButton()
+end
+
+function onEditPhones()
+        ## currIdx = self.phonesChooser[:currentIndex]()
+        ## dialog = phonesDialog(self)
+        ## if dialog.exec_():
+        ##     dialog.permanentApply()
+     
+        ## self.phonesChooser.setCurrentIndex(currIdx)
+        ## if self.phonesChooser[:currentIndex]() == -1:
+        ##     self.phonesChooser.setCurrentIndex(0)
+end
+
+
+
+function onEditPref()
+        ## dialog = preferencesDialog(self)
+        ## if dialog.exec_():
+        ##     dialog.permanentApply()
+        ##     self.audioManager.initializeAudio()
+end
+
 
 function onExperimentChange(experimentSelected)
 
@@ -218,6 +1103,24 @@ end
 function onIntervalLightsChange()
     prm["intervalLights"] = intervalLightsChooser[:currentText]()
     #@responseBox.setupLights()
+end
+
+function onJumpToBlockChange()
+        ## blockToJumpTo = self.jumpToBlockChooser[:currentIndex]() + 1
+        ## self.compareGuiStoredParameters()
+        ## self.prm["currentBlock"] = blockToJumpTo
+        ## self.prm["tmpBlockPosition"] = self.prm["b"+str(self.prm["currentBlock"])]["blockPosition"]
+        ## self.setNewBlock("b"+str(self.prm["currentBlock"]))
+        ## if self.prm["storedBlocks"] > 0:
+        ##     self.responseBox.statusButton.setText(self.prm["rbTrans"].translate("rb", "Start"))
+        ##     self.updateParametersWin()
+        ##     self.autoSetGaugeValue()
+end  
+
+function onJumpToPositionChange()
+        ## position = self.jumpToPositionChooser[:currentIndex]() + 1
+        ## self.compareGuiStoredParameters()
+        ## self.moveToBlockPosition(position)
 end
 
 function onListenerChange()
@@ -238,6 +1141,59 @@ function onNIntervalsChange(nIntervalsSelected)
     prm["nIntervals"] = prm["currentLocale"][:toInt](wd["nIntervalsChooser"][:currentText]())[1]
     setupLights()
 end
+
+function onParadigmChange(paradigmSelected)
+        prm["prevParadigm"] = copy(prm["currParadigm"])
+        prm["currParadigm"] = paradigmSelected
+        setParadigmWidgets(currParadigm, prevParadigm)
+        setupLights()
+end
+
+function onPrecursorIntervalChange()
+        ## if self.precursorIntervalChooser[:currentText]() == self.tr("Yes"):
+        ##     self.prm["precursorInterval"] = True
+        ##     self.precursorIntervalISILabel.show()
+        ##     self.precursorIntervalISITF.show()
+        ##     self.precursorIntervalISICheckBox.show()
+        ## else:
+        ##     self.prm["precursorInterval"] = False
+        ##     self.precursorIntervalISILabel.hide()
+        ##     self.precursorIntervalISITF.hide()
+        ##     self.precursorIntervalISICheckBox.hide()
+        ## self.onChooserChange(None)
+        ## self.responseBox.setupLights()
+end
+
+function onPostcursorIntervalChange()
+        ## if self.postcursorIntervalChooser[:currentText]() == self.tr("Yes"):
+        ##     self.prm["postcursorInterval"] = True
+        ##     self.postcursorIntervalISILabel.show()
+        ##     self.postcursorIntervalISITF.show()
+        ##     self.postcursorIntervalISICheckBox.show()
+        ## else:
+        ##     self.prm["postcursorInterval"] = False
+        ##     self.postcursorIntervalISILabel.hide()
+        ##     self.postcursorIntervalISITF.hide()
+        ##     self.postcursorIntervalISICheckBox.hide()
+        ## self.onChooserChange(None)
+        ## self.responseBox.setupLights()
+end
+
+function onPreTrialIntervalChange()
+        ## if self.preTrialIntervalChooser[:currentText]() == self.tr("Yes"):
+        ##     self.prm["preTrialInterval"] = True
+        ##     self.preTrialIntervalISILabel.show()
+        ##     self.preTrialIntervalISITF.show()
+        ##     self.preTrialIntervalISICheckBox.show()
+        ## else:
+        ##     self.prm["preTrialInterval"] = False
+        ##     self.preTrialIntervalISILabel.hide()
+        ##     self.preTrialIntervalISITF.hide()
+        ##     self.preTrialIntervalISICheckBox.hide()
+        ## self.onChooserChange(None)
+        ## self.responseBox.setupLights()
+end
+
 function onResponseModeChange(selectedMode)
     if selectedMode != "Automatic"
         autoPCorrLabel[:hide]()
@@ -252,6 +1208,42 @@ function onSessionLabelChange()
     prm["sessionLabel"] = text(sessionLabelTF)
 end
 
+
+function onShowFortune()
+        ##dialog = showFortuneDialog(self)
+end
+
+
+function onShowManualPdf()
+        ## fileToOpen = os.path.abspath(os.path.dirname(__file__)) + "/doc/_build/latex/pychoacoustics.pdf"
+        ## QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(fileToOpen))
+end
+
+function onShowModulesDoc()
+        ## fileToOpen = os.path.abspath(os.path.dirname(__file__)) + "/doc/_build/html/index.html"
+        ## QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(fileToOpen))
+end
+
+function onSwapBlocksAction()
+        ## dialog = swapBlocksDialog(self)
+        ## if dialog.exec_():
+        ##     blockA = self.prm["currentLocale"][:toInt](dialog.blockAWidget[:text]())[0]
+        ##     blockB = self.prm["currentLocale"][:toInt](dialog.blockBWidget[:text]())[0]
+        ##     if self.prm["storedBlocks"] < 1:
+        ##         ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                         self.tr("There are no stored blocks to swap."),
+        ##                                         QMessageBox.Ok | QMessageBox.Cancel)
+        ##         return
+        ##     if blockA < 1 or blockB < 1 or blockA > self.prm["storedBlocks"] or blockB > self.prm["storedBlocks"]:
+        ##         ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                         self.tr("Block numbers specified out of range."),
+        ##                                         QMessageBox.Ok | QMessageBox.Cancel)
+        ##         return
+        ##     else:
+        ##         self.swapBlocks(blockA, blockB)
+        ## return
+end
+                
 function onWarningIntervalChange()
     if warningIntervalChooser[:currentText]() == "Yes"
         prm["warningInterval"] = true
@@ -267,6 +1259,115 @@ function onWarningIntervalChange()
         warningIntervalISITF[:hide]()
     end
     #@responseBox.setupLights()
+end
+
+function onWhatsThis(self)
+        ## if QWhatsThis.inWhatsThisMode() == true
+        ##     QWhatsThis.leaveWhatsThisMode()
+        ## else:
+        ##     QWhatsThis.enterWhatsThisMode()
+end
+
+function parseShuffleSeq(seq)
+        ## seq = seq.replace(' ', '') #remove white space
+        ## seqLen = len(seq)
+        ## allowedChars = list(string.digits)
+        ## allowedChars.extend([',', '-', '(', ')', '[', ']'])
+        ## outSeq = ''
+        ## for i in range(len(seq)):
+        ##     if seq[i] not in allowedChars:
+        ##         ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                         self.tr("Shuffling scheme contains non-allowed characters."),
+        ##                                         QMessageBox.Ok | QMessageBox.Cancel)
+        ##         return
+        ## seqFound = False
+        ## k = 0
+        ## while seqFound == False:        
+        ##     if seq[k] in ['(', ')', '[', ']', ',']:
+        ##         outSeq = outSeq + seq[k]
+        ##         k = k+1
+        ##     elif seq[k] == '-':
+        ##         prevDig = seq[k-1]
+        ##         nextDig = seq[k+1]
+        ##         delimiterFound = False
+        ##         n = 2
+        ##         while delimiterFound == False:
+        ##             if seq[k-n] not in ['(', '[', ',']:
+        ##                 prevDig = seq[k-n] + prevDig
+        ##                 n = n+1
+        ##             else:
+        ##                 delimiterFound = True
+        ##         delimiterFound = False
+        ##         n = 2
+        ##         while delimiterFound == False:
+        ##             if seq[k+n] not in [')', ']', ',']:
+        ##                 nextDig = nextDig + seq[k+n]
+        ##                 n = n+1
+        ##             else:
+        ##                 delimiterFound = True
+        ##         nextDigitLength = n-1
+        ##         prevDig = int(prevDig)
+        ##         nextDig = int(nextDig)
+        ##         for j in range(prevDig+1, nextDig+1):
+        ##             outSeq = outSeq + ',' + str(j)
+        ##         k = k+n
+        ##     else:
+        ##         outSeq = outSeq + seq[k]
+        ##         k = k+1
+        ##     if k == len(seq):
+        ##         seqFound = True
+        ## return outSeq
+end
+                    
+function processResultsLinearDialog()
+        ## fList = QFileDialog.getOpenFileNames(self, self.tr("Choose results file to load"), '', self.tr("All Files (*)"))[0]
+        ## sep = None
+        ## if len(fList) > 0:
+        ##     resformat = 'linear'
+
+        ##     f = open(fList[0], 'r')
+        ##     allLines = f.readlines()
+        ##     f.close()
+        ##     paradigmFound = False
+        ##     lineNum = 0
+        ##     while paradigmFound == False:
+        ##         if allLines[lineNum].split(':')[0] == "Paradigm":
+        ##             paradigm = allLines[lineNum].split(':')[1].strip()
+        ##             paradigmFound = True
+        ##         lineNum = lineNum+1
+                
+        ##     dialog = processResultsDialog(self, fList, resformat, paradigm, sep)
+end
+            
+
+function processResultsTableDialog()
+        ## fList = QFileDialog.getOpenFileNames(self, self.tr("Choose results file to load"), '', self.tr("All Files (*)"))[0]
+        ## sep = None
+        ## if len(fList) > 0:
+           
+        ##     resformat = 'table'
+        ## #Determine paradigm
+
+        ##     f = open(fList[0], "r")
+        ##     thisLines = f.readlines()
+        ##     f.close()
+
+        ##     seps = [';', ',', ':', ' ']
+        ##     for sep in seps:
+        ##         try:
+        ##             prdgCol = thisLines[0].split(sep).index('paradigm')
+        ##         except:
+        ##             prdgCol = None
+        ##         if prdgCol != None:
+        ##             break
+        ##     if prdgCol == None:
+        ##         sep, ok = QInputDialog.getText(self, self.tr('Input Dialog'), "CSV separator")
+        ##         if ok == False:
+        ##             return
+
+        ##     paradigm = thisLines[1].split(sep)[prdgCol]
+                
+        ##     dialog = processResultsDialog(self, fList, resformat, paradigm, sep)
 end
 
 function removePrmWidgets()
@@ -298,6 +1399,81 @@ function removePrmWidgets()
     end
 end
 
+function saveParametersToFile(ftow)
+        ## fName = open(ftow, 'w')
+        ## fName.write('Phones: ' + self.phonesChooser[:currentText]() + '\n')
+        ## fName.write('Shuffle Mode: ' + self.shuffleChooser[:currentText]() + '\n')
+        ## fName.write('Response Mode: ' + self.responseModeChooser[:currentText]() + '\n')
+        ## fName.write('Auto Resp. Mode Perc. Corr.: ' + self.autoPCorrTF.text() + '\n')
+        ## fName.write('Sample Rate: ' + self.sampRateTF.text() + '\n')
+        ## fName.write('Bits: ' + self.nBitsChooser[:currentText]() + '\n')
+        ## fName.write('Trigger On/Off: ' + str(self.triggerCheckBox[:isChecked]()) + '\n')
+        ## fName.write('Experiment Label: ' + self.experimentLabelTF[:text]() + '\n')
+        ## fName.write('End Command: ' + self.endExpCommandTF[:text]() + '\n')
+        ## fName.write('Shuffling Scheme: ' + self.shufflingSchemeTF[:text]() + '\n')
+        ## fName.write('No. Repetitions: ' + self.repetitionsTF[:text]() + '\n')
+        ## fName.write('Proc. Res.: ' + str(self.procResCheckBox[:isChecked]()) + '\n')
+        ## fName.write('Proc. Res. Table: ' + str(self.procResTableCheckBox[:isChecked]()) + '\n')
+        ## fName.write('Plot: ' + str(self.winPlotCheckBox[:isChecked]()) + '\n')
+        ## fName.write('PDF Plot: ' + str(self.pdfPlotCheckBox[:isChecked]()) + '\n')
+        ## for i in range(self.prm["storedBlocks"]):
+        ##     currBlock = 'b'+str(i+1)
+        ##     currExp = self.tr(self.prm[currBlock]['experiment'])
+        ##     currParadigm = self.tr(self.prm[currBlock]['paradigm'])
+        ##     fName.write('*******************************************************\n')
+        ##     fName.write(self.tr('Block Position: ') + self.prm[currBlock]['blockPosition']+ '\n')
+        ##     fName.write(self.tr('Condition Label: ') + self.prm[currBlock]['conditionLabel']+ '\n')
+        ##     fName.write(self.tr('Experiment: ') + self.prm[currBlock]['experiment']+ '\n')
+        ##     fName.write(self.tr('Paradigm: ') + self.prm[currBlock]['paradigm']+ '\n')
+        ##     if self.prm[currExp]["hasAlternativesChooser"] == true
+        ##         fName.write(self.tr('Intervals: ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['nIntervals']) + ' :' + str(self.prm[currBlock]['nIntervalsCheckBox']) + '\n')
+        ##         fName.write(self.tr('Alternatives: ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['nAlternatives']) + ' :' + str(self.prm[currBlock]['nAlternativesCheckBox']) + '\n')
+        ##     fName.write(self.tr('Pre-Trial Silence (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['preTrialSilence']) + '\n')
+        ##     fName.write(self.tr('Warning Interval: ') + str(self.prm[currBlock]['warningInterval']) + '\n')
+        ##     if self.prm[currBlock]['warningInterval'] == self.tr("Yes"):
+        ##         fName.write(self.tr('Warning Interval Duration (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['warningIntervalDur']) + '\n')
+        ##         fName.write(self.tr('Warning Interval ISI (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['warningIntervalISI']) + '\n')
+        ##     fName.write(self.tr('Interval Lights: ') + self.prm[currBlock]['intervalLights'] + '\n')
+        ##     if self.prm[currExp]["hasISIBox"] == true
+        ##         fName.write(self.tr('ISI (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['ISIVal']) + ' :' + str(self.prm[currBlock]['ISIValCheckBox']) + '\n')
+        ##     if self.prm[currExp]["hasPreTrialInterval"] == true
+        ##         fName.write(self.tr('Pre-Trial Interval: ') + self.prm[currBlock]['preTrialInterval'] + ' :' + str(self.prm[currBlock]['preTrialIntervalCheckBox']) + '\n')
+        ##         if self.prm[currBlock]['preTrialInterval'] == self.tr("Yes"):
+        ##             fName.write(self.tr('Pre-Trial Interval ISI (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['preTrialIntervalISI']) + ' :' + str(self.prm[currBlock]['preTrialIntervalISICheckBox']) + '\n')
+        ##     if self.prm[currExp]["hasPrecursorInterval"] == true
+        ##         fName.write(self.tr('Precursor Interval: ') + self.prm[currBlock]['precursorInterval'] + ' :' + str(self.prm[currBlock]['precursorIntervalCheckBox']) + '\n')
+        ##         if self.prm[currBlock]['precursorInterval'] == self.tr("Yes"):
+        ##             fName.write(self.tr('Precursor Interval ISI (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['precursorIntervalISI']) + ' :' + str(self.prm[currBlock]['precursorIntervalISICheckBox']) + '\n')
+        ##     if self.prm[currExp]["hasPostcursorInterval"] == true
+        ##         fName.write(self.tr('Postcursor Interval: ') + self.prm[currBlock]['postcursorInterval'] + ' :' + str(self.prm[currBlock]['postcursorIntervalCheckBox']) + '\n')
+        ##         if self.prm[currBlock]['postcursorInterval'] == self.tr("Yes"):
+        ##             fName.write(self.tr('Postcursor Interval ISI (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['postcursorIntervalISI']) + ' :' + str(self.prm[currBlock]['postcursorIntervalISICheckBox']) + '\n')
+        ##     if self.prm[currExp]["hasAltReps"] == true
+        ##         fName.write(self.tr('Alternated (AB) Reps.: ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['altReps']) + ' :' + str(self.prm[currBlock]['altRepsCheckBox']) + '\n')
+        ##         fName.write(self.tr('Alternated (AB) Reps. ISI (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['altRepsISI']) + ' :' + str(self.prm[currBlock]['altRepsISICheckBox']) + '\n')
+             
+
+        ##     fName.write(self.tr('Response Light: ') + str(self.prm[currBlock]['responseLight']) + ' :' + str(self.prm[currBlock]['responseLightCheckBox']) + '\n')
+        ##     fName.write(self.tr('Response Light Duration (ms): ') + self.prm["currentLocale"][:toString](self.prm[currBlock]['responseLightDuration']) + ' :' + str(self.prm[currBlock]['responseLightDurationCheckBox']) + '\n')
+        ##     fName.write('.\n')
+        ##     for k in range(len(self.prm[currBlock]['paradigmChooser'])):
+        ##         fName.write(self.prm[currBlock]['paradigmChooserLabel'][k] +' ' + self.prm[currBlock]['paradigmChooser'][k] + ' :' + str(self.prm[currBlock]['paradigmChooserCheckBox'][k]) + '\n')
+        ##     fName.write('..\n')
+        ##     for k in range(len(self.prm[currBlock]['paradigmField'])):
+        ##         fName.write(self.prm[currBlock]['paradigmFieldLabel'][k] + ': ' +  self.prm["currentLocale"][:toString](self.prm[currBlock]['paradigmField'][k], precision=self.prm["pref"]["general"]["precision"]) + ' :' + str(self.prm[currBlock]['paradigmFieldCheckBox'][k]) + '\n')
+        ##     fName.write('...\n')
+        ##     for k in range(len(self.prm[currBlock]['chooser'])):
+        ##         fName.write(self.prm[currBlock]['chooserLabel'][k] +' ' + self.prm[currBlock]['chooser'][k] + ' :' + str(self.prm[currBlock]['chooserCheckBox'][k]) + '\n')
+        ##     fName.write('....\n')
+        ##     for k in range(len(self.prm[currBlock]['fileChooser'])):
+        ##         fName.write(self.prm[currBlock]['fileChooserButton'][k] +': ' + self.prm[currBlock]['fileChooser'][k] + ' :' + str(self.prm[currBlock]['fileChooserCheckBox'][k]) + '\n')
+        ##     fName.write('.....\n')
+        ##     for k in range(len(self.prm[currBlock]['field'])):
+        ##         fName.write(self.prm[currBlock]['fieldLabel'][k] + ': ' + self.prm["currentLocale"][:toString](self.prm[currBlock]['field'][k], precision=self.prm["pref"]["general"]["precision"]) + ' :' + str(self.prm[currBlock]['fieldCheckBox'][k]) + '\n')
+        ##     fName.write('+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n')
+        ## fName.close()
+end
+                
 function setAdditionalWidgets()
     if prm["prevExp"] != None
         for i=1:length(wdc["additionalWidgetsIntFieldList"])
@@ -329,17 +1505,17 @@ function setAdditionalWidgets()
         wdc["additionalWidgetsChooserCheckBoxList"] = (Any)[]
 
         if prm[prm["currExp"]]["hasISIBox"] == true
-            ISILabel = Qt.QLabel("ISI (ms):")
-            add_widg_sizer[:addWidget](ISILabel, n, 1)
-            ISIBox = Qt.QLineEdit()
-            ISIBox[:setText]("500")
-            ISIBox[:setValidator](Qt.QIntValidator())
-            add_widg_sizer[:addWidget](ISIBox, n, 2)
-            ISIBoxCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](ISIBoxCheckBox, n, 0)
-            push!(wdc["additionalWidgetsIntFieldList"], ISIBox)
-            push!(wdc["additionalWidgetsIntFieldLabelList"], ISILabel)
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], ISIBoxCheckBox)
+            wd["ISILabel"] = Qt.QLabel("ISI (ms):")
+            add_widg_sizer[:addWidget](wd["ISILabel"], n, 1)
+            wd["ISIBox"] = Qt.QLineEdit()
+            wd["ISIBox"][:setText]("500")
+            wd["ISIBox"][:setValidator](Qt.QIntValidator())
+            add_widg_sizer[:addWidget](wd["ISIBox"], n, 2)
+            wd["ISIBoxCheckBox"] = Qt.QCheckBox()
+            add_widg_sizer[:addWidget](wd["ISIBoxCheckBox"], n, 0)
+            push!(wdc["additionalWidgetsIntFieldList"], wd["ISIBox"])
+            push!(wdc["additionalWidgetsIntFieldLabelList"], wd["ISILabel"])
+            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["ISIBoxCheckBox"])
             n = n+1
         end
         if prm[prm["currExp"]]["hasAlternativesChooser"] == true
@@ -657,6 +1833,103 @@ function setDefaultParameters(experiment, paradigm, par)
     onChooserChange()
 end
 
+function setNewBlock(block)
+        ## self.removePrmWidgets()
+        ## self.conditionLabelTF.setText(self.prm[block]['conditionLabel'])
+
+        ## currExp = self.tr(self.prm[block]['experiment'])
+        ## paradigm = self.tr(self.prm[block]['paradigm'])
+        ## self.experimentChooser.setCurrentIndex(self.prm['experimentsChoices'].index(currExp))
+        ## for i in range(self.paradigmChooser.count()):
+        ##     self.paradigmChooser.removeItem(0)
+        ## self.paradigmChooser.addItems(self.prm[currExp]['paradigmChoices'])
+        ## self.paradigmChooser.setCurrentIndex(self.prm[currExp]["paradigmChoices"].index(paradigm))
+
+        ## if paradigm in [self.tr("Multiple Constants 1-Interval 2-Alternatives"), self.tr("Multiple Constants m-Intervals n-Alternatives"), self.tr("Odd One Out")]:
+        ##     self.par['nDifferences'] = int(self.prm[block]['paradigmChooser'][self.prm[block]['paradigmChooserLabel'].index(self.tr("No. Differences:"))])
+        ## if paradigm in [self.tr("Transformed Up-Down Interleaved"), self.tr("Weighted Up-Down Interleaved")]:
+        ##     self.par['nDifferences'] = int(self.prm[block]['paradigmChooser'][self.prm[block]['paradigmChooserLabel'].index(self.tr("No. Tracks:"))])
+      
+        ## self.setDefaultParameters(currExp, self.tr(self.prm[block]['paradigm']), self.par)
+        ## for f in range(len(self.field)):
+        ##     self.field[f].setText(self.prm["currentLocale"][:toString](self.prm[block]['field'][f], precision=self.prm["pref"]["general"]["precision"]))
+        ##     self.fieldCheckBox[f].setChecked(self.prm[block]['fieldCheckBox'][f])
+        ## for c in range(len(self.chooser)):
+        ##     self.chooser[c].setCurrentIndex(self.prm['chooserOptions'][c].index(self.prm[block]['chooser'][c]))
+        ##     self.chooserCheckBox[c].setChecked(self.prm[block]['chooserCheckBox'][c])
+        ## for f in range(len(self.fileChooser)):
+        ##     self.fileChooser[f].setText(self.prm[block]['fileChooser'][f])
+        ##     self.fileChooserCheckBox[f].setChecked(self.prm[block]['fileChooserCheckBox'][f])
+
+        ## for f in range(len(self.paradigmFieldList)):
+        ##     self.paradigmFieldList[f].setText(self.prm["currentLocale"][:toString](self.prm[block]['paradigmField'][f], precision=self.prm["pref"]["general"]["precision"]))
+        ##     self.paradigmFieldCheckBoxList[f].setChecked(self.prm[block]['paradigmFieldCheckBox'][f])
+        ## for c in range(len(self.paradigmChooserList)):
+        ##     self.paradigmChooserList[c].setCurrentIndex(self.paradigmChooserList[c].findText(self.prm[block]['paradigmChooser'][c]))
+        ##     self.paradigmChooserCheckBoxList[c].setChecked(self.prm[block]['paradigmChooserCheckBox'][c])
+
+        ## self.preTrialSilenceTF.setText(self.prm["currentLocale"][:toString](self.prm[block]['preTrialSilence']))
+        ## self.warningIntervalChooser.setCurrentIndex(self.warningIntervalChooser.findText(self.prm[block]['warningInterval']))
+        ## self.onWarningIntervalChange()
+        ## self.warningIntervalDurTF.setText(self.prm["currentLocale"][:toString](self.prm[block]['warningIntervalDur']))
+        ## self.warningIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['warningIntervalISI']))
+        ## self.intervalLightsChooser.setCurrentIndex(self.intervalLightsChooser.findText(self.prm[block]['intervalLights']))
+        ## self.onIntervalLightsChange()
+
+        ## if self.prm[currExp]["hasISIBox"] == true
+        ##     self.ISIBox.setText(self.prm["currentLocale"][:toString](self.prm[block]['ISIVal']))
+        ##     self.ISIBoxCheckBox.setChecked(self.prm[block]['ISIValCheckBox'])
+        ## if self.prm[currExp]["hasPreTrialInterval"] == true
+        ##     self.preTrialIntervalChooser.setCurrentIndex(self.preTrialIntervalChooser.findText(self.prm[block]['preTrialInterval']))
+        ##     self.preTrialIntervalCheckBox.setChecked(self.prm[block]['preTrialIntervalCheckBox'])
+        ##     self.onPreTrialIntervalChange()
+        ##     self.preTrialIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['preTrialIntervalISI']))
+        ##     self.preTrialIntervalISICheckBox.setChecked(self.prm[block]['preTrialIntervalISICheckBox'])
+        ## if self.prm[currExp]["hasPrecursorInterval"] == true
+        ##     self.precursorIntervalChooser.setCurrentIndex(self.precursorIntervalChooser.findText(self.prm[block]['precursorInterval']))
+        ##     self.precursorIntervalCheckBox.setChecked(self.prm[block]['precursorIntervalCheckBox'])
+        ##     self.onPrecursorIntervalChange()
+        ##     self.precursorIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['precursorIntervalISI']))
+        ##     self.precursorIntervalISICheckBox.setChecked(self.prm[block]['precursorIntervalISICheckBox'])
+        ## if self.prm[currExp]["hasPostcursorInterval"] == true
+        ##     self.postcursorIntervalChooser.setCurrentIndex(self.postcursorIntervalChooser.findText(self.prm[block]['postcursorInterval']))
+        ##     self.postcursorIntervalCheckBox.setChecked(self.prm[block]['postcursorIntervalCheckBox'])
+        ##     self.onPostcursorIntervalChange()
+        ##     self.postcursorIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['postcursorIntervalISI']))
+        ##     self.postcursorIntervalISICheckBox.setChecked(self.prm[block]['postcursorIntervalISICheckBox'])
+        ## if self.prm[currExp]["hasAlternativesChooser"] == true
+        ##     self.nIntervalsChooser.setCurrentIndex(self.nIntervalsChooser.findText(str(self.prm[block]['nIntervals'])))
+        ##     self.nIntervalsCheckBox.setChecked(self.prm[block]['nIntervalsCheckBox'])
+        ##     self.onNIntervalsChange(self.nIntervalsChooser.findText(str(self.prm[block]['nIntervals'])))
+        ##     self.nAlternativesChooser.setCurrentIndex(self.nAlternativesChooser.findText(str(self.prm[block]['nAlternatives'])))
+        ##     self.nAlternativesCheckBox.setChecked(self.prm[block]['nAlternativesCheckBox'])
+        ## if self.prm[currExp]["hasAltReps"] == true
+        ##     self.altRepsBox.setText(self.prm["currentLocale"][:toString](self.prm[block]['altReps']))
+        ##     self.altRepsBoxCheckBox.setChecked(self.prm[block]['altRepsCheckBox'])
+        ##     self.altRepsISIBox.setText(self.prm["currentLocale"][:toString](self.prm[block]['altRepsISI']))
+        ##     self.altRepsISIBoxCheckBox.setChecked(self.prm[block]['altRepsISICheckBox'])
+     
+        ## self.responseLightChooser.setCurrentIndex(self.responseLightChooser.findText(self.prm[block]['responseLight']))
+        ## self.responseLightCheckBox.setChecked(self.prm[block]['responseLightCheckBox'])
+        ## self.responseLightDurationTF.setText(self.prm["currentLocale"][:toString](self.prm[block]['responseLightDuration']))
+        ## self.responseLightDurationCheckBox.setChecked(self.prm[block]['responseLightDurationCheckBox'])
+        ## self.currentBlockCountLabel.setText(str(self.prm["currentBlock"]))
+        ## self.currentBlockPositionLabel.setText(str(self.prm["tmpBlockPosition"]))
+        ## self.storedBlocksCountLabel.setText(str(self.prm["storedBlocks"]))
+        ## for i in range(self.jumpToBlockChooser.count()):
+        ##     self.jumpToBlockChooser.removeItem(0)
+        ##     self.jumpToPositionChooser.removeItem(0)
+        ## for i in range(self.prm["storedBlocks"]):
+        ##     self.jumpToBlockChooser.addItem(str(i+1))
+        ##     self.jumpToPositionChooser.addItem(str(i+1))
+        ## self.jumpToBlockChooser.setCurrentIndex(self.prm["currentBlock"]-1)
+        ## self.jumpToPositionChooser.setCurrentIndex(int(self.prm[block]['blockPosition'])-1)
+   
+        ## for c in range(len(self.chooser)):
+        ##     self.chooser[c].activated[str].connect(self.onChooserChange)
+        ## self.onChooserChange(None)
+        ## self.responseBox.setupLights()
+end
 
 function setParadigmWidgets()
     if prm["prevParadigm"] != None
@@ -868,7 +2141,7 @@ function setParadigmWidgets()
         ##     nTracksChooser.activated[str].connect(onChangeNTracks)
         ##     nTracksCheckBox = Qt.QCheckBox()
         ##     paradigm_widg_sizer[:addWidget](nTracksCheckBox, n, 0)
-        ##     if prm[currExp]["hasNTracksChooser"] == True:
+        ##     if prm[currExp]["hasNTracksChooser"] == true
         ##         nTracksLabel[:show]()
         ##         nTracksChooser[:show]()
         ##         nTracksCheckBox[:show]()
@@ -1061,7 +2334,7 @@ function setParadigmWidgets()
         ##     nTracksChooser.activated[str].connect(onChangeNTracks)
         ##     nTracksCheckBox = Qt.QCheckBox()
         ##     paradigm_widg_sizer[:addWidget](nTracksCheckBox, n, 0)
-        ##     if prm[currExp]["hasNTracksChooser"] == True:
+        ##     if prm[currExp]["hasNTracksChooser"] == true
         ##         nTracksLabel[:show]()
         ##         nTracksChooser[:show]()
         ##         nTracksCheckBox[:show]()
@@ -1281,7 +2554,7 @@ function setParadigmWidgets()
 
         ##     nDifferencesCheckBox = Qt.QCheckBox()
         ##     paradigm_widg_sizer[:addWidget](nDifferencesCheckBox, n, 0)
-        ##     if prm[currExp]["hasNDifferencesChooser"] == True:
+        ##     if prm[currExp]["hasNDifferencesChooser"] == true
         ##         nDifferencesLabel[:show]()
         ##         nDifferencesChooser[:show]()
         ##         nDifferencesCheckBox[:show]()
@@ -1385,6 +2658,47 @@ function setParadigmWidgets()
         ##                                       maxStepSizeCheckBox, WCheckBox, pcTrackedCheckBox]
 
 end
+
+function swapBlocks(b1, b2)
+        ## self.compareGuiStoredParameters()
+        ## if self.prm["storedBlocks"] < 1:
+        ##     return
+        ## if b1 > self.prm["storedBlocks"] or b2 > self.prm["storedBlocks"]:
+        ##     ret = QMessageBox.warning(self, self.tr("Warning"),
+        ##                                     self.tr("You're trying to swap the position of a block that has not been stored yet. Please, store the block first."),
+        ##                                     QMessageBox.Ok | QMessageBox.Cancel)
+        ##     return
+        ## if self.prm["storedBlocks"] > 1 and b1 <= self.prm["storedBlocks"] and b2 <= self.prm["storedBlocks"]:
+        ##     ol=copy.deepcopy(self.prm['b'+str(b1)])
+        ##     self.prm['b'+str(b1)] = copy.deepcopy(self.prm['b'+str(b2)])
+        ##     self.prm['b'+str(b2)] = copy.deepcopy(ol)
+        ##     self.saveParametersToFile(self.prm["tmpParametersFile"])
+        ## #
+        ##     #self.updateParametersWin()
+        ##     self.moveToBlockPosition(int(self.prm['b'+str(b2)]["blockPosition"]))
+        ## return
+end
+
+function shiftBlock(blockNumber, direction)
+        ## if direction == "up":
+        ##     if blockNumber == self.prm["storedBlocks"]:
+        ##         newBlockNumber = 1
+        ##     else:
+        ##         newBlockNumber = blockNumber + 1
+        ## elif direction == "down":
+        ##     if blockNumber == 1:
+        ##         newBlockNumber = self.prm["storedBlocks"]
+        ##     else:
+        ##         newBlockNumber = blockNumber - 1
+        ## self.swapBlocks(blockNumber, newBlockNumber)
+end
+
+function togglePdfPlotCheckBox()
+    if pdfPlotCheckBox[:isChecked]() == true
+        procResTableCheckBox[:setChecked](true)
+    end
+end
+
 function toggleResTableCheckBox()
     if procResTableCheckBox[:isChecked]() == false
         winPlotCheckBox[:setChecked](false)
@@ -1398,9 +2712,52 @@ function toggleWinPlotCheckBox()
     end
 end
 
-function togglePdfPlotCheckBox()
-    if pdfPlotCheckBox[:isChecked]() == true
-        procResTableCheckBox[:setChecked](true)
-    end
+function unpack_seq(seq)
+        ## newSeq = []
+        ## for i in range(len(seq)):
+        ##     if isinstance(seq[i], list) == True or isinstance(seq[i], tuple) == true
+        ##         y = self.unpack_seq(seq[i])
+        ##         newSeq.extend(y)
+        ##     else:
+        ##         newSeq.append(seq[i])
+        ## return newSeq
 end
+
+function updateParametersWin()
+    ## #if the next block is already stored show it, otherwise copy the values from the previous block
+    currBlock = string("b", prm["currentBlock"])
+    prevBlock = string("b", prm["currentBlock"]-1)
+       
+    if (prm["currentBlock"] > prm["storedBlocks"]) & (prm["storedBlocks"] > 0) #copy values from previous block
+        block = prevBlock
+    else
+        block = currBlock
+    end
+    prm["tmpBlockPosition"] = prm[currBlock]["blockPosition"]
+    setNewBlock(block)
+end
+
+
+## class dropFrame(QFrame):
+##     drpd = QtCore.Signal(str) 
+##     def __init__(self, parent):
+##         QFrame.__init__(self, parent)
+##         self.setAcceptDrops(True)
+        
+##     def dragEnterEvent(self, event):
+##         if event.mimeData().hasUrls:
+##             event.accept()
+##         else:
+##             event.ignore()
+
+##     def dropEvent(self, event):
+##         if event.mimeData().hasUrls:
+##             event.setDropAction(Qt.CopyAction)
+##             event.accept()
+##             l = []
+##             for url in event.mimeData().urls():
+##                 l.append(str(url.toLocalFile()))
+##                 self.drpd.emit(l[len(l)-1])
+##         else:
+##             event.ignore()
 
