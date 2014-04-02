@@ -529,15 +529,15 @@ end
 
 function moveNextBlock()
     if prm["storedBlocks"] > 0
-        lastBlock = string("b", self.prm["currentBlock"])
+        lastBlock = string("b", prm["currentBlock"])
         if prm["currentBlock"] >= prm["storedBlocks"]
             prm["currentBlock"] = 1
-            string(lastBlock = "b", prm["storedBlocks"])
+            lastBlock = string("b", prm["storedBlocks"])
         else
             prm["currentBlock"] = prm["currentBlock"] +1
         end
         if prm["storedBlocks"] > 0
-            wd["statusButton"][:setText](prm["rbTrans"][:translate]("rb", "Start"))
+            statusButton[:setText](prm["rbTrans"][:translate]("rb", "Start"))
         end
         updateParametersWin()
         autoSetGaugeValue()
@@ -614,17 +614,17 @@ function onAbout()
 end            
 
 function onChangeNDifferences()
-        ## nDifferences = self.currLocale[:toInt](self.nDifferencesChooser.currentText())[0]
-        ## self.removePrmWidgets()
-        ## self.par["nDifferences"] = nDifferences
-        ## self.setDefaultParameters(self.currExp, self.currParadigm, self.par)
+    ## nDifferences = prm["currentLocale"][:toInt](nDifferencesChooser[:currentText]())[1]
+    ## removePrmWidgets()
+    ## par["nDifferences"] = nDifferences
+    ## setDefaultParameters(prm["currExp"], prm["currParadigm"], par)
 end
 
 function onChangeNTracks()
-        ## nTracks = self.currLocale[:toInt](self.nTracksChooser.currentText())[0]
-        ## self.removePrmWidgets()
-        ## self.par["nDifferences"] = nTracks
-        ## self.setDefaultParameters(self.currExp, self.currParadigm, self.par)
+    ## nTracks = self.currLocale[:toInt](self.nTracksChooser.currentText())[0]
+    ## self.removePrmWidgets()
+    ## self.par["nDifferences"] = nTracks
+    ## self.setDefaultParameters(self.currExp, self.currParadigm, self.par)
 end
 
 function onChooserChange()
@@ -697,8 +697,8 @@ function onClickNewBlockButton()
     if prm["storedBlocks"] >= prm["currentBlock"]
         compareGuiStoredParameters()
         block =  currBlock = string("b", prm["currentBlock"])
-        self.prm["currentBlock"] = prm["storedBlocks"] + 1
-        self.prm["tmpBlockPosition"] = prm["storedBlocks"] + 1
+        prm["currentBlock"] = prm["storedBlocks"] + 1
+        prm["tmpBlockPosition"] = prm["storedBlocks"] + 1
         setNewBlock(block)
     else
         ret = Qt.QMessageBox[:warning](w, "Warning",
@@ -797,82 +797,89 @@ function onClickStoreParametersButton()
         prm[currBlock]["ISIVal"] = prm["currentLocale"][:toInt](wd["ISIBox"][:text]())[1]
         prm[currBlock]["ISIValCheckBox"] = wd["ISIBoxCheckBox"][:isChecked]()
     end
-    ## if prm[currExp]["hasPreTrialInterval"] == true
-    ##     prm[currBlock]["preTrialInterval"] = preTrialIntervalChooser[:currentText]()
-    ##     prm[currBlock]["preTrialIntervalCheckBox"] = preTrialIntervalCheckBox[:isChecked]()
-    ##     prm[currBlock]["preTrialIntervalISI"] = prm["currentLocale"][:toInt](preTrialIntervalISITF[:text]())[1]
-    ##     prm[currBlock]["preTrialIntervalISICheckBox"] = preTrialIntervalISICheckBox[:isChecked]()
-    ## end
-    ## if prm[currExp]["hasPrecursorInterval"] == true
-    ##     prm[currBlock]["precursorInterval"] = precursorIntervalChooser[:currentText]()
-    ##     prm[currBlock]["precursorIntervalCheckBox"] = precursorIntervalCheckBox[:isChecked]()
-    ##     prm[currBlock]["precursorIntervalISI"] = prm["currentLocale"][:toInt](precursorIntervalISITF[:text]())[1]
-    ##     prm[currBlock]["precursorIntervalISICheckBox"] = precursorIntervalISICheckBox[:isChecked]()
-    ## end
-    ## if prm[currExp]["hasPostcursorInterval"] == true
-    ##     prm[currBlock]["postcursorInterval"] = postcursorIntervalChooser[:currentText]()
-    ##     prm[currBlock]["postcursorIntervalCheckBox"] = postcursorIntervalCheckBox[:isChecked]()
-    ##     prm[currBlock]["postcursorIntervalISI"] = prm["currentLocale"][:toInt](postcursorIntervalISITF[:text]())[1]
-    ##     prm[currBlock]["postcursorIntervalISICheckBox"] = postcursorIntervalISICheckBox[:isChecked]()
-    ## end
-    ## if prm[currExp]["hasAlternativesChooser"] == true
-    ##     prm[currBlock]["nIntervals"] = prm["currentLocale"][:toInt](nIntervalsChooser[:currentText]())[1]
-    ##     prm[currBlock]["nIntervalsCheckBox"] = nIntervalsCheckBox[:isChecked]()
-    ##     prm[currBlock]["nAlternatives"] = prm["currentLocale"][:toInt](nAlternativesChooser[:currentText]())[1]
-    ##     prm[currBlock]["nAlternativesCheckBox"] = nAlternativesCheckBox[:isChecked]()
-    ## end
-    ## if prm[currExp]["hasAltReps"] == true
-    ##     prm[currBlock]["altReps"] = prm["currentLocale"][:toInt](altRepsBox[:text]())[1]
-    ##     prm[currBlock]["altRepsCheckBox"] = altRepsBoxCheckBox[:isChecked]()
-    ##     prm[currBlock]["altRepsISI"] = prm["currentLocale"][:toInt](altRepsISIBox[:text]())[1]
-    ##     prm[currBlock]["altRepsISICheckBox"] = altRepsISIBoxCheckBox[:isChecked]()
-    ## end
+    if prm[currExp]["hasPreTrialInterval"] == true
+        prm[currBlock]["preTrialInterval"] = wd["preTrialIntervalChooser"][:currentText]()
+        prm[currBlock]["preTrialIntervalCheckBox"] = wd["preTrialIntervalCheckBox"][:isChecked]()
+        prm[currBlock]["preTrialIntervalISI"] = prm["currentLocale"][:toInt](wd["preTrialIntervalISITF"][:text]())[1]
+        prm[currBlock]["preTrialIntervalISICheckBox"] = wd["preTrialIntervalISICheckBox"][:isChecked]()
+    end
+    if prm[currExp]["hasPrecursorInterval"] == true
+        prm[currBlock]["precursorInterval"] = wd["precursorIntervalChooser"][:currentText]()
+        prm[currBlock]["precursorIntervalCheckBox"] = wd["precursorIntervalCheckBox"][:isChecked]()
+        prm[currBlock]["precursorIntervalISI"] = prm["currentLocale"][:toInt](wd["precursorIntervalISITF"][:text]())[1]
+        prm[currBlock]["precursorIntervalISICheckBox"] = wd["precursorIntervalISICheckBox"][:isChecked]()
+    end
+    if prm[currExp]["hasPostcursorInterval"] == true
+        prm[currBlock]["postcursorInterval"] = wd["postcursorIntervalChooser"][:currentText]()
+        prm[currBlock]["postcursorIntervalCheckBox"] = wd["postcursorIntervalCheckBox"][:isChecked]()
+        prm[currBlock]["postcursorIntervalISI"] = prm["currentLocale"][:toInt](wd["postcursorIntervalISITF"][:text]())[1]
+        prm[currBlock]["postcursorIntervalISICheckBox"] = wd["postcursorIntervalISICheckBox"][:isChecked]()
+    end
+    if prm[currExp]["hasAlternativesChooser"] == true
+        prm[currBlock]["nIntervals"] = prm["currentLocale"][:toInt](wd["nIntervalsChooser"][:currentText]())[1]
+        prm[currBlock]["nIntervalsCheckBox"] = wd["nIntervalsCheckBox"][:isChecked]()
+        prm[currBlock]["nAlternatives"] = prm["currentLocale"][:toInt](wd["nAlternativesChooser"][:currentText]())[1]
+        prm[currBlock]["nAlternativesCheckBox"] = wd["nAlternativesCheckBox"][:isChecked]()
+    end
+    if prm[currExp]["hasAltReps"] == true
+        prm[currBlock]["altReps"] = prm["currentLocale"][:toInt](wd["altRepsBox"][:text]())[1]
+        prm[currBlock]["altRepsCheckBox"] = wd["altRepsBoxCheckBox"][:isChecked]()
+        prm[currBlock]["altRepsISI"] = prm["currentLocale"][:toInt](wd["altRepsISIBox"][:text]())[1]
+        prm[currBlock]["altRepsISICheckBox"] = wd["altRepsISIBoxCheckBox"][:isChecked]()
+    end
+
+    prm[currBlock]["responseLight"] = wd["responseLightChooser"][:currentText]()
+    prm[currBlock]["responseLightCheckBox"] = wd["responseLightCheckBox"][:isChecked]()
+    prm[currBlock]["responseLightDuration"] = prm["currentLocale"][:toInt](wd["responseLightDurationTF"][:text]())[1]
+    prm[currBlock]["responseLightDurationCheckBox"] = wd["responseLightDurationCheckBox"][:isChecked]()
+
     
-    ## prm[currBlock]["responseLight"] = responseLightChooser[:currentText]()
-    ## prm[currBlock]["responseLightCheckBox"] = responseLightCheckBox[:isChecked]()
-    ## prm[currBlock]["responseLightDuration"] = prm["currentLocale"][:toInt](responseLightDurationTF[:text]())[1]
-    ## prm[currBlock]["responseLightDurationCheckBox"] = responseLightDurationCheckBox[:isChecked]()
+    for f=1:prm["nFields"]
+        push!(prm[currBlock]["field"], prm["currentLocale"][:toDouble](wd["field"][f][:text]())[1])
+        push!(prm[currBlock]["fieldLabel"], wd["fieldLabel"][f][:text]())
+        push!(prm[currBlock]["fieldCheckBox"], wd["fieldCheckBox"][f][:isChecked]())
+    end
+    for c=1:prm["nChoosers"]
+        push!(prm[currBlock]["chooser"], wd["chooserOptions"][c][wd["chooser"][c][:currentIndex]()+1])
+        push!(prm[currBlock]["chooserOptions"], wd["chooserOptions"][c])
+        push!(prm[currBlock]["chooserLabel"], wd["chooserLabel"][c][:text]())
+        push!(prm[currBlock]["chooserCheckBox"], wd["chooserCheckBox"][c][:isChecked]())
+    end
     
-    ## for f in range(prm["nFields"]):
-    ##     prm[currBlock]["field"][f] = prm["currentLocale"].toDouble(field[f][:text]())[1]
-    ##     prm[currBlock]["fieldLabel"][f] =  fieldLabel[f][:text]()
-    ##     prm[currBlock]["fieldCheckBox"][f] =  fieldCheckBox[f][:isChecked]()
+    for f=1:prm["nFileChoosers"]
+        push!(prm[currBlock]["fileChooser"], wd["fileChooser"][f][:text]())
+        push!(prm[currBlock]["fileChooserButton"], wd["fileChooserButton"][f][:text]())
+        push!(prm[currBlock]["fileChooserCheckBox"], wd["fileChooserCheckBox"][f][:isChecked]())
+    end
+    for i=1:length(wdc["paradigmFieldList"])
+        push!(prm[currBlock]["paradigmField"], prm["currentLocale"][:toDouble](wdc["paradigmFieldList"][i][:text]())[1])
+        push!(prm[currBlock]["paradigmFieldLabel"], wdc["paradigmFieldLabelList"][i][:text]())
+        push!(prm[currBlock]["paradigmFieldCheckBox"], wdc["paradigmFieldCheckBoxList"][i][:isChecked]())
+    end
+    for i=1:length(wdc["paradigmChooserList"])
+        push!(prm[currBlock]["paradigmChooser"], wdc["paradigmChooserOptionsList"][i][wdc["paradigmChooserList"][i][:currentIndex]()+1])
+        push!(prm[currBlock]["paradigmChooserLabel"], wdc["paradigmChooserLabelList"][i][:text]())
+        push!(prm[currBlock]["paradigmChooserOptions"], wdc["paradigmChooserOptionsList"][i])
+        push!(prm[currBlock]["paradigmChooserCheckBox"], wdc["paradigmChooserCheckBoxList"][i][:isChecked]())
+    end
     
-    ## for c in range(prm["nChoosers"]):
-    ##     prm[currBlock]["chooser"][c] =  chooserOptions[c][chooser[c][:currentIndex]()]
-    ##     prm[currBlock]["chooserOptions"][c] =  chooserOptions[c]
-    ##     prm[currBlock]["chooserLabel"][c] =  chooserLabel[c][:text]()
-    ##     prm[currBlock]["chooserCheckBox"][c] =  chooserCheckBox[c][:isChecked]()
-    
-    ## for f in range(prm["nFileChoosers"]):
-    ##     prm[currBlock]["fileChooser"][f] = fileChooser[f][:text]()
-    ##     prm[currBlock]["fileChooserButton"][f] =  fileChooserButton[f][:text]()
-    ##     prm[currBlock]["fileChooserCheckBox"][f] =  fileChooserCheckBox[f][:isChecked]()
-    
-    ## for i in range(len(paradigmFieldList)):
-    ##     prm[currBlock]["paradigmField"].append(prm["currentLocale"].toDouble(paradigmFieldList[i][:text]())[1])
-    ##     prm[currBlock]["paradigmFieldLabel"].append(paradigmFieldLabelList[i][:text]())
-    ##     prm[currBlock]["paradigmFieldCheckBox"].append(paradigmFieldCheckBoxList[i][:isChecked]())
-    ## for i in range(len(paradigmChooserList)):
-    ##     prm[currBlock]["paradigmChooser"].append(paradigmChooserOptionsList[i][paradigmChooserList[i][:currentIndex]()])
-    ##     prm[currBlock]["paradigmChooserLabel"].append(paradigmChooserLabelList[i][:text]())
-    ##     prm[currBlock]["paradigmChooserOptions"].append(paradigmChooserOptionsList[i])
-    ##     prm[currBlock]["paradigmChooserCheckBox"].append(paradigmChooserCheckBoxList[i][:isChecked]())
-    
-    ## if prm["currentBlock"] > prm["storedBlocks"]:    
-    ##     prm["storedBlocks"] = prm["storedBlocks"] + 1
-    ## storedBlocksCountLabel.setText(str(prm["storedBlocks"]))
-    ## for i in range(jumpToBlockChooser.count()):
-    ##     jumpToBlockChooser.removeItem(0)
-    ##     jumpToPositionChooser.removeItem(0)
-    ## for i in range(prm["storedBlocks"]):
-    ##     jumpToBlockChooser.addItem(str(i+1))
-    ##     jumpToPositionChooser.addItem(str(i+1))
-    ## jumpToBlockChooser.setCurrentIndex(prm["currentBlock"]-1)
-    ## jumpToPositionChooser.setCurrentIndex(int(prm[currBlock]["blockPosition"])-1)
-    ## responseBox.statusButton.setText(prm["rbTrans"].translate("rb", "Start"))
-    #saveParametersToFile(prm["tmpParametersFile"])
-    #autoSetGaugeValue()
+    if prm["currentBlock"] > prm["storedBlocks"]
+        prm["storedBlocks"] = prm["storedBlocks"] + 1
+    end
+    storedBlocksCountLabel[:setText](string(prm["storedBlocks"]))
+    for i=1:jumpToBlockChooser[:count]()
+        jumpToBlockChooser[:removeItem](0)
+        jumpToPositionChooser[:removeItem](0)
+    end
+    for i=1:prm["storedBlocks"]
+        jumpToBlockChooser[:addItem](string(i))
+        jumpToPositionChooser[:addItem](string(i))
+    end
+    jumpToBlockChooser[:setCurrentIndex](prm["currentBlock"]-1)
+    jumpToPositionChooser[:setCurrentIndex](int(prm[currBlock]["blockPosition"])-1)
+    statusButton[:setText](prm["rbTrans"][:translate]("rb", "Start"))
+    saveParametersToFile(prm["tmpParametersFile"])
+    autoSetGaugeValue()
 end
 
 function onClickStoreandaddParametersButton()
@@ -1495,224 +1502,250 @@ function setAdditionalWidgets()
         end
     end
 
-        ## #ADD ADDITIONAL WIDGETS
-        n = 0
-        wdc["additionalWidgetsIntFieldList"] = (Any)[]
-        wdc["additionalWidgetsIntFieldLabelList"] = (Any)[]
-        wdc["additionalWidgetsIntFieldCheckBoxList"] = (Any)[]
-        wdc["additionalWidgetsChooserList"] = (Any)[]
-        wdc["additionalWidgetsChooserLabelList"] =(Any) []
-        wdc["additionalWidgetsChooserCheckBoxList"] = (Any)[]
-
-        if prm[prm["currExp"]]["hasISIBox"] == true
-            wd["ISILabel"] = Qt.QLabel("ISI (ms):")
-            add_widg_sizer[:addWidget](wd["ISILabel"], n, 1)
-            wd["ISIBox"] = Qt.QLineEdit()
-            wd["ISIBox"][:setText]("500")
-            wd["ISIBox"][:setValidator](Qt.QIntValidator())
-            add_widg_sizer[:addWidget](wd["ISIBox"], n, 2)
-            wd["ISIBoxCheckBox"] = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](wd["ISIBoxCheckBox"], n, 0)
-            push!(wdc["additionalWidgetsIntFieldList"], wd["ISIBox"])
-            push!(wdc["additionalWidgetsIntFieldLabelList"], wd["ISILabel"])
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["ISIBoxCheckBox"])
-            n = n+1
-        end
-        if prm[prm["currExp"]]["hasAlternativesChooser"] == true
-            nIntervalsLabel = Qt.QLabel("Intervals:")
-            add_widg_sizer[:addWidget](nIntervalsLabel, n, 1)
-            wd["nIntervalsChooser"] = Qt.QComboBox()
-            wd["nIntervalsChooser"][:addItems](prm["nIntervalsChoices"])
-            if haskey(prm, "nIntervals")
-                wd["nIntervalsChooser"][:setCurrentIndex](find(prm["nIntervalsChoices"] .== string(prm["nIntervals"]))-1)
-            else
-                wd["nIntervalsChooser"][:setCurrentIndex](0)
-            end
-            add_widg_sizer[:addWidget](wd["nIntervalsChooser"], n, 2)
-            qconnect(wd["nIntervalsChooser"], :activated, (str) -> onNIntervalsChange(prm["nIntervalsChoices"][str+1]))
-            nIntervalsCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](nIntervalsCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], wd["nIntervalsChooser"])
-            push!(wdc["additionalWidgetsChooserLabelList"], nIntervalsLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], nIntervalsCheckBox)
-            n = n+1
-            nAlternativesLabel = Qt.QLabel("Alternatives:")
-            add_widg_sizer[:addWidget](nAlternativesLabel, n, 1)
-            wd["nAlternativesChooser"] = Qt.QComboBox()
-            wd["nAlternativesChooser"][:addItems]([string(prm["currentLocale"][:toInt](wd["nIntervalsChooser"][:currentText]())[1]-1), wd["nIntervalsChooser"][:currentText]()])
-            wd["nAlternativesChooser"][:setCurrentIndex](wd["nAlternativesChooser"][:findText](string(prm["nAlternatives"])))
-            add_widg_sizer[:addWidget](wd["nAlternativesChooser"], n, 2)
-            qconnect(wd["nAlternativesChooser"], :activated, (str) -> onNAlternativesChange(str))
-            nAlternativesCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](nAlternativesCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], wd["nAlternativesChooser"])
-            push!(wdc["additionalWidgetsChooserLabelList"], nAlternativesLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], nAlternativesCheckBox)
-            n = n+1
-        end
-
-        #Pre-Trial Interval
-        if prm[prm["currExp"]]["hasPreTrialInterval"] == true
-            preTrialIntervalChooserLabel = Qt.QLabel("Pre-Trial Interval:")
-            add_widg_sizer[:addWidget](preTrialIntervalChooserLabel, n, 1)
-            preTrialIntervalChooser = Qt.QComboBox()
-            preTrialIntervalChooser[:addItems]([tr("Yes"), tr("No")])
-            preTrialIntervalChooser[:setCurrentIndex](1)
-            qconnect(preTrialIntervalChooser, :activated, (str) -> onPreTrialIntervalChange())
-            add_widg_sizer[:addWidget](preTrialIntervalChooser, n, 2)
-            preTrialIntervalCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](preTrialIntervalCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], preTrialIntervalChooser)
-            push!(wdc["additionalWidgetsChooserLabelList"], preTrialIntervalChooserLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], preTrialIntervalCheckBox)
-            n = n+1
-            preTrialIntervalISILabel = Qt.QLabel("Pre-Trial Interval ISI (ms):")
-            add_widg_sizer[:addWidget](preTrialIntervalISILabel, n, 1)
-           
-            preTrialIntervalISITF = Qt.QLineEdit()
-            preTrialIntervalISITF[:setText]("500")
-            preTrialIntervalISITF[:setValidator](QIntValidator())
-            preTrialIntervalISITF[:setWhatsThis]("Sets the duration of the silent interval between the pre-trial interval and the first observation interval")
-         
-            add_widg_sizer[:addWidget](preTrialIntervalISITF, n, 2)
-            preTrialIntervalISICheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](preTrialIntervalISICheckBox, n, 0)
-
-            preTrialIntervalISILabel[:hide]()
-            preTrialIntervalISITF[:hide]()
-            preTrialIntervalISICheckBox[:hide]()
-            
-            push!(wdc["additionalWidgetsIntFieldList"], preTrialIntervalISITF)
-            push!(wdc["additionalWidgetsIntFieldLabelList"], preTrialIntervalISILabel)
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], preTrialIntervalISICheckBox)
-            n = n+1
-        end
-
-        #Precursor Interval
-        if prm[prm["currExp"]]["hasPrecursorInterval"] == true
-            precursorIntervalChooserLabel = Qt.QLabel("Precursor Interval:")
-            add_widg_sizer[:addWidget](precursorIntervalChooserLabel, n, 1)
-            precursorIntervalChooser = Qt.QComboBox()
-            precursorIntervalChooser[:addItems](["Yes", "No"])
-            precursorIntervalChooser[:setCurrentIndex](1)
-            qconnect(precursorIntervalChooser, :activated, (str) -> onPrecursorIntervalChange())
-            add_widg_sizer[:addWidget](precursorIntervalChooser, n, 2)
-            precursorIntervalCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](precursorIntervalCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], precursorIntervalChooser)
-            push!(wdc["additionalWidgetsChooserLabelList"], precursorIntervalChooserLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], precursorIntervalCheckBox)
-            n = n+1
-            precursorIntervalISILabel = Qt.QLabel("Precursor Interval ISI (ms):")
-            add_widg_sizer[:addWidget](precursorIntervalISILabel, n, 1)
-           
-            precursorIntervalISITF = Qt.QLineEdit()
-            precursorIntervalISITF[:setText]("500")
-            precursorIntervalISITF[:setValidator](Qt.QIntValidator())
-            precursorIntervalISITF[:setWhatsThis]("Sets the duration of the silent interval between the precursor interval and the observation interval")
-         
-            add_widg_sizer[:addWidget](precursorIntervalISITF, n, 2)
-            precursorIntervalISICheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](precursorIntervalISICheckBox, n, 0)
-
-            precursorIntervalISILabel[:hide]()
-            precursorIntervalISITF[:hide]()
-            precursorIntervalISICheckBox[:hide]()
-            
-            push!(wdc["additionalWidgetsIntFieldList"], precursorIntervalISITF)
-            push!(wdc["additionalWidgetsIntFieldLabelList"], precursorIntervalISILabel)
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], precursorIntervalISICheckBox)
-            n = n+1
-        end
+    ## #ADD ADDITIONAL WIDGETS
+    n = 0
+    wdc["additionalWidgetsIntFieldList"] = (Any)[]
+    wdc["additionalWidgetsIntFieldLabelList"] = (Any)[]
+    wdc["additionalWidgetsIntFieldCheckBoxList"] = (Any)[]
+    wdc["additionalWidgetsChooserList"] = (Any)[]
+    wdc["additionalWidgetsChooserLabelList"] =(Any) []
+    wdc["additionalWidgetsChooserCheckBoxList"] = (Any)[]
     
-        #Postcursor Interval
-        if prm[prm["currExp"]]["hasPostcursorInterval"] == true
-            postcursorIntervalChooserLabel = Qt.QLabel("Postcursor Interval:")
-            add_widg_sizer[:addWidget](postcursorIntervalChooserLabel, n, 1)
-            postcursorIntervalChooser = Qt.QComboBox()
-            postcursorIntervalChooser[:addItems](["Yes", "No"])
-            postcursorIntervalChooser[:setCurrentIndex](1)
-            qconnect(postcursorIntervalChooser, :activated, (str) -> onPostcursorIntervalChange())
-            add_widg_sizer[:addWidget](postcursorIntervalChooser, n, 2)
-            postcursorIntervalCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](postcursorIntervalCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], postcursorIntervalChooser)
-            push!(wdc["additionalWidgetsChooserLabelList"], postcursorIntervalChooserLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], postcursorIntervalCheckBox)
-            n = n+1
-            postcursorIntervalISILabel = Qt.QLabel("Postcursor Interval ISI (ms):")
-            add_widg_sizer[:addWidget](postcursorIntervalISILabel, n, 1)
-           
-            postcursorIntervalISITF = QLineEdit()
-            postcursorIntervalISITF[:setText]("500")
-            postcursorIntervalISITF[:setValidator](Qt.QIntValidator())
-            postcursorIntervalISITF[:setWhatsThis]("Sets the duration of the silent interval between the observation interval and the postcursor interval")
-         
-            add_widg_sizer[:addWidget](postcursorIntervalISITF, n, 2)
-            postcursorIntervalISICheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](postcursorIntervalISICheckBox, n, 0)
-
-            postcursorIntervalISILabel[:hide]()
-            postcursorIntervalISITF[:hide]()
-            postcursorIntervalISICheckBox[:hide]()
-            
-            push!(wdc["additionalWidgetsIntFieldList"], postcursorIntervalISITF)
-            push!(wdc["additionalWidgetsIntFieldLabelList"], postcursorIntervalISILabel)
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], postcursorIntervalISICheckBox)
-            n = n+1
-        end
-            
-        if prm[prm["currExp"]]["hasFeedback"] == true
-            responseLightLabel =  Qt.QLabel("Response Light:")
-            responseLightChooser = Qt.QComboBox()
-            responseLightChooser[:addItems](["Feedback", "Neutral", "None"])
-            add_widg_sizer[:addWidget](responseLightLabel, n, 1)
-            add_widg_sizer[:addWidget](responseLightChooser, n, 2)
-            responseLightCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](responseLightCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], responseLightChooser)
-            push!(wdc["additionalWidgetsChooserLabelList"], responseLightLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], responseLightCheckBox)
-            n = n+1
-            responseLightDurationLabel = Qt.QLabel("Response Light Duration (ms):")
-            add_widg_sizer[:addWidget](responseLightDurationLabel, n, 1)
-            responseLightDurationTF = Qt.QLineEdit()
-            responseLightDurationTF[:setText](prm["pref"]["general"]["responseLightDuration"])
-            responseLightDurationTF[:setValidator](Qt.QIntValidator())
-
-            add_widg_sizer[:addWidget](responseLightDurationTF, n, 2)
-            responseLightDurationCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](responseLightDurationCheckBox, n, 0)
-            push!(wdc["additionalWidgetsIntFieldList"], responseLightDurationTF)
-            push!(wdc["additionalWidgetsIntFieldLabelList"], responseLightDurationLabel)
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], responseLightDurationCheckBox)
-            n = n+1
+    if prm[prm["currExp"]]["hasISIBox"] == true
+        wd["ISILabel"] = Qt.QLabel("ISI (ms):")
+        add_widg_sizer[:addWidget](wd["ISILabel"], n, 1)
+        wd["ISIBox"] = Qt.QLineEdit()
+        wd["ISIBox"][:setText]("500")
+        wd["ISIBox"][:setValidator](Qt.QIntValidator())
+        add_widg_sizer[:addWidget](wd["ISIBox"], n, 2)
+        wd["ISIBoxCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["ISIBoxCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsIntFieldList"], wd["ISIBox"])
+        push!(wdc["additionalWidgetsIntFieldLabelList"], wd["ISILabel"])
+        push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["ISIBoxCheckBox"])
+        n = n+1
+    end
+    if prm[prm["currExp"]]["hasAlternativesChooser"] == true
+        wd["nIntervalsLabel"] = Qt.QLabel("Intervals:")
+        add_widg_sizer[:addWidget](wd["nIntervalsLabel"], n, 1)
+        wd["nIntervalsChooser"] = Qt.QComboBox()
+        wd["nIntervalsChooser"][:addItems](prm["nIntervalsChoices"])
+        if haskey(prm, "nIntervals")
+            wd["nIntervalsChooser"][:setCurrentIndex](find(prm["nIntervalsChoices"] .== string(prm["nIntervals"]))-1)
         else
-            responseLightLabel =  QLabel("Response Light:")
-            responseLightChooser = Qt.QComboBox()
-            responseLightChooser[:addItems]([tr("Neutral"), tr("None")])
-            add_widg_sizer[:addWidget](responseLightLabel, n, 1)
-            add_widg_sizer[:addWidget](responseLightChooser, n, 2)
-            responseLightCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](responseLightCheckBox, n, 0)
-            push!(wdc["additionalWidgetsChooserList"], responseLightChooser)
-            push!(wdc["additionalWidgetsChooserLabelList"], responseLightLabel)
-            push!(wdc["additionalWidgetsChooserCheckBoxList"], responseLightCheckBox)
-            n = n+1
-            responseLightDurationLabel = QLabel(tr("Response Light Duration (ms):"), self)
-            add_widg_sizer[:addWidget](responseLightDurationLabel, n, 1)
-            responseLightDurationTF = QLineEdit()
-            responseLightDurationTF[:setText](prm["pref"]["general"]["responseLightDuration"])
-            responseLightDurationTF[:setValidator](Qt.QIntValidator())
-            push!(wdc["additionalWidgetsIntFieldList"], responseLightDurationTF)
-            push!(wdc["additionalWidgetsIntFieldLabelList"], responseLightDurationLabel)
-
-            add_widg_sizer[:addWidget](responseLightDurationTF, n, 2)
-            responseLightDurationCheckBox = Qt.QCheckBox()
-            add_widg_sizer[:addWidget](responseLightDurationCheckBox, n, 0)
-            push!(wdc["additionalWidgetsIntFieldCheckBoxList"], responseLightDurationCheckBox)
-            n = n+1
+            wd["nIntervalsChooser"][:setCurrentIndex](0)
         end
+        add_widg_sizer[:addWidget](wd["nIntervalsChooser"], n, 2)
+        qconnect(wd["nIntervalsChooser"], :activated, (str) -> onNIntervalsChange(prm["nIntervalsChoices"][str+1]))
+        wd["nIntervalsCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["nIntervalsCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["nIntervalsChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["nIntervalsLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["nIntervalsCheckBox"])
+        n = n+1
+        wd["nAlternativesLabel"] = Qt.QLabel("Alternatives:")
+        add_widg_sizer[:addWidget](wd["nAlternativesLabel"], n, 1)
+        wd["nAlternativesChooser"] = Qt.QComboBox()
+        wd["nAlternativesChooser"][:addItems]([string(prm["currentLocale"][:toInt](wd["nIntervalsChooser"][:currentText]())[1]-1), wd["nIntervalsChooser"][:currentText]()])
+        wd["nAlternativesChooser"][:setCurrentIndex](wd["nAlternativesChooser"][:findText](string(prm["nAlternatives"])))
+        add_widg_sizer[:addWidget](wd["nAlternativesChooser"], n, 2)
+        qconnect(wd["nAlternativesChooser"], :activated, (str) -> onNAlternativesChange(str))
+        wd["nAlternativesCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["nAlternativesCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["nAlternativesChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["nAlternativesLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["nAlternativesCheckBox"])
+        n = n+1
+    end
+    if prm[prm["currExp"]]["hasAltReps"] == true
+        wd["altRepsLabel"] = Qt.QLabel("Alternated (AB) Reps.:", w)
+        add_widg_sizer[:addWidget](wd["altRepsLabel"], n, 1)
+        wd["altRepsBox"] = Qt.QLineEdit()
+        wd["altRepsBox"][:setText]("0")
+        wd["altRepsBox"][:setValidator](Qt.QIntValidator(w))
+        add_widg_sizer[:addWidget](wd["altRepsBox"], n, 2)
+        wd["altRepsBoxCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["altRepsBoxCheckBox"], n, 0)
+        push!(additionalWidgetsIntFieldList, wd["altRepsBox"])
+        push!(additionalWidgetsIntFieldLabelList, wd["altRepsLabel"])
+        push!(additionalWidgetsIntFieldCheckBoxList, wd["altRepsBoxCheckBox"])
+        n = n+1
+        wd["altRepsISILabel"] = Qt.QLabel("Alternated (AB) Reps. ISI (ms):", w)
+        add_widg_sizer[:addWidget](wd["altRepsISILabel"], n, 1)
+        wd["altRepsISIBox"] = Qt.QLineEdit()
+        wd["altRepsISIBox"][:setText]("0")
+        wd["altRepsISIBox"][:setValidator](Qt.QIntValidator(w))
+        add_widg_sizer[:addWidget](wd["altRepsISIBox"], n, 2)
+        wd["altRepsISIBoxCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer.addWidget(wd["altRepsISIBoxCheckBox"], n, 0)
+        push!(additionalWidgetsIntFieldList, wd["altRepsISIBox"])
+        push!(additionalWidgetsIntFieldLabelList, wd["altRepsISILabel"])
+        push!(additionalWidgetsIntFieldCheckBoxList, wd["altRepsISIBoxCheckBox"])
+        n = n+1
+    end
+    
+    #Pre-Trial Interval
+    if prm[prm["currExp"]]["hasPreTrialInterval"] == true
+        wd["preTrialIntervalChooserLabel"] = Qt.QLabel("Pre-Trial Interval:")
+        add_widg_sizer[:addWidget](wd["preTrialIntervalChooserLabel"], n, 1)
+        wd["preTrialIntervalChooser"] = Qt.QComboBox()
+        wd["preTrialIntervalChooser"][:addItems]([tr("Yes"), tr("No")])
+        wd["preTrialIntervalChooser"][:setCurrentIndex](1)
+        qconnect(wd["preTrialIntervalChooser"], :activated, (str) -> onPreTrialIntervalChange())
+        add_widg_sizer[:addWidget](wd["preTrialIntervalChooser"], n, 2)
+        wd["preTrialIntervalCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["preTrialIntervalCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["preTrialIntervalChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["preTrialIntervalChooserLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["preTrialIntervalCheckBox"])
+        n = n+1
+        wd["preTrialIntervalISILabel"] = Qt.QLabel("Pre-Trial Interval ISI (ms):")
+        add_widg_sizer[:addWidget](wd["preTrialIntervalISILabel"], n, 1)
+        
+        wd["preTrialIntervalISITF"] = Qt.QLineEdit()
+        wd["preTrialIntervalISITF"][:setText]("500")
+        wd["preTrialIntervalISITF"][:setValidator](QIntValidator())
+        wd["preTrialIntervalISITF"][:setWhatsThis]("Sets the duration of the silent interval between the pre-trial interval and the first observation interval")
+        
+        add_widg_sizer[:addWidget](wd["preTrialIntervalISITF"], n, 2)
+        wd["preTrialIntervalISICheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["preTrialIntervalISICheckBox"], n, 0)
+        
+        wd["preTrialIntervalISILabel"][:hide]()
+        wd["preTrialIntervalISITF"][:hide]()
+        wd["preTrialIntervalISICheckBox"][:hide]()
+        
+        push!(wdc["additionalWidgetsIntFieldList"], wd["preTrialIntervalISITF"])
+        push!(wdc["additionalWidgetsIntFieldLabelList"], wd["preTrialIntervalISILabel"])
+        push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["preTrialIntervalISICheckBox"])
+        n = n+1
+    end
+    
+    #Precursor Interval
+    if prm[prm["currExp"]]["hasPrecursorInterval"] == true
+        wd["precursorIntervalChooserLabel"] = Qt.QLabel("Precursor Interval:")
+        add_widg_sizer[:addWidget](wd["precursorIntervalChooserLabel"], n, 1)
+        wd["precursorIntervalChooser"] = Qt.QComboBox()
+        wd["precursorIntervalChooser"][:addItems](["Yes", "No"])
+        wd["precursorIntervalChooser"][:setCurrentIndex](1)
+        qconnect(wd["precursorIntervalChooser"], :activated, (str) -> onPrecursorIntervalChange())
+        add_widg_sizer[:addWidget](wd["precursorIntervalChooser"], n, 2)
+        wd["precursorIntervalCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["precursorIntervalCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["precursorIntervalChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["precursorIntervalChooserLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["precursorIntervalCheckBox"])
+        n = n+1
+        wd["precursorIntervalISILabel"] = Qt.QLabel("Precursor Interval ISI (ms):")
+        add_widg_sizer[:addWidget](wd["precursorIntervalISILabel"], n, 1)
+        
+        wd["precursorIntervalISITF"] = Qt.QLineEdit()
+        wd["precursorIntervalISITF"][:setText]("500")
+        wd["precursorIntervalISITF"][:setValidator](Qt.QIntValidator())
+        wd["precursorIntervalISITF"][:setWhatsThis]("Sets the duration of the silent interval between the precursor interval and the observation interval")
+        
+        add_widg_sizer[:addWidget](wd["precursorIntervalISITF"], n, 2)
+        wd["precursorIntervalISICheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["precursorIntervalISICheckBox"], n, 0)
+        
+        wd["precursorIntervalISILabel"][:hide]()
+        wd["precursorIntervalISITF"][:hide]()
+        wd["precursorIntervalISICheckBox"][:hide]()
+        
+        push!(wdc["additionalWidgetsIntFieldList"], wd["precursorIntervalISITF"])
+        push!(wdc["additionalWidgetsIntFieldLabelList"], wd["precursorIntervalISILabe"]l)
+        push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["precursorIntervalISICheckBox"])
+        n = n+1
+    end
+    
+    #Postcursor Interval
+    if prm[prm["currExp"]]["hasPostcursorInterval"] == true
+        wd["postcursorIntervalChooserLabel"] = Qt.QLabel("Postcursor Interval:")
+        add_widg_sizer[:addWidget](wd["postcursorIntervalChooserLabel"], n, 1)
+        wd["postcursorIntervalChooser"] = Qt.QComboBox()
+        wd["postcursorIntervalChooser"][:addItems](["Yes", "No"])
+        wd["postcursorIntervalChooser"][:setCurrentIndex](1)
+        qconnect(wd["postcursorIntervalChooser"], :activated, (str) -> onPostcursorIntervalChange())
+        add_widg_sizer[:addWidget](wd["postcursorIntervalChooser"], n, 2)
+        wd["postcursorIntervalCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["postcursorIntervalCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["postcursorIntervalChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["postcursorIntervalChooserLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["postcursorIntervalCheckBox"])
+        n = n+1
+        wd["postcursorIntervalISILabel"] = Qt.QLabel("Postcursor Interval ISI (ms):")
+        add_widg_sizer[:addWidget](wd["postcursorIntervalISILabel"], n, 1)
+        
+        wd["postcursorIntervalISITF"] = QLineEdit()
+        wd["postcursorIntervalISITF"][:setText]("500")
+        wd["postcursorIntervalISITF"][:setValidator](Qt.QIntValidator())
+        wd["postcursorIntervalISITF"][:setWhatsThis]("Sets the duration of the silent interval between the observation interval and the postcursor interval")
+        
+        add_widg_sizer[:addWidget](wd["postcursorIntervalISITF"], n, 2)
+        wd["postcursorIntervalISICheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["postcursorIntervalISICheckBox"], n, 0)
+        
+        wd["postcursorIntervalISILabel"][:hide]()
+        wd["postcursorIntervalISITF"][:hide]()
+        wd["postcursorIntervalISICheckBox"][:hide]()
+        
+        push!(wdc["additionalWidgetsIntFieldList"], wd["postcursorIntervalISITF"])
+        push!(wdc["additionalWidgetsIntFieldLabelList"], wd["postcursorIntervalISILabel"])
+        push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["postcursorIntervalISICheckBox"])
+        n = n+1
+    end
+    
+    if prm[prm["currExp"]]["hasFeedback"] == true
+        wd["responseLightLabel"] =  Qt.QLabel("Response Light:")
+        wd["responseLightChooser"] = Qt.QComboBox()
+        wd["responseLightChooser"][:addItems](["Feedback", "Neutral", "None"])
+        add_widg_sizer[:addWidget](wd["responseLightLabel"], n, 1)
+        add_widg_sizer[:addWidget](wd["responseLightChooser"], n, 2)
+        wd["responseLightCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["responseLightCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["responseLightChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["responseLightLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["responseLightCheckBox"])
+        n = n+1
+        wd["responseLightDurationLabel"] = Qt.QLabel("Response Light Duration (ms):")
+        add_widg_sizer[:addWidget](wd["responseLightDurationLabel"], n, 1)
+        wd["responseLightDurationTF"] = Qt.QLineEdit()
+        wd["responseLightDurationTF"][:setText](prm["pref"]["general"]["responseLightDuration"])
+        wd["responseLightDurationTF"][:setValidator](Qt.QIntValidator())
+        
+        add_widg_sizer[:addWidget](wd["responseLightDurationTF"], n, 2)
+        wd["responseLightDurationCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["responseLightDurationCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsIntFieldList"], wd["responseLightDurationTF"])
+        push!(wdc["additionalWidgetsIntFieldLabelList"], wd["responseLightDurationLabel"])
+        push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["responseLightDurationCheckBox"])
+        n = n+1
+    else
+        wd["responseLightLabel"] =  QLabel("Response Light:")
+        wd["responseLightChooser"] = Qt.QComboBox()
+        wd["responseLightChooser"][:addItems]([tr("Neutral"), tr("None")])
+        add_widg_sizer[:addWidget](wd["responseLightLabel"], n, 1)
+        add_widg_sizer[:addWidget](wd["responseLightChooser"], n, 2)
+        wd["responseLightCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["responseLightCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsChooserList"], wd["responseLightChooser"])
+        push!(wdc["additionalWidgetsChooserLabelList"], wd["responseLightLabel"])
+        push!(wdc["additionalWidgetsChooserCheckBoxList"], wd["responseLightCheckBox"])
+        n = n+1
+        wd["responseLightDurationLabel"] = QLabel(tr("Response Light Duration (ms):"), self)
+        add_widg_sizer[:addWidget](wd["responseLightDurationLabel"], n, 1)
+        wd["responseLightDurationTF"] = QLineEdit()
+        wd["responseLightDurationTF"][:setText](prm["pref"]["general"]["responseLightDuration"])
+        wd["responseLightDurationTF"][:setValidator](Qt.QIntValidator())
+        push!(wdc["additionalWidgetsIntFieldList"], wd["responseLightDurationTF"])
+        push!(wdc["additionalWidgetsIntFieldLabelList"], wd["responseLightDurationLabel"])
+        
+        add_widg_sizer[:addWidget](wd["responseLightDurationTF"], n, 2)
+        wd["responseLightDurationCheckBox"] = Qt.QCheckBox()
+        add_widg_sizer[:addWidget](wd["responseLightDurationCheckBox"], n, 0)
+        push!(wdc["additionalWidgetsIntFieldCheckBoxList"], wd["responseLightDurationCheckBox"])
+        n = n+1
+    end
 end
 
 function setDefaultParameters(experiment, paradigm, par)
@@ -1834,101 +1867,101 @@ function setDefaultParameters(experiment, paradigm, par)
 end
 
 function setNewBlock(block)
-        ## self.removePrmWidgets()
-        ## self.conditionLabelTF.setText(self.prm[block]['conditionLabel'])
+        removePrmWidgets()
+        conditionLabelTF[:setText](prm[block]["conditionLabel"])
 
-        ## currExp = self.tr(self.prm[block]['experiment'])
-        ## paradigm = self.tr(self.prm[block]['paradigm'])
-        ## self.experimentChooser.setCurrentIndex(self.prm['experimentsChoices'].index(currExp))
-        ## for i in range(self.paradigmChooser.count()):
-        ##     self.paradigmChooser.removeItem(0)
-        ## self.paradigmChooser.addItems(self.prm[currExp]['paradigmChoices'])
-        ## self.paradigmChooser.setCurrentIndex(self.prm[currExp]["paradigmChoices"].index(paradigm))
+        ## currExp = tr(prm[block]['experiment'])
+        ## paradigm = tr(prm[block]['paradigm'])
+        ## experimentChooser.setCurrentIndex(prm['experimentsChoices'].index(currExp))
+        ## for i in range(paradigmChooser.count()):
+        ##     paradigmChooser.removeItem(0)
+        ## paradigmChooser.addItems(prm[currExp]['paradigmChoices'])
+        ## paradigmChooser.setCurrentIndex(prm[currExp]["paradigmChoices"].index(paradigm))
 
-        ## if paradigm in [self.tr("Multiple Constants 1-Interval 2-Alternatives"), self.tr("Multiple Constants m-Intervals n-Alternatives"), self.tr("Odd One Out")]:
-        ##     self.par['nDifferences'] = int(self.prm[block]['paradigmChooser'][self.prm[block]['paradigmChooserLabel'].index(self.tr("No. Differences:"))])
-        ## if paradigm in [self.tr("Transformed Up-Down Interleaved"), self.tr("Weighted Up-Down Interleaved")]:
-        ##     self.par['nDifferences'] = int(self.prm[block]['paradigmChooser'][self.prm[block]['paradigmChooserLabel'].index(self.tr("No. Tracks:"))])
+        ## if paradigm in [tr("Multiple Constants 1-Interval 2-Alternatives"), tr("Multiple Constants m-Intervals n-Alternatives"), tr("Odd One Out")]:
+        ##     par['nDifferences'] = int(prm[block]['paradigmChooser'][prm[block]['paradigmChooserLabel'].index(tr("No. Differences:"))])
+        ## if paradigm in [tr("Transformed Up-Down Interleaved"), tr("Weighted Up-Down Interleaved")]:
+        ##     par['nDifferences'] = int(prm[block]['paradigmChooser'][prm[block]['paradigmChooserLabel'].index(tr("No. Tracks:"))])
       
-        ## self.setDefaultParameters(currExp, self.tr(self.prm[block]['paradigm']), self.par)
-        ## for f in range(len(self.field)):
-        ##     self.field[f].setText(self.prm["currentLocale"][:toString](self.prm[block]['field'][f], precision=self.prm["pref"]["general"]["precision"]))
-        ##     self.fieldCheckBox[f].setChecked(self.prm[block]['fieldCheckBox'][f])
-        ## for c in range(len(self.chooser)):
-        ##     self.chooser[c].setCurrentIndex(self.prm['chooserOptions'][c].index(self.prm[block]['chooser'][c]))
-        ##     self.chooserCheckBox[c].setChecked(self.prm[block]['chooserCheckBox'][c])
-        ## for f in range(len(self.fileChooser)):
-        ##     self.fileChooser[f].setText(self.prm[block]['fileChooser'][f])
-        ##     self.fileChooserCheckBox[f].setChecked(self.prm[block]['fileChooserCheckBox'][f])
+        ## setDefaultParameters(currExp, tr(prm[block]['paradigm']), par)
+        ## for f in range(len(field)):
+        ##     field[f].setText(prm["currentLocale"][:toString](prm[block]['field'][f], precision=prm["pref"]["general"]["precision"]))
+        ##     fieldCheckBox[f].setChecked(prm[block]['fieldCheckBox'][f])
+        ## for c in range(len(chooser)):
+        ##     chooser[c].setCurrentIndex(prm['chooserOptions'][c].index(prm[block]['chooser'][c]))
+        ##     chooserCheckBox[c].setChecked(prm[block]['chooserCheckBox'][c])
+        ## for f in range(len(fileChooser)):
+        ##     fileChooser[f].setText(prm[block]['fileChooser'][f])
+        ##     fileChooserCheckBox[f].setChecked(prm[block]['fileChooserCheckBox'][f])
 
-        ## for f in range(len(self.paradigmFieldList)):
-        ##     self.paradigmFieldList[f].setText(self.prm["currentLocale"][:toString](self.prm[block]['paradigmField'][f], precision=self.prm["pref"]["general"]["precision"]))
-        ##     self.paradigmFieldCheckBoxList[f].setChecked(self.prm[block]['paradigmFieldCheckBox'][f])
-        ## for c in range(len(self.paradigmChooserList)):
-        ##     self.paradigmChooserList[c].setCurrentIndex(self.paradigmChooserList[c].findText(self.prm[block]['paradigmChooser'][c]))
-        ##     self.paradigmChooserCheckBoxList[c].setChecked(self.prm[block]['paradigmChooserCheckBox'][c])
+        ## for f in range(len(paradigmFieldList)):
+        ##     paradigmFieldList[f].setText(prm["currentLocale"][:toString](prm[block]['paradigmField'][f], precision=prm["pref"]["general"]["precision"]))
+        ##     paradigmFieldCheckBoxList[f].setChecked(prm[block]['paradigmFieldCheckBox'][f])
+        ## for c in range(len(paradigmChooserList)):
+        ##     paradigmChooserList[c].setCurrentIndex(paradigmChooserList[c].findText(prm[block]['paradigmChooser'][c]))
+        ##     paradigmChooserCheckBoxList[c].setChecked(prm[block]['paradigmChooserCheckBox'][c])
 
-        ## self.preTrialSilenceTF.setText(self.prm["currentLocale"][:toString](self.prm[block]['preTrialSilence']))
-        ## self.warningIntervalChooser.setCurrentIndex(self.warningIntervalChooser.findText(self.prm[block]['warningInterval']))
-        ## self.onWarningIntervalChange()
-        ## self.warningIntervalDurTF.setText(self.prm["currentLocale"][:toString](self.prm[block]['warningIntervalDur']))
-        ## self.warningIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['warningIntervalISI']))
-        ## self.intervalLightsChooser.setCurrentIndex(self.intervalLightsChooser.findText(self.prm[block]['intervalLights']))
-        ## self.onIntervalLightsChange()
+        ## preTrialSilenceTF.setText(prm["currentLocale"][:toString](prm[block]['preTrialSilence']))
+        ## warningIntervalChooser.setCurrentIndex(warningIntervalChooser.findText(prm[block]['warningInterval']))
+        ## onWarningIntervalChange()
+        ## warningIntervalDurTF.setText(prm["currentLocale"][:toString](prm[block]['warningIntervalDur']))
+        ## warningIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['warningIntervalISI']))
+        ## intervalLightsChooser.setCurrentIndex(intervalLightsChooser.findText(prm[block]['intervalLights']))
+        ## onIntervalLightsChange()
 
-        ## if self.prm[currExp]["hasISIBox"] == true
-        ##     self.ISIBox.setText(self.prm["currentLocale"][:toString](self.prm[block]['ISIVal']))
-        ##     self.ISIBoxCheckBox.setChecked(self.prm[block]['ISIValCheckBox'])
-        ## if self.prm[currExp]["hasPreTrialInterval"] == true
-        ##     self.preTrialIntervalChooser.setCurrentIndex(self.preTrialIntervalChooser.findText(self.prm[block]['preTrialInterval']))
-        ##     self.preTrialIntervalCheckBox.setChecked(self.prm[block]['preTrialIntervalCheckBox'])
-        ##     self.onPreTrialIntervalChange()
-        ##     self.preTrialIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['preTrialIntervalISI']))
-        ##     self.preTrialIntervalISICheckBox.setChecked(self.prm[block]['preTrialIntervalISICheckBox'])
-        ## if self.prm[currExp]["hasPrecursorInterval"] == true
-        ##     self.precursorIntervalChooser.setCurrentIndex(self.precursorIntervalChooser.findText(self.prm[block]['precursorInterval']))
-        ##     self.precursorIntervalCheckBox.setChecked(self.prm[block]['precursorIntervalCheckBox'])
-        ##     self.onPrecursorIntervalChange()
-        ##     self.precursorIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['precursorIntervalISI']))
-        ##     self.precursorIntervalISICheckBox.setChecked(self.prm[block]['precursorIntervalISICheckBox'])
-        ## if self.prm[currExp]["hasPostcursorInterval"] == true
-        ##     self.postcursorIntervalChooser.setCurrentIndex(self.postcursorIntervalChooser.findText(self.prm[block]['postcursorInterval']))
-        ##     self.postcursorIntervalCheckBox.setChecked(self.prm[block]['postcursorIntervalCheckBox'])
-        ##     self.onPostcursorIntervalChange()
-        ##     self.postcursorIntervalISITF.setText(self.prm["currentLocale"][:toString](self.prm[block]['postcursorIntervalISI']))
-        ##     self.postcursorIntervalISICheckBox.setChecked(self.prm[block]['postcursorIntervalISICheckBox'])
-        ## if self.prm[currExp]["hasAlternativesChooser"] == true
-        ##     self.nIntervalsChooser.setCurrentIndex(self.nIntervalsChooser.findText(str(self.prm[block]['nIntervals'])))
-        ##     self.nIntervalsCheckBox.setChecked(self.prm[block]['nIntervalsCheckBox'])
-        ##     self.onNIntervalsChange(self.nIntervalsChooser.findText(str(self.prm[block]['nIntervals'])))
-        ##     self.nAlternativesChooser.setCurrentIndex(self.nAlternativesChooser.findText(str(self.prm[block]['nAlternatives'])))
-        ##     self.nAlternativesCheckBox.setChecked(self.prm[block]['nAlternativesCheckBox'])
-        ## if self.prm[currExp]["hasAltReps"] == true
-        ##     self.altRepsBox.setText(self.prm["currentLocale"][:toString](self.prm[block]['altReps']))
-        ##     self.altRepsBoxCheckBox.setChecked(self.prm[block]['altRepsCheckBox'])
-        ##     self.altRepsISIBox.setText(self.prm["currentLocale"][:toString](self.prm[block]['altRepsISI']))
-        ##     self.altRepsISIBoxCheckBox.setChecked(self.prm[block]['altRepsISICheckBox'])
+        ## if prm[currExp]["hasISIBox"] == true
+        ##     ISIBox.setText(prm["currentLocale"][:toString](prm[block]['ISIVal']))
+        ##     ISIBoxCheckBox.setChecked(prm[block]['ISIValCheckBox'])
+        ## if prm[currExp]["hasPreTrialInterval"] == true
+        ##     preTrialIntervalChooser.setCurrentIndex(preTrialIntervalChooser.findText(prm[block]['preTrialInterval']))
+        ##     preTrialIntervalCheckBox.setChecked(prm[block]['preTrialIntervalCheckBox'])
+        ##     onPreTrialIntervalChange()
+        ##     preTrialIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['preTrialIntervalISI']))
+        ##     preTrialIntervalISICheckBox.setChecked(prm[block]['preTrialIntervalISICheckBox'])
+        ## if prm[currExp]["hasPrecursorInterval"] == true
+        ##     precursorIntervalChooser.setCurrentIndex(precursorIntervalChooser.findText(prm[block]['precursorInterval']))
+        ##     precursorIntervalCheckBox.setChecked(prm[block]['precursorIntervalCheckBox'])
+        ##     onPrecursorIntervalChange()
+        ##     precursorIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['precursorIntervalISI']))
+        ##     precursorIntervalISICheckBox.setChecked(prm[block]['precursorIntervalISICheckBox'])
+        ## if prm[currExp]["hasPostcursorInterval"] == true
+        ##     postcursorIntervalChooser.setCurrentIndex(postcursorIntervalChooser.findText(prm[block]['postcursorInterval']))
+        ##     postcursorIntervalCheckBox.setChecked(prm[block]['postcursorIntervalCheckBox'])
+        ##     onPostcursorIntervalChange()
+        ##     postcursorIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['postcursorIntervalISI']))
+        ##     postcursorIntervalISICheckBox.setChecked(prm[block]['postcursorIntervalISICheckBox'])
+        ## if prm[currExp]["hasAlternativesChooser"] == true
+        ##     nIntervalsChooser.setCurrentIndex(nIntervalsChooser.findText(str(prm[block]['nIntervals'])))
+        ##     nIntervalsCheckBox.setChecked(prm[block]['nIntervalsCheckBox'])
+        ##     onNIntervalsChange(nIntervalsChooser.findText(str(prm[block]['nIntervals'])))
+        ##     nAlternativesChooser.setCurrentIndex(nAlternativesChooser.findText(str(prm[block]['nAlternatives'])))
+        ##     nAlternativesCheckBox.setChecked(prm[block]['nAlternativesCheckBox'])
+        ## if prm[currExp]["hasAltReps"] == true
+        ##     altRepsBox.setText(prm["currentLocale"][:toString](prm[block]['altReps']))
+        ##     altRepsBoxCheckBox.setChecked(prm[block]['altRepsCheckBox'])
+        ##     altRepsISIBox.setText(prm["currentLocale"][:toString](prm[block]['altRepsISI']))
+        ##     altRepsISIBoxCheckBox.setChecked(prm[block]['altRepsISICheckBox'])
      
-        ## self.responseLightChooser.setCurrentIndex(self.responseLightChooser.findText(self.prm[block]['responseLight']))
-        ## self.responseLightCheckBox.setChecked(self.prm[block]['responseLightCheckBox'])
-        ## self.responseLightDurationTF.setText(self.prm["currentLocale"][:toString](self.prm[block]['responseLightDuration']))
-        ## self.responseLightDurationCheckBox.setChecked(self.prm[block]['responseLightDurationCheckBox'])
-        ## self.currentBlockCountLabel.setText(str(self.prm["currentBlock"]))
-        ## self.currentBlockPositionLabel.setText(str(self.prm["tmpBlockPosition"]))
-        ## self.storedBlocksCountLabel.setText(str(self.prm["storedBlocks"]))
-        ## for i in range(self.jumpToBlockChooser.count()):
-        ##     self.jumpToBlockChooser.removeItem(0)
-        ##     self.jumpToPositionChooser.removeItem(0)
-        ## for i in range(self.prm["storedBlocks"]):
-        ##     self.jumpToBlockChooser.addItem(str(i+1))
-        ##     self.jumpToPositionChooser.addItem(str(i+1))
-        ## self.jumpToBlockChooser.setCurrentIndex(self.prm["currentBlock"]-1)
-        ## self.jumpToPositionChooser.setCurrentIndex(int(self.prm[block]['blockPosition'])-1)
+        ## responseLightChooser.setCurrentIndex(responseLightChooser.findText(prm[block]['responseLight']))
+        ## responseLightCheckBox.setChecked(prm[block]['responseLightCheckBox'])
+        ## responseLightDurationTF.setText(prm["currentLocale"][:toString](prm[block]['responseLightDuration']))
+        ## responseLightDurationCheckBox.setChecked(prm[block]['responseLightDurationCheckBox'])
+        ## currentBlockCountLabel.setText(str(prm["currentBlock"]))
+        ## currentBlockPositionLabel.setText(str(prm["tmpBlockPosition"]))
+        ## storedBlocksCountLabel.setText(str(prm["storedBlocks"]))
+        ## for i in range(jumpToBlockChooser.count()):
+        ##     jumpToBlockChooser.removeItem(0)
+        ##     jumpToPositionChooser.removeItem(0)
+        ## for i in range(prm["storedBlocks"]):
+        ##     jumpToBlockChooser.addItem(str(i+1))
+        ##     jumpToPositionChooser.addItem(str(i+1))
+        ## jumpToBlockChooser.setCurrentIndex(prm["currentBlock"]-1)
+        ## jumpToPositionChooser.setCurrentIndex(int(prm[block]['blockPosition'])-1)
    
-        ## for c in range(len(self.chooser)):
-        ##     self.chooser[c].activated[str].connect(self.onChooserChange)
-        ## self.onChooserChange(None)
-        ## self.responseBox.setupLights()
+        ## for c in range(len(chooser)):
+        ##     chooser[c].activated[str].connect(onChooserChange)
+        ## onChooserChange(None)
+        ## responseBox.setupLights()
 end
 
 function setParadigmWidgets()
@@ -2660,37 +2693,37 @@ function setParadigmWidgets()
 end
 
 function swapBlocks(b1, b2)
-        ## self.compareGuiStoredParameters()
-        ## if self.prm["storedBlocks"] < 1:
+        ## compareGuiStoredParameters()
+        ## if prm["storedBlocks"] < 1:
         ##     return
-        ## if b1 > self.prm["storedBlocks"] or b2 > self.prm["storedBlocks"]:
-        ##     ret = QMessageBox.warning(self, self.tr("Warning"),
-        ##                                     self.tr("You're trying to swap the position of a block that has not been stored yet. Please, store the block first."),
+        ## if b1 > prm["storedBlocks"] or b2 > prm["storedBlocks"]:
+        ##     ret = QMessageBox.warning(self, tr("Warning"),
+        ##                                     tr("You're trying to swap the position of a block that has not been stored yet. Please, store the block first."),
         ##                                     QMessageBox.Ok | QMessageBox.Cancel)
         ##     return
-        ## if self.prm["storedBlocks"] > 1 and b1 <= self.prm["storedBlocks"] and b2 <= self.prm["storedBlocks"]:
-        ##     ol=copy.deepcopy(self.prm['b'+str(b1)])
-        ##     self.prm['b'+str(b1)] = copy.deepcopy(self.prm['b'+str(b2)])
-        ##     self.prm['b'+str(b2)] = copy.deepcopy(ol)
-        ##     self.saveParametersToFile(self.prm["tmpParametersFile"])
+        ## if prm["storedBlocks"] > 1 and b1 <= prm["storedBlocks"] and b2 <= prm["storedBlocks"]:
+        ##     ol=copy.deepcopy(prm['b'+str(b1)])
+        ##     prm['b'+str(b1)] = copy.deepcopy(prm['b'+str(b2)])
+        ##     prm['b'+str(b2)] = copy.deepcopy(ol)
+        ##     saveParametersToFile(prm["tmpParametersFile"])
         ## #
-        ##     #self.updateParametersWin()
-        ##     self.moveToBlockPosition(int(self.prm['b'+str(b2)]["blockPosition"]))
+        ##     #updateParametersWin()
+        ##     moveToBlockPosition(int(prm['b'+str(b2)]["blockPosition"]))
         ## return
 end
 
 function shiftBlock(blockNumber, direction)
         ## if direction == "up":
-        ##     if blockNumber == self.prm["storedBlocks"]:
+        ##     if blockNumber == prm["storedBlocks"]:
         ##         newBlockNumber = 1
         ##     else:
         ##         newBlockNumber = blockNumber + 1
         ## elif direction == "down":
         ##     if blockNumber == 1:
-        ##         newBlockNumber = self.prm["storedBlocks"]
+        ##         newBlockNumber = prm["storedBlocks"]
         ##     else:
         ##         newBlockNumber = blockNumber - 1
-        ## self.swapBlocks(blockNumber, newBlockNumber)
+        ## swapBlocks(blockNumber, newBlockNumber)
 end
 
 function togglePdfPlotCheckBox()
@@ -2716,7 +2749,7 @@ function unpack_seq(seq)
         ## newSeq = []
         ## for i in range(len(seq)):
         ##     if isinstance(seq[i], list) == True or isinstance(seq[i], tuple) == true
-        ##         y = self.unpack_seq(seq[i])
+        ##         y = unpack_seq(seq[i])
         ##         newSeq.extend(y)
         ##     else:
         ##         newSeq.append(seq[i])

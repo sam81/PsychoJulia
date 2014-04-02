@@ -31,7 +31,7 @@ function set_global_parameters(prm)
     ##         prm = methodToCall2(prm)
     opts =  ["hasISIBox", "hasAlternativesChooser", "hasFeedback", "hasIntervalLights",
              "hasPreTrialInterval", "hasPrecursorInterval", "hasPostcursorInterval",
-             "hasNTracksChooser", "hasNDifferencesChooser"]
+             "hasNTracksChooser", "hasNDifferencesChooser", "hasAltReps"]
 
     for exp in prm["experimentsChoices"]
         for opt in opts

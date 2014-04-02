@@ -40,6 +40,7 @@ prm = set_global_parameters(prm)
 prm["hideWins"] = false
 prm["progbar"] = false
 prm["blockProgbar"] = false
+prm["currentRepetition"] = 1
 
 #-------------------
 #LOCALE SETTINGS
@@ -416,8 +417,7 @@ autoPCorrLabel = Qt.QLabel("Percent Correct (%):")
 def_widg_sizer2[:addWidget](autoPCorrLabel, 2, 2)
 autoPCorrTF = Qt.QLineEdit()
 autoPCorrTF[:setText]("75")
-#autoPCorrTF[:setValidator](Qt.QDoubleValidator(0, 100, 6, self))
-autoPCorrTF[:setValidator](Qt.QDoubleValidator(0, 100, 6))
+autoPCorrTF[:setValidator](Qt.QDoubleValidator(0, 100, 6, w))
 def_widg_sizer2[:addWidget](autoPCorrTF, 2, 3)
 autoPCorrLabel[:hide]()
 autoPCorrTF[:hide]()
@@ -466,7 +466,7 @@ pw_buttons_sizer[:addWidget](deleteParametersButton, n, 2)
 
 
 undoUnsavedButton = Qt.QPushButton("Undo Unsaved")
-## undoUnsavedButton[:clicked][:connect](onClickUndoUnsavedButton)
+undoUnsavedButton[:clicked][:connect](onClickUndoUnsavedButton)
 undoUnsavedButton[:setIcon](QtGui["QIcon"][:fromTheme]("edit-undo", Qt.QIcon(":/edit-undo")))
 undoUnsavedButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 undoUnsavedButton[:setToolTip]("Undo unsaved changes")
@@ -484,19 +484,19 @@ storeParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeParametersButton, n, 0)
 
 storeandaddParametersButton = Qt.QPushButton("Store 'n' add!")
-## storeandaddParametersButton[:clicked][:connect](onClickStoreandaddParametersButton)
+storeandaddParametersButton[:clicked][:connect](onClickStoreandaddParametersButton)
 storeandaddParametersButton[:setToolTip]("Store current Block and add a new one")
 storeandaddParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeandaddParametersButton, n, 1)
 
 storeandgoParametersButton = Qt.QPushButton("Store 'n' go!")
-## storeandgoParametersButton[:clicked][:connect](onClickStoreandgoParametersButton)
+storeandgoParametersButton[:clicked][:connect](onClickStoreandgoParametersButton)
 storeandgoParametersButton[:setToolTip]("Store current Block and move to the next")
 storeandgoParametersButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](storeandgoParametersButton, n, 2)
 
 newBlockButton = Qt.QPushButton("New Block")
-##newBlockButton[:clicked][:connect](onClickNewBlockButton)
+newBlockButton[:clicked][:connect](onClickNewBlockButton)
 newBlockButton[:setIcon](QtGui["QIcon"][:fromTheme]("document-new", Qt.QIcon(":/document-new")))
 newBlockButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 newBlockButton[:setToolTip]("Append a new block")
@@ -509,7 +509,7 @@ pw_buttons_sizer[:addWidget](newBlockButton, n, 3)
 #---- THIRD ROW
 n = n+1
 prevBlockButton = Qt.QPushButton("Previous")
-## prevBlockButton[:clicked][:connect](onClickPrevBlockButton)
+prevBlockButton[:clicked][:connect](onClickPrevBlockButton)
 prevBlockButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-previous", Qt.QIcon(":/go-previous")))
 prevBlockButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 prevBlockButton[:setToolTip]("Move to previous block")
@@ -517,7 +517,7 @@ prevBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](prevBlockButton, n, 0)
 
 nextBlockButton = Qt.QPushButton("Next")
-##nextBlockButton[:clicked][:connect](onClickNextBlockButton)
+nextBlockButton[:clicked][:connect](onClickNextBlockButton)
 nextBlockButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-next", Qt.QIcon(":/go-next")))
 nextBlockButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 nextBlockButton[:setToolTip]("Move to next block")
@@ -525,7 +525,7 @@ nextBlockButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](nextBlockButton, n, 1)
 
 shuffleBlocksButton = Qt.QPushButton("Shuffle")
-## shuffleBlocksButton[:clicked][:connect](onClickShuffleBlocksButton)
+shuffleBlocksButton[:clicked][:connect](onClickShuffleBlocksButton)
 shuffleBlocksButton[:setIcon](QtGui["QIcon"][:fromTheme]("media-playlist-shuffle", Qt.QIcon(":/media-playlist-shuffle")))
 shuffleBlocksButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 shuffleBlocksButton[:setToolTip]("Shuffle blocks")
@@ -533,7 +533,7 @@ shuffleBlocksButton[:setSizePolicy](szp[:Expanding], szp[:Expanding])
 pw_buttons_sizer[:addWidget](shuffleBlocksButton, n, 2)
 
 resetParametersButton = Qt.QPushButton("Reset")
-## resetParametersButton[:clicked][:connect](onClickResetParametersButton)
+resetParametersButton[:clicked][:connect](onClickResetParametersButton)
 resetParametersButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-home", Qt.QIcon(":/go-home")))
 resetParametersButton[:setIconSize](QtCore[:QSize](min_pw_icon_size, min_pw_icon_size))
 resetParametersButton[:setToolTip]("Reset parameters")
@@ -548,14 +548,14 @@ n = n+1
 currentBlockLabel = Qt.QLabel("Current Block:")
 pw_buttons_sizer[:addWidget](currentBlockLabel, n, 0)
 
-#currentBlockCountLabel = QLabel(str(prm["currentBlock"]))
-#pw_buttons_sizer[:addWidget](currentBlockCountLabel, n, 1)
+currentBlockCountLabel = Qt.QLabel(string(prm["currentBlock"]))
+pw_buttons_sizer[:addWidget](currentBlockCountLabel, n, 1)
 
 storedBlocksLabel = Qt.QLabel("Stored Blocks:")
 pw_buttons_sizer[:addWidget](storedBlocksLabel, n, 2)
 
-## storedBlocksCountLabel = QLabel(str(prm["storedBlocks"]))
-## pw_buttons_sizer[:addWidget](storedBlocksCountLabel, n, 3)
+storedBlocksCountLabel = Qt.QLabel(string(prm["storedBlocks"]))
+pw_buttons_sizer[:addWidget](storedBlocksCountLabel, n, 3)
 
 #FIFTH ROW
 n = n+1
@@ -566,28 +566,28 @@ pw_buttons_sizer[:addWidget](currentBlockPositionLabel, n, 1)
 
 jumpToBlockLabel = Qt.QLabel("Jump to Block:")
 jumpToBlockChooser = Qt.QComboBox()
-## jumpToBlockChooser.activated[str].connect(onJumpToBlockChange)
+qconnect(jumpToBlockChooser, :activated, (str) -> onJumpToBlockChange(str))
 pw_buttons_sizer[:addWidget](jumpToBlockLabel, n, 2)
 pw_buttons_sizer[:addWidget](jumpToBlockChooser, n, 3)
 #SIXTH ROW
 n = n+1
 prevBlockPositionButton = Qt.QPushButton("Previous Position")
-## prevBlockPositionButton[:clicked][:connect](onClickPrevBlockPositionButton)
+prevBlockPositionButton[:clicked][:connect](onClickPrevBlockPositionButton)
 prevBlockPositionButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-previous", Qt.QIcon(":/go-previous")))
 prevBlockPositionButton[:setToolTip]("Move to previous block position")
 pw_buttons_sizer[:addWidget](prevBlockPositionButton, n, 0)
 
 nextBlockPositionButton = Qt.QPushButton("Next Position")
-## nextBlockPositionButton[:clicked][:connect](onClickNextBlockPositionButton)
+nextBlockPositionButton[:clicked][:connect](onClickNextBlockPositionButton)
 nextBlockPositionButton[:setIcon](QtGui["QIcon"][:fromTheme]("go-next", Qt.QIcon(":/go-next")))
 nextBlockPositionButton[:setToolTip]("Move to next block position")
 pw_buttons_sizer[:addWidget](nextBlockPositionButton, n, 1)
 
-## jumpToPositionLabel = Qt.QLabel(tr("Jump to Position:"))
-## jumpToPositionChooser = Qt.QComboBox()
-## jumpToPositionChooser.activated[str].connect(onJumpToPositionChange)
-## pw_buttons_sizer[:addWidget](jumpToPositionLabel, n, 2)
-## pw_buttons_sizer[:addWidget](jumpToPositionChooser, n, 3)
+jumpToPositionLabel = Qt.QLabel("Jump to Position:")
+jumpToPositionChooser = Qt.QComboBox()
+qconnect(jumpToPositionChooser, :activated, (str) -> onJumpToPositionChange(str))
+pw_buttons_sizer[:addWidget](jumpToPositionLabel, n, 2)
+pw_buttons_sizer[:addWidget](jumpToPositionChooser, n, 3)
 
 # SEVENTH ROW
 n = n+1
