@@ -19,53 +19,53 @@
 function onClickStatusButton()
 ##         parent().compareGuiStoredParameters()
     if (prm["storedBlocks"] == 0) | (statusButton[:text]() == prm["rbTrans"][:translate]("rb", "Running")) | (statusButton[:text]() == prm["rbTrans"][:translate]("rb", "Finished"))
+        println(statusButton[:text]())
         return
     end
 
-##         if prm["currentBlock"] > prm["storedBlocks"]: #the user did not choose to store the unsaved block, move to first block
-##             parent().moveToBlockPosition(1)    
-       
-##         if parent().listenerTF.text() == "" and prm["pref"]["general"]["listenerNameWarn"] == True:
-##             msg = prm["rbTrans"].translate("rb", "Please, enter the listener"s name:") 
-##             text, ok = QInputDialog.getText(self, prm["rbTrans"].translate("rb", "Input Dialog:") , msg)
-##             if ok:
-##                 parent().listenerTF.setText(text)
-##                 prm["listener"] = text
-
-##             return
-##         if parent().sessionLabelTF.text() == "" and prm["pref"]["general"]["sessionLabelWarn"] == True:
-##             msg = prm["rbTrans"].translate("rb", "Please, enter the session label:") 
-##             text, ok = QInputDialog.getText(self, prm["rbTrans"].translate("rb", "Input Dialog:") , msg)
-##             if ok:
-##                 parent().sessionLabelTF.setText(text)
-##                 prm["sessionLabel"] = text
-##             return
-        
-##         if int(prm["b"+str(prm["currentBlock"])]["blockPosition"]) == 1 and prm["allBlocks"]["shuffleMode"] == tr("Ask") and prm["shuffled"] == False and prm["storedBlocks"] > 1 :
-##             reply = QMessageBox.question(self, prm["rbTrans"].translate("rb", "Message"),
-##                                                prm["rbTrans"].translate("rb", "Do you want to shuffle the blocks?"), QMessageBox.Yes | 
-##                                                QMessageBox.No, QMessageBox.No)
-##             if reply == QMessageBox.Yes:
-##                 parent().onClickShuffleBlocksButton()
-##                 prm["shuffled"] = True
-##         elif int(prm["b"+str(prm["currentBlock"])]["blockPosition"]) == 1 and prm["shuffled"] == False and prm["allBlocks"]["shuffleMode"] == tr("Auto") and prm["storedBlocks"] > 1 :
-         
-##             parent().onClickShuffleBlocksButton()
-##             prm["shuffled"] = True
-
-##         prm["startOfBlock"] = True
-##         statusButton.setText(prm["rbTrans"].translate("rb", "Running"))
-##         prm["trialRunning"] = True
-##         QApplication.processEvents()
-
-##         if prm["allBlocks"]["sendTriggers"] == True:
-##             thisSnd = pureTone(440, 0, -200, 980, 10, "Both", prm["allBlocks"]["sampRate"], 100)
-##             #playCmd = prm["pref"]["sound"]["playCommand"]
-##             audioManager.playSoundWithTrigger(thisSnd, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], False, "ONTrigger.wav", prm["pref"]["general"]["ONTrigger"])
-##             print("SENDING START TRIGGER", prm["pref"]["general"]["ONTrigger"])
-##         if prm["currentBlock"] > prm["storedBlocks"]:
-##             parent().onClickNextBlockPositionButton()
-        
+    if prm["currentBlock"] > prm["storedBlocks"] #the user did not choose to store the unsaved block, move to first block
+        moveToBlockPosition(1)    
+    end
+    ## if parent().listenerTF.text() == "" and prm["pref"]["general"]["listenerNameWarn"] == True:
+    ##     msg = prm["rbTrans"].translate("rb", "Please, enter the listener"s name:") 
+    ##     text, ok = QInputDialog.getText(self, prm["rbTrans"].translate("rb", "Input Dialog:") , msg)
+    ##     if ok:
+    ##         parent().listenerTF.setText(text)
+    ##         prm["listener"] = text
+    
+    ##     return
+    ## if parent().sessionLabelTF.text() == "" and prm["pref"]["general"]["sessionLabelWarn"] == True:
+    ##     msg = prm["rbTrans"].translate("rb", "Please, enter the session label:") 
+    ##     text, ok = QInputDialog.getText(self, prm["rbTrans"].translate("rb", "Input Dialog:") , msg)
+    ##     if ok:
+    ##         parent().sessionLabelTF.setText(text)
+    ##         prm["sessionLabel"] = text
+    ##     return
+    
+    ## if int(prm["b"+str(prm["currentBlock"])]["blockPosition"]) == 1 and prm["allBlocks"]["shuffleMode"] == tr("Ask") and prm["shuffled"] == False and prm["storedBlocks"] > 1 :
+    ##     reply = QMessageBox.question(self, prm["rbTrans"].translate("rb", "Message"),
+    ##                                        prm["rbTrans"].translate("rb", "Do you want to shuffle the blocks?"), QMessageBox.Yes | 
+    ##                                        QMessageBox.No, QMessageBox.No)
+    ##     if reply == QMessageBox.Yes:
+    ##         parent().onClickShuffleBlocksButton()
+    ##         prm["shuffled"] = True
+    ## elif int(prm["b"+str(prm["currentBlock"])]["blockPosition"]) == 1 and prm["shuffled"] == False and prm["allBlocks"]["shuffleMode"] == tr("Auto") and prm["storedBlocks"] > 1 :
+    
+    ##     parent().onClickShuffleBlocksButton()
+    ##     prm["shuffled"] = True
+    
+    prm["startOfBlock"] = true
+    statusButton[:setText](prm["rbTrans"][:translate]("rb", "Running"))
+    prm["trialRunning"] = true
+    QtGui["QApplication"][:processEvents]()
+    
+    ## if prm["allBlocks"]["sendTriggers"] == True:
+    ##     thisSnd = pureTone(440, 0, -200, 980, 10, "Both", prm["allBlocks"]["sampRate"], 100)
+    ##     #playCmd = prm["pref"]["sound"]["playCommand"]
+    ##     audioManager.playSoundWithTrigger(thisSnd, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], False, "ONTrigger.wav", prm["pref"]["general"]["ONTrigger"])
+    ##     print("SENDING START TRIGGER", prm["pref"]["general"]["ONTrigger"])
+    ## if prm["currentBlock"] > prm["storedBlocks"]:
+    ##     parent().onClickNextBlockPositionButton()
     doTrial()
 end
 
@@ -407,32 +407,39 @@ function doTrial()
     prm["trialRunning"] = true
     prm["sortingResponse"] = false
     currBlock = string("b", prm["currentBlock"])
-##         #for compatibility otherwise need to change in all experiments
-##         prm["maxLevel"] = prm["allBlocks"]["maxLevel"]
-##         prm["sampRate"] = prm["allBlocks"]["sampRate"]
-##         prm["nBits"] = prm["allBlocks"]["nBits"]
+  
+    #for compatibility otherwise need to change in all experiments
+    prm["maxLevel"] = prm["allBlocks"]["maxLevel"]
+    prm["sampRate"] = prm["allBlocks"]["sampRate"]
+    prm["nBits"] = prm["allBlocks"]["nBits"]
    
-##         prm["paradigm"] = prm[currBlock]["paradigm"]
-##         if prm[parent().currExp]["hasISIBox"] == True:
-##             prm["isi"] = prm[currBlock]["ISIVal"]
-##         if prm[parent().currExp]["hasAlternativesChooser"] == True:
-##             prm["nAlternatives"] = prm[currBlock]["nAlternatives"]
-##         if prm[parent().currExp]["hasAltReps"] == True:
-##             prm["altReps"] = prm[currBlock]["altReps"]
-##             prm["altRepsISI"] = prm[currBlock]["altRepsISI"]
-##         else:
-##             prm["altReps"] = 0
-##         prm["responseLight"] = prm[currBlock]["responseLight"]
+    prm["paradigm"] = prm[currBlock]["paradigm"]
+    if prm[prm["currExp"]]["hasISIBox"] == true
+        prm["isi"] = prm[currBlock]["ISIVal"]
+    end
+    if prm[prm["currExp"]]["hasAlternativesChooser"] == true
+            prm["nAlternatives"] = prm[currBlock]["nAlternatives"]
+    end
+    if prm[prm["currExp"]]["hasAltReps"] == true
+        prm["altReps"] = prm[currBlock]["altReps"]
+        prm["altRepsISI"] = prm[currBlock]["altRepsISI"]
+    else
+        prm["altReps"] = 0
+    end
+    prm["responseLight"] = prm[currBlock]["responseLight"]
 
-##         if prm["startOfBlock"] == True:
-##             getStartTime()
+    if prm["startOfBlock"] == true
+        getStartTime()
+    end
 
-##             if prm["paradigm"] in [tr("Transformed Up-Down Interleaved"), tr("Weighted Up-Down Interleaved")]:
-##                 prm["nDifferences"] = int(prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("No. Tracks:"))])
-##                 if prm["nDifferences"] == 1:
-##                     prm["maxConsecutiveTrials"] = tr("unlimited")
-##                 else:
-##                     prm["maxConsecutiveTrials"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Max. Consecutive Trials x Track:"))]
+    if  in (prm["paradigm"], ["Transformed Up-Down Interleaved", "Weighted Up-Down Interleaved"]) == true
+        prm["nDifferences"] = int(prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "No. Tracks:")])
+        if prm["nDifferences"] == 1
+            prm["maxConsecutiveTrials"] = "unlimited"
+        else
+            prm["maxConsecutiveTrials"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "Max. Consecutive Trials x Track:")]
+        end
+    end
            
 
 ##             if prm["paradigm"] == tr("Transformed Up-Down"):
@@ -2180,18 +2187,19 @@ end
 ##             whenFinished()
 ##         prm["cmdOutFileHandle"].flush()
         
-##     def getEndTime(self):
-##         prm["blockEndTime"] = time.time()
-##         prm["blockEndTimeStamp"] = QDateTime.toString(QDateTime.currentDateTime(), currLocale.dateTimeFormat(currLocale.ShortFormat)) 
-##         prm["blockEndDateString"] = QDate.toString(QDate.currentDate(), currLocale.dateFormat(currLocale.ShortFormat)) 
-##         prm["blockEndTimeString"] = QTime.toString(QTime.currentTime(), currLocale.timeFormat(currLocale.ShortFormat)) 
+function getEndTime()
+    prm["blockEndTime"] = time()
+    prm["blockEndTimeStamp"] = pycall(QtCore["QDateTime"]["toString"], PyAny, QtCore["QDateTime"][:currentDateTime](), prm["currentLocale"][:dateTimeFormat](prm["currentLocale"][:ShortFormat]))
+    prm["blockEndDateString"] = pycall(QtCore["QDate"]["toString"], PyAny, QtCore["QDate"][:currentDate](), prm["currentLocale"][:dateFormat](prm["currentLocale"][:ShortFormat])) 
+    prm["blockEndTimeString"] = pycall(QtCore["QTime"]["toString"], PyAny, QtCore["QTime"][:currentTime](), prm["currentLocale"][:timeFormat](prm["currentLocale"][:ShortFormat]))
+end
         
-##     def getStartTime(self):
-##         prm["blockStartTime"] = time.time()
-##         prm["blockStartTimeStamp"] = QDateTime.toString(QDateTime.currentDateTime(), currLocale.dateTimeFormat(currLocale.ShortFormat)) 
-##         prm["blockStartDateString"] = QDate.toString(QDate.currentDate(), currLocale.dateFormat(currLocale.ShortFormat)) 
-##         prm["blockStartTimeString"] = QTime.toString(QTime.currentTime(), currLocale.timeFormat(currLocale.ShortFormat)) 
-        
+function getStartTime()
+    prm["blockStartTime"] = time()
+    prm["blockStartTimeStamp"] = pycall(QtCore["QDateTime"]["toString"], PyAny, QtCore["QDateTime"][:currentDateTime](), prm["currentLocale"][:dateTimeFormat](prm["currentLocale"][:ShortFormat]))
+    prm["blockStartDateString"] = pycall(QtCore["QDate"]["toString"], PyAny, QtCore["QDate"][:currentDate](), prm["currentLocale"][:dateFormat](prm["currentLocale"][:ShortFormat])) 
+    prm["blockStartTimeString"] = pycall(QtCore["QTime"]["toString"], PyAny, QtCore["QTime"][:currentTime](), prm["currentLocale"][:timeFormat](prm["currentLocale"][:ShortFormat]))
+end        
 
 ##     def writeResultsHeader(self, fileType):
 ##         if fileType == "log":

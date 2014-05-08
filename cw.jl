@@ -29,6 +29,8 @@ pysis["path"][:insert](0, pyos["path"][:abspath]("."))
 PyCall.pyimport("qrc_resources") 
 
 QtGui = pyimport("PySide.QtGui")
+
+
 szp = Qt.QSizePolicy()
 
 prm = (String => Any)[]

@@ -748,7 +748,7 @@ function onClickStoreParametersButton()
     prm["allBlocks"]["endExpCommand"] = endExpCommandTF[:text]()
     prm["allBlocks"]["currentExperimenter"] = experimenterChooser[:currentText]()
     prm["allBlocks"]["currentPhones"] = phonesChooser[:currentText]()
-    #prm["allBlocks"]["maxLevel"] = float(prm["phones"]["phonesMaxLevel"][phonesChooser[:currentIndex]()])
+    prm["allBlocks"]["maxLevel"] = float(prm["phones"]["phonesMaxLevel"][phonesChooser[:currentIndex]()+1])
     prm["allBlocks"]["sampRate"] =  prm["currentLocale"][:toInt](sampRateTF[:text]())[1]
     prm["allBlocks"]["nBits"] = prm["currentLocale"][:toInt](nBitsChooser[:currentText]())[1]
     prm["allBlocks"]["responseMode"] = responseModeChooser[:currentText]()
@@ -1047,7 +1047,7 @@ function onClickShuffleBlocksButton()
         ##     self.prm["shuffled"] = True
         ##     self.saveParametersToFile(self.prm["tmpParametersFile"])
         ##     self.updateParametersWin()
-        ##     self.responseBox.statusButton.setText(self.prm["rbTrans"].translate("rb", "Start"))
+        # self.responseBox.statusButton.setText(self.prm["rbTrans"].translate("rb", "Start"))
         ##     self.autoSetGaugeValue()
 end
 
@@ -1870,98 +1870,100 @@ function setNewBlock(block)
         removePrmWidgets()
         conditionLabelTF[:setText](prm[block]["conditionLabel"])
 
-        ## currExp = tr(prm[block]['experiment'])
-        ## paradigm = tr(prm[block]['paradigm'])
-        ## experimentChooser.setCurrentIndex(prm['experimentsChoices'].index(currExp))
+        currExp = prm[block]["experiment"]
+        paradigm = prm[block]["paradigm"]
+        ##experimentChooser[:setCurrentIndex](prm["experimentsChoices"].index(currExp))
         ## for i in range(paradigmChooser.count()):
         ##     paradigmChooser.removeItem(0)
-        ## paradigmChooser.addItems(prm[currExp]['paradigmChoices'])
+        ## paradigmChooser.addItems(prm[currExp]["paradigmChoices"])
         ## paradigmChooser.setCurrentIndex(prm[currExp]["paradigmChoices"].index(paradigm))
 
         ## if paradigm in [tr("Multiple Constants 1-Interval 2-Alternatives"), tr("Multiple Constants m-Intervals n-Alternatives"), tr("Odd One Out")]:
-        ##     par['nDifferences'] = int(prm[block]['paradigmChooser'][prm[block]['paradigmChooserLabel'].index(tr("No. Differences:"))])
+        ##     par["nDifferences"] = int(prm[block]["paradigmChooser"][prm[block]["paradigmChooserLabel"].index(tr("No. Differences:"))])
         ## if paradigm in [tr("Transformed Up-Down Interleaved"), tr("Weighted Up-Down Interleaved")]:
-        ##     par['nDifferences'] = int(prm[block]['paradigmChooser'][prm[block]['paradigmChooserLabel'].index(tr("No. Tracks:"))])
+        ##     par["nDifferences"] = int(prm[block]["paradigmChooser"][prm[block]["paradigmChooserLabel"].index(tr("No. Tracks:"))])
       
-        ## setDefaultParameters(currExp, tr(prm[block]['paradigm']), par)
+        ## setDefaultParameters(currExp, tr(prm[block]["paradigm"]), par)
         ## for f in range(len(field)):
-        ##     field[f].setText(prm["currentLocale"][:toString](prm[block]['field'][f], precision=prm["pref"]["general"]["precision"]))
-        ##     fieldCheckBox[f].setChecked(prm[block]['fieldCheckBox'][f])
+        ##     field[f].setText(prm["currentLocale"][:toString](prm[block]["field"][f], precision=prm["pref"]["general"]["precision"]))
+        ##     fieldCheckBox[f].setChecked(prm[block]["fieldCheckBox"][f])
         ## for c in range(len(chooser)):
-        ##     chooser[c].setCurrentIndex(prm['chooserOptions'][c].index(prm[block]['chooser'][c]))
-        ##     chooserCheckBox[c].setChecked(prm[block]['chooserCheckBox'][c])
+        ##     chooser[c].setCurrentIndex(prm["chooserOptions"][c].index(prm[block]["chooser"][c]))
+        ##     chooserCheckBox[c].setChecked(prm[block]["chooserCheckBox"][c])
         ## for f in range(len(fileChooser)):
-        ##     fileChooser[f].setText(prm[block]['fileChooser'][f])
-        ##     fileChooserCheckBox[f].setChecked(prm[block]['fileChooserCheckBox'][f])
+        ##     fileChooser[f].setText(prm[block]["fileChooser"][f])
+        ##     fileChooserCheckBox[f].setChecked(prm[block]["fileChooserCheckBox"][f])
 
         ## for f in range(len(paradigmFieldList)):
-        ##     paradigmFieldList[f].setText(prm["currentLocale"][:toString](prm[block]['paradigmField'][f], precision=prm["pref"]["general"]["precision"]))
-        ##     paradigmFieldCheckBoxList[f].setChecked(prm[block]['paradigmFieldCheckBox'][f])
+        ##     paradigmFieldList[f].setText(prm["currentLocale"][:toString](prm[block]["paradigmField"][f], precision=prm["pref"]["general"]["precision"]))
+        ##     paradigmFieldCheckBoxList[f].setChecked(prm[block]["paradigmFieldCheckBox"][f])
         ## for c in range(len(paradigmChooserList)):
-        ##     paradigmChooserList[c].setCurrentIndex(paradigmChooserList[c].findText(prm[block]['paradigmChooser'][c]))
-        ##     paradigmChooserCheckBoxList[c].setChecked(prm[block]['paradigmChooserCheckBox'][c])
+        ##     paradigmChooserList[c].setCurrentIndex(paradigmChooserList[c].findText(prm[block]["paradigmChooser"][c]))
+        ##     paradigmChooserCheckBoxList[c].setChecked(prm[block]["paradigmChooserCheckBox"][c])
 
-        ## preTrialSilenceTF.setText(prm["currentLocale"][:toString](prm[block]['preTrialSilence']))
-        ## warningIntervalChooser.setCurrentIndex(warningIntervalChooser.findText(prm[block]['warningInterval']))
+        ## preTrialSilenceTF.setText(prm["currentLocale"][:toString](prm[block]["preTrialSilence"]))
+        ## warningIntervalChooser.setCurrentIndex(warningIntervalChooser.findText(prm[block]["warningInterval"]))
         ## onWarningIntervalChange()
-        ## warningIntervalDurTF.setText(prm["currentLocale"][:toString](prm[block]['warningIntervalDur']))
-        ## warningIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['warningIntervalISI']))
-        ## intervalLightsChooser.setCurrentIndex(intervalLightsChooser.findText(prm[block]['intervalLights']))
+        ## warningIntervalDurTF.setText(prm["currentLocale"][:toString](prm[block]["warningIntervalDur"]))
+        ## warningIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]["warningIntervalISI"]))
+        ## intervalLightsChooser.setCurrentIndex(intervalLightsChooser.findText(prm[block]["intervalLights"]))
         ## onIntervalLightsChange()
 
         ## if prm[currExp]["hasISIBox"] == true
-        ##     ISIBox.setText(prm["currentLocale"][:toString](prm[block]['ISIVal']))
-        ##     ISIBoxCheckBox.setChecked(prm[block]['ISIValCheckBox'])
+        ##     ISIBox.setText(prm["currentLocale"][:toString](prm[block]["ISIVal"]))
+        ##     ISIBoxCheckBox.setChecked(prm[block]["ISIValCheckBox"])
         ## if prm[currExp]["hasPreTrialInterval"] == true
-        ##     preTrialIntervalChooser.setCurrentIndex(preTrialIntervalChooser.findText(prm[block]['preTrialInterval']))
-        ##     preTrialIntervalCheckBox.setChecked(prm[block]['preTrialIntervalCheckBox'])
+        ##     preTrialIntervalChooser.setCurrentIndex(preTrialIntervalChooser.findText(prm[block]["preTrialInterval"]))
+        ##     preTrialIntervalCheckBox.setChecked(prm[block]["preTrialIntervalCheckBox"])
         ##     onPreTrialIntervalChange()
-        ##     preTrialIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['preTrialIntervalISI']))
-        ##     preTrialIntervalISICheckBox.setChecked(prm[block]['preTrialIntervalISICheckBox'])
+        ##     preTrialIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]["preTrialIntervalISI"]))
+        ##     preTrialIntervalISICheckBox.setChecked(prm[block]["preTrialIntervalISICheckBox"])
         ## if prm[currExp]["hasPrecursorInterval"] == true
-        ##     precursorIntervalChooser.setCurrentIndex(precursorIntervalChooser.findText(prm[block]['precursorInterval']))
-        ##     precursorIntervalCheckBox.setChecked(prm[block]['precursorIntervalCheckBox'])
+        ##     precursorIntervalChooser.setCurrentIndex(precursorIntervalChooser.findText(prm[block]["precursorInterval"]))
+        ##     precursorIntervalCheckBox.setChecked(prm[block]["precursorIntervalCheckBox"])
         ##     onPrecursorIntervalChange()
-        ##     precursorIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['precursorIntervalISI']))
-        ##     precursorIntervalISICheckBox.setChecked(prm[block]['precursorIntervalISICheckBox'])
+        ##     precursorIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]["precursorIntervalISI"]))
+        ##     precursorIntervalISICheckBox.setChecked(prm[block]["precursorIntervalISICheckBox"])
         ## if prm[currExp]["hasPostcursorInterval"] == true
-        ##     postcursorIntervalChooser.setCurrentIndex(postcursorIntervalChooser.findText(prm[block]['postcursorInterval']))
-        ##     postcursorIntervalCheckBox.setChecked(prm[block]['postcursorIntervalCheckBox'])
+        ##     postcursorIntervalChooser.setCurrentIndex(postcursorIntervalChooser.findText(prm[block]["postcursorInterval"]))
+        ##     postcursorIntervalCheckBox.setChecked(prm[block]["postcursorIntervalCheckBox"])
         ##     onPostcursorIntervalChange()
-        ##     postcursorIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]['postcursorIntervalISI']))
-        ##     postcursorIntervalISICheckBox.setChecked(prm[block]['postcursorIntervalISICheckBox'])
+        ##     postcursorIntervalISITF.setText(prm["currentLocale"][:toString](prm[block]["postcursorIntervalISI"]))
+        ##     postcursorIntervalISICheckBox.setChecked(prm[block]["postcursorIntervalISICheckBox"])
         ## if prm[currExp]["hasAlternativesChooser"] == true
-        ##     nIntervalsChooser.setCurrentIndex(nIntervalsChooser.findText(str(prm[block]['nIntervals'])))
-        ##     nIntervalsCheckBox.setChecked(prm[block]['nIntervalsCheckBox'])
-        ##     onNIntervalsChange(nIntervalsChooser.findText(str(prm[block]['nIntervals'])))
-        ##     nAlternativesChooser.setCurrentIndex(nAlternativesChooser.findText(str(prm[block]['nAlternatives'])))
-        ##     nAlternativesCheckBox.setChecked(prm[block]['nAlternativesCheckBox'])
+        ##     nIntervalsChooser.setCurrentIndex(nIntervalsChooser.findText(str(prm[block]["nIntervals"])))
+        ##     nIntervalsCheckBox.setChecked(prm[block]["nIntervalsCheckBox"])
+        ##     onNIntervalsChange(nIntervalsChooser.findText(str(prm[block]["nIntervals"])))
+        ##     nAlternativesChooser.setCurrentIndex(nAlternativesChooser.findText(str(prm[block]["nAlternatives"])))
+        ##     nAlternativesCheckBox.setChecked(prm[block]["nAlternativesCheckBox"])
         ## if prm[currExp]["hasAltReps"] == true
-        ##     altRepsBox.setText(prm["currentLocale"][:toString](prm[block]['altReps']))
-        ##     altRepsBoxCheckBox.setChecked(prm[block]['altRepsCheckBox'])
-        ##     altRepsISIBox.setText(prm["currentLocale"][:toString](prm[block]['altRepsISI']))
-        ##     altRepsISIBoxCheckBox.setChecked(prm[block]['altRepsISICheckBox'])
+        ##     altRepsBox.setText(prm["currentLocale"][:toString](prm[block]["altReps"]))
+        ##     altRepsBoxCheckBox.setChecked(prm[block]["altRepsCheckBox"])
+        ##     altRepsISIBox.setText(prm["currentLocale"][:toString](prm[block]["altRepsISI"]))
+        ##     altRepsISIBoxCheckBox.setChecked(prm[block]["altRepsISICheckBox"])
      
-        ## responseLightChooser.setCurrentIndex(responseLightChooser.findText(prm[block]['responseLight']))
-        ## responseLightCheckBox.setChecked(prm[block]['responseLightCheckBox'])
-        ## responseLightDurationTF.setText(prm["currentLocale"][:toString](prm[block]['responseLightDuration']))
-        ## responseLightDurationCheckBox.setChecked(prm[block]['responseLightDurationCheckBox'])
-        ## currentBlockCountLabel.setText(str(prm["currentBlock"]))
-        ## currentBlockPositionLabel.setText(str(prm["tmpBlockPosition"]))
-        ## storedBlocksCountLabel.setText(str(prm["storedBlocks"]))
-        ## for i in range(jumpToBlockChooser.count()):
-        ##     jumpToBlockChooser.removeItem(0)
-        ##     jumpToPositionChooser.removeItem(0)
-        ## for i in range(prm["storedBlocks"]):
-        ##     jumpToBlockChooser.addItem(str(i+1))
-        ##     jumpToPositionChooser.addItem(str(i+1))
-        ## jumpToBlockChooser.setCurrentIndex(prm["currentBlock"]-1)
-        ## jumpToPositionChooser.setCurrentIndex(int(prm[block]['blockPosition'])-1)
+        ## responseLightChooser.setCurrentIndex(responseLightChooser.findText(prm[block]["responseLight"]))
+        ## responseLightCheckBox.setChecked(prm[block]["responseLightCheckBox"])
+        ## responseLightDurationTF.setText(prm["currentLocale"][:toString](prm[block]["responseLightDuration"]))
+        ## responseLightDurationCheckBox.setChecked(prm[block]["responseLightDurationCheckBox"])
+        currentBlockCountLabel[:setText](string(prm["currentBlock"]))
+        currentBlockPositionLabel[:setText](string(prm["tmpBlockPosition"]))
+        storedBlocksCountLabel[:setText](string(prm["storedBlocks"]))
+        for i=1:jumpToBlockChooser[:count]()
+            jumpToBlockChooser[:removeItem](0)
+            jumpToPositionChooser[:removeItem](0)
+        end
+        for i=1:prm["storedBlocks"]
+            jumpToBlockChooser[:addItem](string(i))
+            jumpToPositionChooser[:addItem](string(i))
+        end
+        jumpToBlockChooser[:setCurrentIndex](prm["currentBlock"]-1)
+        jumpToPositionChooser[:setCurrentIndex](int(prm[block]["blockPosition"])-1)
    
         ## for c in range(len(chooser)):
         ##     chooser[c].activated[str].connect(onChooserChange)
         ## onChooserChange(None)
-        ## responseBox.setupLights()
+        setupLights()
 end
 
 function setParadigmWidgets()
@@ -2702,13 +2704,13 @@ function swapBlocks(b1, b2)
         ##                                     QMessageBox.Ok | QMessageBox.Cancel)
         ##     return
         ## if prm["storedBlocks"] > 1 and b1 <= prm["storedBlocks"] and b2 <= prm["storedBlocks"]:
-        ##     ol=copy.deepcopy(prm['b'+str(b1)])
-        ##     prm['b'+str(b1)] = copy.deepcopy(prm['b'+str(b2)])
-        ##     prm['b'+str(b2)] = copy.deepcopy(ol)
+        ##     ol=copy.deepcopy(prm["b"+str(b1)])
+        ##     prm["b"+str(b1)] = copy.deepcopy(prm["b"+str(b2)])
+        ##     prm["b"+str(b2)] = copy.deepcopy(ol)
         ##     saveParametersToFile(prm["tmpParametersFile"])
         ## #
         ##     #updateParametersWin()
-        ##     moveToBlockPosition(int(prm['b'+str(b2)]["blockPosition"]))
+        ##     moveToBlockPosition(int(prm["b"+str(b2)]["blockPosition"]))
         ## return
 end
 
