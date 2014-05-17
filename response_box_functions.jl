@@ -299,63 +299,72 @@ end
 
 
 
-##     def playRandomisedIntervals(self, stimulusCorrect, stimulusIncorrect, preTrialStim=None, precursorStim=None, postCursorStim=None):
-##         # this randint function comes from numpy and has different behaviour than in the python "random" module
-##         # Return random integers x such that low <= x < high
-##         currBlock = "b"+ str(prm["currentBlock"])
-##         nAlternatives = prm[currBlock]["nAlternatives"]
-##         nIntervals = prm[currBlock]["nIntervals"]
+function playRandomisedIntervals(prm, stimulusCorrect, stimulusIncorrect; preTrialStim=nothing, precursorStim=nothing, postCursorStim=nothing)
+
+    currBlock = string("b", prm["currentBlock"])
+    nAlternatives = prm[currBlock]["nAlternatives"]
+    nIntervals = prm[currBlock]["nIntervals"]
+    shuffle!(stimulusIncorrect)
 ##         #cmd = prm["pref"]["sound"]["playCommand"]
-##         if nAlternatives == nIntervals:
-##             correctInterval = numpy.random.randint(0, nIntervals)
-##             correctButton = correctInterval + 1
-##         elif nAlternatives == nIntervals-1:
-##             correctInterval = numpy.random.randint(1, nIntervals)
-##             correctButton = correctInterval 
-##         soundList = []
-        
-##         for i in range(nIntervals):
-##             if i == correctInterval:
-##                 soundList.append(stimulusCorrect)
-##             else:
-##                 foo = stimulusIncorrect.pop()
-##                 soundList.append(foo)
+    if nAlternatives == nIntervals
+        correctInterval = rand(1:nIntervals)
+        correctButton = correctInterval 
+    elseif nAlternatives == nIntervals-1
+        correctInterval = rand(2:nIntervals)
+        correctButton = correctInterval
+    end
+    soundList = (Any)[]
+   
+    for i=1:nIntervals
+        if i == correctInterval
+            push!(soundList, stimulusCorrect)
+        else
+            foo = pop!(stimulusIncorrect) 
+            push!(soundList, foo)
+        end
+    end
+ 
+    nLight = 0
+    if prm["warningInterval"] == true
+        intervalLight[nLight][:setStatus]("on")
+        sleep(prm[currBlock]["warningIntervalDur"]/1000)
+        intervalLight[nLight][:setStatus]("off")
+        nLight = nLight+1
+        sleep(prm[currBlock]["warningIntervalISI"]/1000)
+    end
 
-##         nLight = 0
-##         if prm["warningInterval"] == True:
-##             intervalLight[nLight].setStatus("on")
-##             time.sleep(prm[currBlock]["warningIntervalDur"]/1000)
-##             intervalLight[nLight].setStatus("off")
-##             nLight = nLight+1
-##             time.sleep(prm[currBlock]["warningIntervalISI"]/1000)
-
-##         if prm["preTrialInterval"] == True:
-##             intervalLight[nLight].setStatus("on")
-##             audioManager.playSound(preTrialStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "pre-trial_interval" +".wav")
-##             intervalLight[nLight].setStatus("off")
-##             nLight = nLight+1
-##             time.sleep(prm[currBlock]["preTrialIntervalISI"]/1000)
-
-##         for i in range(nIntervals):
-##             if prm["precursorInterval"] == True:
-##                 intervalLight[nLight].setStatus("on")
-##                 audioManager.playSound(precursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "precursor_interval"+str(i+1) +".wav")
-##                 intervalLight[nLight].setStatus("off")
-##                 nLight = nLight+1
-##                 time.sleep(prm[currBlock]["precursorIntervalISI"]/1000)
-##             intervalLight[nLight].setStatus("on")
-##             audioManager.playSound(soundList[i], prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "interval"+str(i+1) +".wav")
-##             intervalLight[nLight].setStatus("off")
-##             nLight = nLight+1
-##             if prm["postcursorInterval"] == True:
-##                 intervalLight[nLight].setStatus("on")
-##                 audioManager.playSound(postcursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "postcursor_interval"+str(i+1) +".wav")
-##                 intervalLight[nLight].setStatus("off")
-##                 nLight = nLight+1
-##                 time.sleep(prm[currBlock]["postcursorIntervalISI"]/1000)
-##             if i < nIntervals-1:
-##                 time.sleep(prm["isi"]/1000.)
-
+    if prm["preTrialInterval"] == true
+        intervalLight[nLight][:setStatus]("on")
+        playSound(preTrialStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "pre-trial_interval" +".wav")
+        intervalLight[nLight][:setStatus]("off")
+        nLight = nLight+1
+        sleep(prm[currBlock]["preTrialIntervalISI"]/1000)
+    end
+   
+    for i=1:nIntervals
+        if prm["precursorInterval"] == true
+            intervalLight[nLight][:setStatus]("on")
+            #audioManager.playSound(precursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "precursor_interval"+str(i+1) +".wav")
+            intervalLight[nLight][:setStatus]("off")
+            nLight = nLight+1
+            sleep(prm[currBlock]["precursorIntervalISI"]/1000)
+        end
+        intervalLight[nLight][:setStatus]("on")
+        #audioManager.playSound(soundList[i], prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "interval"+str(i+1) +".wav")
+        intervalLight[nLight][setStatus]("off")
+        nLight = nLight+1
+        if prm["postcursorInterval"] == true
+            intervalLight[nLight][:setStatus]("on")
+            #audioManager.playSound(postcursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "postcursor_interval"+str(i+1) +".wav")
+            intervalLight[nLight][:setStatus]("off")
+            nLight = nLight+1
+            sleep(prm[currBlock]["postcursorIntervalISI"]/1000)
+        end
+        if i < nIntervals
+            sleep(prm["isi"]/1000)
+        end
+    end
+end
 ##     def playSequentialIntervals(self, sndList, ISIList=[], trigNum=None):
 ##         currBlock = "b"+ str(prm["currentBlock"])
 ##         #cmd = prm["pref"]["sound"]["playCommand"]
@@ -442,15 +451,15 @@ function doTrial()
     end
            
 
-##             if prm["paradigm"] == tr("Transformed Up-Down"):
-##                 prm["numberCorrectNeeded"] = int(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Rule Down"))])
-##                 prm["numberIncorrectNeeded"] = int(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Rule Up"))])
-##                 prm["initialTurnpoints"] = int(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Initial Turnpoints"))])
-##                 prm["totalTurnpoints"] = int(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Total Turnpoints"))])
-##                 prm["adaptiveStepSize1"] = prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Step Size 1"))]
-##                 prm["adaptiveStepSize2"] = prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Step Size 2"))]
-##                 prm["adaptiveType"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Procedure:"))]
-##                 prm["trackDir"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Initial Track Direction:"))]
+    if prm["paradigm"] == "Transformed Up-Down"
+        prm["numberCorrectNeeded"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Rule Down")])
+        prm["numberIncorrectNeeded"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Rule Up")])
+        prm["initialTurnpoints"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Initial Turnpoints")])
+        prm["totalTurnpoints"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Total Turnpoints")])
+        prm["adaptiveStepSize1"] = prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Step Size 1")]
+        prm["adaptiveStepSize2"] = prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Step Size 2")]
+        prm["adaptiveType"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "Procedure:")]
+        prm["trackDir"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "Initial Track Direction:")]
 ##             elif prm["paradigm"] == tr("Transformed Up-Down Interleaved"):
 ##                 prm["adaptiveType"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Procedure:"))]
 ##                 prm["turnpointsToAverage"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Turnpoints to average:"))]
@@ -525,17 +534,20 @@ function doTrial()
 ##                 prm["maxStepSize"] = float(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Maximum Step Size"))])
 ##                 prm["percentCorrectTracked"] = float(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("Percent Correct Tracked"))])
 ##                 prm["W"] = float(prm[currBlock]["paradigmField"][prm[currBlock]["paradigmFieldLabel"].index(tr("W"))])
+    end
         
-##         if prm["startOfBlock"] == True and "resultsFile" not in prm:
-##             if prm["pref"]["general"]["resFileFormat"] == "fixed":
-##                 prm["resultsFile"] = prm["pref"]["general"]["resFileFixedString"]
-##                 resFileToOpen = copy.copy(prm["pref"]["general"]["resFileFixedString"])
-
-##                 fName = open(resFileToOpen, "w")
-##                 fName.write("")
-##                 fName.close()
-##             elif prm["pref"]["general"]["resFileFormat"] == "variable":
-##                 prm["resultsFile"] = prm["listener"] + "_" + time.strftime("%y-%m-%d_%H-%M-%S", time.localtime())
+    if (prm["startOfBlock"] == true) & (in("resultsFile", prm) == false)
+        if prm["pref"]["general"]["resFileFormat"] == "fixed"
+            prm["resultsFile"] = prm["pref"]["general"]["resFileFixedString"]
+            resFileToOpen = copy(prm["pref"]["general"]["resFileFixedString"])
+            
+            fName = open(resFileToOpen, "w")
+            write(fName, "")
+            close(fName)
+        elseif prm["pref"]["general"]["resFileFormat"] == "variable"
+            prm["resultsFile"] = string(prm["listener"], "_", strftime("%y-%m-%d_%H-%M-%S", time()))
+        end
+    end
 
 ##         if prm["paradigm"] in [tr("Transformed Up-Down Interleaved"), tr("Weighted Up-Down Interleaved")]:
 ##             if prm["maxConsecutiveTrials"] == tr("unlimited"):
@@ -553,7 +565,8 @@ function doTrial()
 ##                     prm["consecutiveTrialsCounter"][i] = 0
      
 
-##         currExp = tr(prm[currBlock]["experiment"])
+
+    currExp = prm[currBlock]["experiment"]
 ##         pychovariables =           ["[resDir]",
 ##                                          "[resFile]",
 ##                                          "[resFileFull]",
@@ -574,8 +587,8 @@ function doTrial()
       
 
         
-##         time.sleep(prm[currBlock]["preTrialSilence"]/1000)
-##         execString = prm[currExp]["execString"]
+    sleep(prm[currBlock]["preTrialSilence"]/1000)
+    execString = prm[currExp]["execString"]
       
 ##         try:
 ##             methodToCall1 = getattr(default_experiments, execString)
@@ -585,11 +598,12 @@ function doTrial()
 ##             methodToCall1 = getattr(labexp, execString)
 ##         except:
 ##             pass
-        
+    eval(parse(string("default_experiments.doTrial_", execString, "(prm)")))
+   
 ##         methodToCall2 = getattr(methodToCall1, "doTrial_"+ execString)
 ##         result = methodToCall2(self)
-##         QApplication.processEvents()
-##         prm["trialRunning"] = False
+    QtGui["QApplication"][:processEvents]()
+    prm["trialRunning"] = false
 ##         if prm["allBlocks"]["responseMode"] == tr("Automatic"):
 ##             if numpy.random.uniform(0, 1, 1)[0] < prm["allBlocks"]["autoPCCorr"]:
 ##                 sortResponse(correctButton)
@@ -2201,7 +2215,7 @@ function getStartTime()
     prm["blockStartTimeString"] = pycall(QtCore["QTime"]["toString"], PyAny, QtCore["QTime"][:currentTime](), prm["currentLocale"][:timeFormat](prm["currentLocale"][:ShortFormat]))
 end        
 
-##     def writeResultsHeader(self, fileType):
+function writeResultsHeader(fileType)
 ##         if fileType == "log":
 ##             resLogFilePath = prm["backupDirectoryName"]  + time.strftime("%y-%m-%d_%H-%M-%S", time.localtime()) + "_" + prm["listener"] + "_log"
 ##             resLogFullFilePath = prm["backupDirectoryName"]  + time.strftime("%y-%m-%d_%H-%M-%S", time.localtime()) + "_" + prm["listener"] + "full_log"
@@ -2284,8 +2298,8 @@ end
 ##             thisFile.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n")
 
 ##             thisFile.flush()
-
-##     def writeResultsFooter(self, fileType):
+end
+function writeResultsFooter(fileType)
 ##         if fileType == "log":
 ##             filesToWrite = [resFileLog, fullFileLog]
 ##         elif fileType == "standard":
@@ -2297,7 +2311,7 @@ end
 ##             thisFile.write("Duration: {} min. \n".format( (prm["blockEndTime"] - prm["blockStartTime"]) / 60 ))
 ##             thisFile.write("\n")
 ##             thisFile.flush()
-            
+end
 ##     def writeResultsSummaryLine(self, paradigm, resultsLine):
 ##         if paradigm in ["Transformed Up-Down", "Weighted Up-Down"]:
 ##             headerToWrite = "threshold_" +  prm["adaptiveType"].lower() + prm["pref"]["general"]["csvSeparator"] + \

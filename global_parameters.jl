@@ -188,18 +188,18 @@ function def_pref(prm)
     prm["pref"]["general"]["playEndMessage"] = false
     prm["pref"]["general"]["processResultsEnd"] = true
     prm["pref"]["interface"]["responseButtonSize"] = 20
-    ## prm["pref"]["general"]["resFileFormat"] = "fixed"
-    ## prm["pref"]["general"]["resFileFixedString"] = "test.txt"
-    ## prm["pref"]["general"]["csvSeparator"] = ";"
-    ## prm["pref"]["general"]["fullFileSuffix"] = "_full"
-    ## prm["pref"]["general"]["resFileSuffix"] = "_res"
-    ## prm["pref"]["general"]["resTableFileSuffix"] = "_table"
-    ## prm["pref"]["general"]["automaticFileExtension"] = True
-    ## prm["pref"]["general"]["nBlocksCustomCommand"] = ""
-    ## prm["pref"]["general"]["atEndCustomCommand"] = ""
-    ## prm["pref"]["general"]["dprimeCorrection"] = True
+    prm["pref"]["general"]["resFileFormat"] = "fixed"
+    prm["pref"]["general"]["resFileFixedString"] = "test.txt"
+    prm["pref"]["general"]["csvSeparator"] = ";"
+    prm["pref"]["general"]["fullFileSuffix"] = "_full"
+    prm["pref"]["general"]["resFileSuffix"] = "_res"
+    prm["pref"]["general"]["resTableFileSuffix"] = "_table"
+    prm["pref"]["general"]["automaticFileExtension"] = true
+    prm["pref"]["general"]["nBlocksCustomCommand"] = ""
+    prm["pref"]["general"]["atEndCustomCommand"] = ""
+    prm["pref"]["general"]["dprimeCorrection"] = true
 
-    ## prm["pref"]["general"]["precision"] = 12
+    prm["pref"]["general"]["precision"] = 12
     ## # 'variable'
     ## prm["pref"]["email"]["notifyEnd"] = False
     ## prm["pref"]["email"]["nBlocksNotify"] = 1

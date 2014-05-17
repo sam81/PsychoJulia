@@ -15,7 +15,8 @@
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
 
 module default_experiments
-
+include("../response_box_functions.jl")
+include("../jsndlib.jl")
 exps = ["audiogram",
         "freq"]
 for i in 1:length(exps)

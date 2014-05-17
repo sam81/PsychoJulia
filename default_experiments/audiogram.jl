@@ -89,26 +89,26 @@ function get_fields_to_hide_audiogram(prm, wd)
 end
 
 function doTrial_audiogram(prm)
-
-    currBlock = "b"+ string(prm["currentBlock"])
+ 
+    currBlock = string("b", prm["currentBlock"])
     if prm["startOfBlock"] == true
         prm["additional_parameters_to_write"] = (Any)[]
-        prm["adaptiveDifference"] = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Level (dB SPL)")]
+        prm["adaptiveDifference"] = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Level (dB SPL)")][1]
         prm["conditions"] = [string(prm["adaptiveDifference"])]
 
         writeResultsHeader("log")
     end
 
-    currentCondition = prm["conditions"][0]
-    frequency = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Frequency (Hz)")] 
-    bandwidth = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Bandwidth (Hz)")] 
+    currentCondition = prm["conditions"][1]
+    frequency = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Frequency (Hz)")][1] 
+    bandwidth = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Bandwidth (Hz)")][1]
     phase = 0
     correctLevel = prm["adaptiveDifference"]
     incorrectLevel = -200
-    duration = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Duration (ms)")] 
-    ramps = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Ramps (ms)")] 
-    channel = prm[currBlock]["chooser"][find(prm["chooserLabel"] .== "Ear:")]
-    sndType = prm[currBlock]["chooser"][find(prm["chooserLabel"] .== "Signal Type:")]
+    duration = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Duration (ms)")][1]
+    ramps = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Ramps (ms)")][1] 
+    channel = prm[currBlock]["chooser"][find(prm["chooserLabel"] .== "Ear:")][1]
+    sndType = prm[currBlock]["chooser"][find(prm["chooserLabel"] .== "Signal Type:")][1]
 
     if sndType == "Narrowband Noise"
         if bandwidth > 0
@@ -120,13 +120,14 @@ function doTrial_audiogram(prm)
     elseif sndType == "Sinusoid"
         stimulusCorrect = pureTone(frequency, phase, correctLevel, duration, ramps, channel, prm["sampRate"], prm["maxLevel"])
     end
-      
-            
+    
+    
     stimulusIncorrect = (Any)[]
     for i=1:(prm["nIntervals"]-1)
         thisSnd = pureTone(frequency, phase, incorrectLevel, duration, ramps, channel, prm["sampRate"], prm["maxLevel"])
         push!(stimulusIncorrect, thisSnd)
     end
-    playRandomisedIntervals(stimulusCorrect, stimulusIncorrect)
+ 
+    playRandomisedIntervals(prm, stimulusCorrect, stimulusIncorrect)
 
 end
