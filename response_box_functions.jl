@@ -90,15 +90,15 @@ function setupLights()
         #remove previous lights and buttons
     
         clearLayout(intervalSizer)
-        intervalLight = (Any)[]
+        wdc["intervalLight"] = (Any)[]
      
         clearLayout(responseButtonSizer)
         wdc["responseButton"] = (Any)[]
 
         n = 1
         if prm["warningInterval"] == true
-            push!(intervalLight, py_class[:intervalLight](rbw))
-            intervalSizer[:addWidget](intervalLight[n], 0, n)
+            push!(wdc["intervalLight"], py_class[:intervalLight](rbw))
+            intervalSizer[:addWidget](wdc["intervalLight"][n], 0, n)
             n = n+1
         end
                 
@@ -116,25 +116,25 @@ function setupLights()
                            "PEST"])
 
         if prm["preTrialInterval"] == true
-            push!(intervalLight, py_class[:intervalLight](rbw))
-            intervalSizer[:addWidget](intervalLight[n], 0, n)
+            push!(wdc["intervalLight"], py_class[:intervalLight](rbw))
+            intervalSizer[:addWidget](wdc["intervalLight"][n], 0, n)
             n = n+1
         end
 
         for i=1:nIntervals
             if prm["precursorInterval"] == true
-                push!(intervalLight, py_class[:intervalLight](rbw))
-                intervalSizer[:addWidget](intervalLight[n], 0, n)
+                push!(wdc["intervalLight"], py_class[:intervalLight](rbw))
+                intervalSizer[:addWidget](wdc["intervalLight"][n], 0, n)
                 n = n+1
             end
                 
-            push!(intervalLight, py_class[:intervalLight](rbw))
-            intervalSizer[:addWidget](intervalLight[n], 0, n)
+            push!(wdc["intervalLight"], py_class[:intervalLight](rbw))
+            intervalSizer[:addWidget](wdc["intervalLight"][n], 0, n)
             n = n+1
             
             if prm["postcursorInterval"] == true
-                push!(intervalLight, py_class[:intervalLight](rbw))
-                intervalSizer[:addWidget](intervalLight[n], 0, n)
+                push!(wdc["intervalLight"], py_class[:intervalLight](rbw))
+                intervalSizer[:addWidget](wdc["intervalLight"][n], 0, n)
                 n = n+1
             end
         end
@@ -299,7 +299,7 @@ end
 
 
 
-function playRandomisedIntervals(prm, stimulusCorrect, stimulusIncorrect; preTrialStim=nothing, precursorStim=nothing, postCursorStim=nothing)
+function playRandomisedIntervals(prm, wdc, stimulusCorrect, stimulusIncorrect; preTrialStim=nothing, precursorStim=nothing, postCursorStim=nothing)
 
     currBlock = string("b", prm["currentBlock"])
     nAlternatives = prm[currBlock]["nAlternatives"]
@@ -324,39 +324,39 @@ function playRandomisedIntervals(prm, stimulusCorrect, stimulusIncorrect; preTri
         end
     end
  
-    nLight = 0
+    nLight = 1
     if prm["warningInterval"] == true
-        intervalLight[nLight][:setStatus]("on")
+        wdc["intervalLight"][nLight][:setStatus]("on")
         sleep(prm[currBlock]["warningIntervalDur"]/1000)
-        intervalLight[nLight][:setStatus]("off")
+        wdc["intervalLight"][nLight][:setStatus]("off")
         nLight = nLight+1
         sleep(prm[currBlock]["warningIntervalISI"]/1000)
     end
 
     if prm["preTrialInterval"] == true
-        intervalLight[nLight][:setStatus]("on")
+        wdc["intervalLight"][nLight][:setStatus]("on")
         playSound(preTrialStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "pre-trial_interval" +".wav")
-        intervalLight[nLight][:setStatus]("off")
+        wdc["intervalLight"][nLight][:setStatus]("off")
         nLight = nLight+1
         sleep(prm[currBlock]["preTrialIntervalISI"]/1000)
     end
    
     for i=1:nIntervals
         if prm["precursorInterval"] == true
-            intervalLight[nLight][:setStatus]("on")
+            wdc["intervalLight"][nLight][:setStatus]("on")
             #audioManager.playSound(precursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "precursor_interval"+str(i+1) +".wav")
-            intervalLight[nLight][:setStatus]("off")
+            wdc["intervalLight"][nLight][:setStatus]("off")
             nLight = nLight+1
             sleep(prm[currBlock]["precursorIntervalISI"]/1000)
         end
-        intervalLight[nLight][:setStatus]("on")
+        wdc["intervalLight"][nLight][:setStatus]("on")
         #audioManager.playSound(soundList[i], prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "interval"+str(i+1) +".wav")
-        intervalLight[nLight][setStatus]("off")
+        wdc["intervalLight"][nLight][:setStatus]("off")
         nLight = nLight+1
         if prm["postcursorInterval"] == true
-            intervalLight[nLight][:setStatus]("on")
+            wdc["intervalLight"][nLight][:setStatus]("on")
             #audioManager.playSound(postcursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "postcursor_interval"+str(i+1) +".wav")
-            intervalLight[nLight][:setStatus]("off")
+            wdc["intervalLight"][nLight][:setStatus]("off")
             nLight = nLight+1
             sleep(prm[currBlock]["postcursorIntervalISI"]/1000)
         end
@@ -598,7 +598,7 @@ function doTrial()
 ##             methodToCall1 = getattr(labexp, execString)
 ##         except:
 ##             pass
-    eval(parse(string("default_experiments.doTrial_", execString, "(prm)")))
+    eval(parse(string("default_experiments.doTrial_", execString, "(prm, wdc)")))
    
 ##         methodToCall2 = getattr(methodToCall1, "doTrial_"+ execString)
 ##         result = methodToCall2(self)

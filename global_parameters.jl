@@ -230,10 +230,11 @@ function def_pref(prm)
     prm["pref"]["sound"]["defaultSampleRate"] = "48000"
     prm["pref"]["sound"]["writewav"] = true
     prm["pref"]["sound"]["writeSndSeqSegments"] = false
-    ## prm["pref"]["sound"]["wavmanager"] = "scipy"
+    prm["pref"]["sound"]["wavmanager"] = "WAV"
     ## prm["pref"]["sound"]["bufferSize"] = 1024
     prm["pref"]["sound"]["appendSilence"] = 0
 
+    prm["pref"]["sound"]["playCommand"] = "AudioIO"
     ## if platform.system() == "Windows":
     ##     prm["pref"]["sound"]["playCommand"] = "winsound"
     ##     prm["pref"]["sound"]["playCommandType"] = "winsound"

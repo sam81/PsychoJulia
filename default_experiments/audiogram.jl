@@ -88,7 +88,7 @@ function get_fields_to_hide_audiogram(prm, wd)
     end
 end
 
-function doTrial_audiogram(prm)
+function doTrial_audiogram(prm, wdc)
  
     currBlock = string("b", prm["currentBlock"])
     if prm["startOfBlock"] == true
@@ -128,6 +128,6 @@ function doTrial_audiogram(prm)
         push!(stimulusIncorrect, thisSnd)
     end
  
-    playRandomisedIntervals(prm, stimulusCorrect, stimulusIncorrect)
+    playRandomisedIntervals(prm, wdc, stimulusCorrect, stimulusIncorrect)
 
 end
