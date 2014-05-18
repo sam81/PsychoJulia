@@ -19,7 +19,7 @@
 function onClickStatusButton()
 ##         parent().compareGuiStoredParameters()
     if (prm["storedBlocks"] == 0) | (statusButton[:text]() == prm["rbTrans"][:translate]("rb", "Running")) | (statusButton[:text]() == prm["rbTrans"][:translate]("rb", "Finished"))
-        println(statusButton[:text]())
+##        println(statusButton[:text]())
         return
     end
 
@@ -335,27 +335,27 @@ function playRandomisedIntervals(prm, wdc, stimulusCorrect, stimulusIncorrect; p
 
     if prm["preTrialInterval"] == true
         wdc["intervalLight"][nLight][:setStatus]("on")
-        playSound(preTrialStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "pre-trial_interval" +".wav")
+        playSound(preTrialStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], string("pre-trial_interval", ".wav"), prm)
         wdc["intervalLight"][nLight][:setStatus]("off")
         nLight = nLight+1
         sleep(prm[currBlock]["preTrialIntervalISI"]/1000)
     end
-   
+
     for i=1:nIntervals
         if prm["precursorInterval"] == true
             wdc["intervalLight"][nLight][:setStatus]("on")
-            #audioManager.playSound(precursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "precursor_interval"+str(i+1) +".wav")
+            playSound(precursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], string("precursor_interval", i , ".wav"), prm)
             wdc["intervalLight"][nLight][:setStatus]("off")
             nLight = nLight+1
             sleep(prm[currBlock]["precursorIntervalISI"]/1000)
         end
         wdc["intervalLight"][nLight][:setStatus]("on")
-        #audioManager.playSound(soundList[i], prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "interval"+str(i+1) +".wav")
+        playSound(soundList[i], prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], string("interval", i , ".wav"), prm)
         wdc["intervalLight"][nLight][:setStatus]("off")
         nLight = nLight+1
         if prm["postcursorInterval"] == true
             wdc["intervalLight"][nLight][:setStatus]("on")
-            #audioManager.playSound(postcursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], "postcursor_interval"+str(i+1) +".wav")
+            playSound(postcursorStim, prm["allBlocks"]["sampRate"], prm["allBlocks"]["nBits"], prm["pref"]["sound"]["writewav"], string("postcursor_interval", i, ".wav"), prm)
             wdc["intervalLight"][nLight][:setStatus]("off")
             nLight = nLight+1
             sleep(prm[currBlock]["postcursorIntervalISI"]/1000)

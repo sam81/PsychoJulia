@@ -1,0 +1,4 @@
+#! /bin/sh
+
+julia -e 'cd(/media/ntfsShared/lin_home/auditory/code/PsychoJulia/); reload("cw.jl")'
+

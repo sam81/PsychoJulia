@@ -13,109 +13,45 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
-
+using AudioIO
 
 function playSound(snd, fs, nbits, writewav, fname, prm)
-
     wavmanager = prm["pref"]["sound"]["wavmanager"]
-    playCmd = prm["playCmd"]
-##         enc = "pcm"+ str(nbits)
-##         if writewav == True:
-##             fname = fname
-##         else:
-##             (hnl, fname) = mkstemp("tmp_snd.wav")
+    playCmd = prm["pref"]["sound"]["playCommand"]
+  
 
-##         if playCmd in ['alsaaudio', 'pyaudio']:#write wav before appending zeros in this case
-##             if writewav == True:
-##                 if wavmanager == "scipy":
-##                     self.scipy_wavwrite(fname, fs, nbits, snd)
-##         if self.prm["pref"]["sound"]["appendSilence"] > 0:
-##             duration = self.prm["pref"]["sound"]["appendSilence"]/1000 #convert from ms to sec
-##             nSamples = int(round(duration * fs))
-##             silenceToAppend = zeros((nSamples, 2))
-##             snd = concatenate((snd, silenceToAppend), axis=0)
-##         #alsaaudio
-##         if playCmd in ['alsaaudio', 'pyaudio']:
-##             nSamples = snd.shape[0]
-##             nChannels = snd.shape[1]
-##             bufferSize = self.prm["pref"]["sound"]["bufferSize"]
-##             if bufferSize < 1:
-##                 bufferSize = nSamples
-##                 nSeg = 1
-##             else:
-##                 nSeg = int(ceil(nSamples/bufferSize))
-##                 padSize = (nSeg*bufferSize) - nSamples
-##                 pad = zeros((padSize, nChannels))
-##                 snd = concatenate((snd, pad), axis=0)
-            
-##         if playCmd == "alsaaudio":
-##             device = self.device
-##             device.setchannels(nChannels)
-##             device.setrate(fs)
-##             device.setperiodsize(bufferSize)
-##             if nbits == 16:
-##                 data = snd*(2.**15)
-##                 data = data.astype(int16)
-##                 device.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-##             elif nbits == 32:
-##                 data = snd*(2.**31)
-##                 data = data.astype(int32)
-##                 device.setformat(alsaaudio.PCM_FORMAT_S32_LE)
-##             for i in range(nSeg):
-##                 thisData = data[i*bufferSize:((i*bufferSize)+bufferSize)][:]
-##                 device.write(thisData)
-            
-##         elif playCmd == "pyaudio":
-            
-##             if nbits == 16:
-##                 data = snd*(2.**15)
-##                 data = data.astype(int16)
-##                 sampleFormat = pyaudio.paInt16
-##             elif nbits == 32:
-##                 data = snd*(2.**31)
-##                 data = data.astype(int32)
-##                 sampleFormat = pyaudio.paInt32
-
-##             # try:
-##             #     self.stream
-##             # except:
-##             stream = self.paManager.open(format=sampleFormat,
-##                                               channels = nChannels,
-##                                               rate = fs,
-##                                               output = True,
-##                                               input_device_index = self.prm["pref"]["sound"]["pyaudioDevice"],
-##                                               output_device_index=None,
-##                                               frames_per_buffer=bufferSize)
-
-##             for i in range(nSeg):
-##                 thisData = data[i*bufferSize:((i*bufferSize)+bufferSize)][:]
-##                 stream.write(thisData, num_frames=bufferSize)
-##             stream.stop_stream()
-##             stream.close()
-##             #time.sleep((bufferSize/fs)+0.02)
-##             #self.stream.close() #stream seems to close before sound finished playing
+    if in(playCmd, ["AaudioIO"])#write wav before appending zeros in this case
+        if writewav == true
+            if wavmanager == "WAV"
+                wavwrite(ns, fname, Fs=fs, nbits=nbits)
+            end
+        end
+    end
           
+    if prm["pref"]["sound"]["appendSilence"] > 0
+        duration = prm["pref"]["sound"]["appendSilence"]/1000 #convert from ms to sec
+        nSamples = int(round(duration * fs))
+        silenceToAppend = zeros(nSamples, 2)
+        snd = vcat(snd, silenceToAppend)
+    end
+    
+    #AudioIO
+    if in(playCmd, ["AudioIO"])
+        nSamples = size(snd)[1]
+        play(snd)
 
-##         else:
-##             if wavmanager == "scipy":
-##                 self.scipy_wavwrite(fname, fs, nbits, snd)
-         
-##             if platform.system() == "Windows":
-##                 if playCmd == "winsound":
-##                     winsound.PlaySound(fname, winsound.SND_FILENAME)
-##                 else:
-##                     subprocess.call(playCmd + " " + fname, shell=True)
-##                 if writewav == False:
-##                     os.close(hnl)
-##                     os.remove(fname)
-##             else:
-##                 subprocess.call(playCmd + " " + fname, shell=True)
-##                 if writewav == False:
-##                     os.close(hnl)
-##                     os.remove(fname)
-##         return)
+    else
+        if wavmanager == "WAV"
+            wavwrite(snd, fname, Fs=fs, nbits=nbits)
+        end
+        run(`$playCmd $fname`)
+            
 
+    end
+    return
 end
+
+
 ## def decimalToBinary(x, n):
 ##     """Convert an integer in decimal format to binary string representation
 ##     x: decimal integer

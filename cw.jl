@@ -19,7 +19,7 @@ using PyCall
 #pyinitialize("python3")
 using PySide
 
-
+include("audio_manager.jl")
 include("global_parameters.jl")
 include("default_experiments/default_experiments.jl")
 pysis = pyimport("sys") 

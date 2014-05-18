@@ -233,8 +233,15 @@ function def_pref(prm)
     prm["pref"]["sound"]["wavmanager"] = "WAV"
     ## prm["pref"]["sound"]["bufferSize"] = 1024
     prm["pref"]["sound"]["appendSilence"] = 0
-
-    prm["pref"]["sound"]["playCommand"] = "AudioIO"
+    if (OS_NAME == :Windows)
+        prm["pref"]["sound"]["playCommand"] = "AudioIO"
+    elseif (OS_NAME == :Linux)
+        prm["pref"]["sound"]["playCommand"] = "aplay"
+    elseif (OS_NAME ==: FreeBSD)
+                prm["pref"]["sound"]["playCommand"] = "AudioIO"
+    elseif (OS_NAME == :Darwin)
+        prm["pref"]["sound"]["playCommand"] = "afplay"
+    end
     ## if platform.system() == "Windows":
     ##     prm["pref"]["sound"]["playCommand"] = "winsound"
     ##     prm["pref"]["sound"]["playCommandType"] = "winsound"

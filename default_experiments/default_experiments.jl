@@ -15,6 +15,8 @@
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
 
 module default_experiments
+using WAV
+include("../audio_manager.jl")
 include("../response_box_functions.jl")
 include("../jsndlib.jl")
 exps = ["audiogram",
