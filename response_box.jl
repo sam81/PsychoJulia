@@ -17,7 +17,40 @@
 py_class = pyimport("py_class")
 include("response_box_functions.jl")
 
-rbw = Qt.QMainWindow(w)
+qnew_class("respBoxWin", "QtGui.QMainWindow") ## QtGui -- not just Qt.
+rbw = qnew_class_instance("respBoxWin")
+qset_method(rbw, :keyPressEvent) do event
+    if event[:type]() == QtCore["QEvent"]["KeyPress"]
+        if event[:key]() == int(QtCore["Qt"]["Key_0"])
+            buttonClicked = 0
+        elseif event[:key]() == int(QtCore["Qt"]["Key_1"])
+            buttonClicked = 1
+        elseif event[:key]() == int(QtCore["Qt"]["Key_2"])
+            buttonClicked = 2
+        elseif event[:key]() == int(QtCore["Qt"]["Key_3"])
+            buttonClicked = 3
+        elseif event[:key]() == int(QtCore["Qt"]["Key_4"])
+            buttonClicked = 4
+        elseif event[:key]() == int(QtCore["Qt"]["Key_5"])
+            buttonClicked = 5
+        elseif event[:key]() == int(QtCore["Qt"]["Key_6"])
+            buttonClicked = 6
+        elseif event[:key]() == int(QtCore["Qt"]["Key_7"])
+            buttonClicked = 7
+        elseif event[:key]() == int(QtCore["Qt"]["Key_8"])
+            buttonClicked = 8
+        elseif event[:key]() == int(QtCore["Qt"]["Key_9"])
+            buttonClicked = 9
+         else
+             buttonClicked = 0
+        end
+    end
+    sortResponse(buttonClicked)
+    return
+    
+end
+
+#rbw = Qt.QMainWindow(w)
 rbw[:setWindowFlags](qt_enum(["Window", "CustomizeWindowHint", "WindowMinimizeButtonHint", "WindowMaximizeButtonHint"], how="|"))
 rbw[:setWindowModality](PySide.QtNamespace[:NonModal])
 
@@ -25,8 +58,10 @@ rbw[:setWindowModality](PySide.QtNamespace[:NonModal])
 
                      
 rbw[:setWindowTitle]("Response Box")
-spx = prm["pref"]["interface"]["responseButtonSize"]
-rbw[:setStyleSheet]("QPushButton[responseBoxButton='true'] {font-weight:bold; font-size: $spx;} ")
+#spx = prm["pref"]["interface"]["responseButtonSize"]
+#rbw[:setStyleSheet]("QPushButton[responseBoxButton='true'] {font-weight:bold; font-size: $spx;} ")
+rbw[:setStyleSheet]("QPushButton[responseBoxButton='true'] {font-weight:bold; font-size: 20px;}")
+
 ##         self.menubar = self.menuBar()
 rbwMenubar = rbw[:menuBar]()
 ##         #FILE MENU

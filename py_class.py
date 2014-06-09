@@ -2,6 +2,7 @@
 from PySide import QtGui, QtCore
 from PySide.QtCore import Qt, QEvent, QThread, QDate, QTime, QDateTime
 from PySide.QtGui import QAction, QApplication, QComboBox, QFileDialog, QFrame, QGridLayout, QInputDialog, QLabel, QLineEdit, QMainWindow, QMessageBox, QPainter, QProgressBar, QPushButton, QScrollArea, QShortcut, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget, QWidgetItem
+import time
  
 class responseLight(QWidget):
     def __init__(self, parent):
@@ -10,12 +11,12 @@ class responseLight(QWidget):
                                        QSizePolicy.Expanding))
         self.borderColor = Qt.black
         self.lightColor = Qt.black
-    def giveFeedback(self, feedback):
+    def giveFeedback(self, feedback, duration):
         self.setStatus(feedback)
         self.parent().repaint()
         QApplication.processEvents()
-        currBlock = 'b'+ str(self.parent().parent().prm['currentBlock'])
-        time.sleep(self.parent().parent().prm[currBlock]['responseLightDuration']/1000.)
+        #currBlock = 'b'+ str(self.parent().parent().prm['currentBlock'])
+        time.sleep(duration)#self.parent().parent().prm[currBlock]['responseLightDuration']/1000.)
         self.setStatus('off')
         self.parent().repaint()
         QApplication.processEvents()

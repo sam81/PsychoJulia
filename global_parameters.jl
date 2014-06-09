@@ -187,7 +187,7 @@ function def_pref(prm)
     prm["pref"]["general"]["sessionLabelWarn"] = true
     prm["pref"]["general"]["playEndMessage"] = false
     prm["pref"]["general"]["processResultsEnd"] = true
-    prm["pref"]["interface"]["responseButtonSize"] = 20
+    #prm["pref"]["interface"]["responseButtonSize"] = 20
     prm["pref"]["general"]["resFileFormat"] = "fixed"
     prm["pref"]["general"]["resFileFixedString"] = "test.txt"
     prm["pref"]["general"]["csvSeparator"] = ";"

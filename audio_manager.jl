@@ -13,7 +13,7 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with PsychoJulia.  If not, see <http://www.gnu.org/licenses/>.
-using AudioIO
+#using AudioIO
 
 function playSound(snd, fs, nbits, writewav, fname, prm)
     wavmanager = prm["pref"]["sound"]["wavmanager"]

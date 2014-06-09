@@ -164,7 +164,7 @@ function setupLights()
                     responseButtonSizer[:addItem](Qt.QSpacerItem(-1, -1, szp[:Expanding]), 0, r)
                     r = r+1
                 end
-                wdc["responseButton"][i][:clicked][:connect](sortResponseButton)
+                wdc["responseButton"][i][:clicked][:connect](() -> sortResponseButton(i))
                 wdc["responseButton"][i][:setFocusPolicy](PySide.QtNamespace[:NoFocus])
            
             end
@@ -185,7 +185,7 @@ function setupLights()
                 wdc["responseButton"][i][:setSizePolicy](Qt.QSizePolicy(szp[:Expanding], szp[:Expanding]))
                 wdc["responseButton"][i][:setProperty]("responseBoxButton", true)
                 r = r+1
-                wdc["responseButton"][i][:clicked][:connect](sortResponseButton)
+                wdc["responseButton"][i][:clicked][:connect](() -> sortResponseButton(i))
                 wdc["responseButton"][i][:setFocusPolicy](PySide.QtNamespace[:NoFocus])
                 if prm[prm["currExp"]]["hasPostcursorInterval"] == true
                     responseButtonSizer[:addItem](Qt.QSpacerItem(-1, -1, szp[:Expanding]), 0, r)
@@ -308,10 +308,10 @@ function playRandomisedIntervals(prm, wdc, stimulusCorrect, stimulusIncorrect; p
 ##         #cmd = prm["pref"]["sound"]["playCommand"]
     if nAlternatives == nIntervals
         correctInterval = rand(1:nIntervals)
-        correctButton = correctInterval 
+        prm["correctButton"] = correctInterval 
     elseif nAlternatives == nIntervals-1
         correctInterval = rand(2:nIntervals)
-        correctButton = correctInterval
+        prm["correctButton"] = correctInterval
     end
     soundList = (Any)[]
    
@@ -442,24 +442,24 @@ function doTrial()
     end
 
     if  in (prm["paradigm"], ["Transformed Up-Down Interleaved", "Weighted Up-Down Interleaved"]) == true
-        prm["nDifferences"] = int(prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "No. Tracks:")])
+        prm["nDifferences"] = int(prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] .== "No. Tracks:")][1])
         if prm["nDifferences"] == 1
             prm["maxConsecutiveTrials"] = "unlimited"
         else
-            prm["maxConsecutiveTrials"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "Max. Consecutive Trials x Track:")]
+            prm["maxConsecutiveTrials"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] .== "Max. Consecutive Trials x Track:")][1]
         end
     end
            
 
     if prm["paradigm"] == "Transformed Up-Down"
-        prm["numberCorrectNeeded"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Rule Down")])
-        prm["numberIncorrectNeeded"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Rule Up")])
-        prm["initialTurnpoints"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Initial Turnpoints")])
-        prm["totalTurnpoints"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Total Turnpoints")])
-        prm["adaptiveStepSize1"] = prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Step Size 1")]
-        prm["adaptiveStepSize2"] = prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] == "Step Size 2")]
-        prm["adaptiveType"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "Procedure:")]
-        prm["trackDir"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] == "Initial Track Direction:")]
+        prm["numberCorrectNeeded"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] .== "Rule Down")][1])
+        prm["numberIncorrectNeeded"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] .== "Rule Up")][1])
+        prm["initialTurnpoints"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] .== "Initial Turnpoints")][1])
+        prm["totalTurnpoints"] = int(prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] .== "Total Turnpoints")][1])
+        prm["adaptiveStepSize1"] = prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] .== "Step Size 1")][1]
+        prm["adaptiveStepSize2"] = prm[currBlock]["paradigmField"][find(prm[currBlock]["paradigmFieldLabel"] .== "Step Size 2")][1]
+        prm["adaptiveType"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] .== "Procedure:")][1]
+        prm["trackDir"] = prm[currBlock]["paradigmChooser"][find(prm[currBlock]["paradigmChooserLabel"] .== "Initial Track Direction:")][1]
 ##             elif prm["paradigm"] == tr("Transformed Up-Down Interleaved"):
 ##                 prm["adaptiveType"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Procedure:"))]
 ##                 prm["turnpointsToAverage"] = prm[currBlock]["paradigmChooser"][prm[currBlock]["paradigmChooserLabel"].index(tr("Turnpoints to average:"))]
@@ -612,114 +612,103 @@ function doTrial()
 ##        #==================================================================
 end
 
-function sortResponseButton()
-##         buttonClicked = responseButton.index(sender())+1
-##         sortResponse(buttonClicked)
+function sortResponseButton(i)
+    sortResponse(i)
 end
 
-##     def keyPressEvent(self, event):
-##         if (event.type() == QEvent.KeyPress): 
-##             if event.key()==Qt.Key_0:
-##                 buttonClicked = 0
-##             elif event.key()==Qt.Key_1:
-##                 buttonClicked = 1
-##             elif event.key()==Qt.Key_2:
-##                 buttonClicked = 2
-##             elif event.key()==Qt.Key_3:
-##                 buttonClicked = 3
-##             elif event.key()==Qt.Key_4:
-##                 buttonClicked = 4
-##             elif event.key()==Qt.Key_5:
-##                 buttonClicked = 5
-##             elif event.key()==Qt.Key_6:
-##                 buttonClicked = 6
-##             elif event.key()==Qt.Key_7:
-##                 buttonClicked = 7
-##             elif event.key()==Qt.Key_8:
-##                 buttonClicked = 8
-##             elif event.key()==Qt.Key_9:
-##                 buttonClicked = 9
-##             else:
-##                 buttonClicked = 0
-##             sortResponse(buttonClicked)
-##         return 
        
-##     def sortResponse(self, buttonClicked):
-        
-##         currBlock = "b"+ str(prm["currentBlock"])
-##         if buttonClicked == 0: #0 is not a response option
-##             return
-##         if buttonClicked > prm["nAlternatives"] or statusButton.text() != prm["rbTrans"].translate("rb", "Running"): #tr("Running"): #1) do not accept responses outside the possible alternatives and 2) if the block is not running (like wait or finished)
-##             return
-##         if buttonClicked < (prm["nAlternatives"]+1) and prm["trialRunning"] == True: #1) can"t remember why I put the first condition 2) do not accept responses while the trial is running
-##             return
-##         if prm["sortingResponse"] == True: #Do not accept other responses while processing the current one
-##             return
-##         prm["sortingResponse"] = True
+function sortResponse(buttonClicked)
+    currBlock =  string("b", prm["currentBlock"])
+    if buttonClicked == 0 #0 is not a response option
+        return
+    end
+    if (buttonClicked > prm["nAlternatives"]) | (statusButton[:text]() != prm["rbTrans"][:translate]("rb", "Running")) #tr("Running"): #1) do not accept responses outside the possible alternatives and 2) if the block is not running (like wait or finished)
+        return
+    end
+    ## if (buttonClicked < (prm["nAlternatives"]+1)) & (prm["trialRunning"] == true) #1) can"t remember why I put the first condition 2) do not accept responses while the trial is running
+    ##     return
+    ## end
+    if prm["trialRunning"] == true
+        return
+    end
+    if prm["sortingResponse"] == true #Do not accept other responses while processing the current one
+        return
+    end
+    prm["sortingResponse"] = true
 
-##         if prm["paradigm"] == tr("Transformed Up-Down"):
-##             sortResponseAdaptive(buttonClicked, "transformedUpDown")
-##         elif prm["paradigm"] == tr("Transformed Up-Down Interleaved"):
-##             sortResponseAdaptiveInterleaved(buttonClicked, "transformedUpDown")
-##         elif prm["paradigm"] == tr("Weighted Up-Down"):
-##             sortResponseAdaptive(buttonClicked, "weightedUpDown")
-##         elif prm["paradigm"] == tr("Weighted Up-Down Interleaved"):
-##             sortResponseAdaptiveInterleaved(buttonClicked, "weightedUpDown")
-##         elif prm["paradigm"] == tr("Constant 1-Interval 2-Alternatives"):
-##             sortResponseConstant1Interval2Alternatives(buttonClicked)
-##         elif prm["paradigm"] == tr("Multiple Constants 1-Interval 2-Alternatives"):
-##             sortResponseMultipleConstants1Interval2Alternatives(buttonClicked)
-##         elif prm["paradigm"] == tr("Constant m-Intervals n-Alternatives"):
-##             sortResponseConstantMIntervalsNAlternatives(buttonClicked)
-##         elif prm["paradigm"] == tr("Multiple Constants m-Intervals n-Alternatives"):
-##             sortResponseMultipleConstantsMIntervalsNAlternatives(buttonClicked)
-##         elif prm["paradigm"] == tr("Constant 1-Pair Same/Different"):
-##             sortResponseConstant1PairSameDifferent(buttonClicked)
-##         elif prm["paradigm"] == tr("PEST"):
-##             sortResponsePEST(buttonClicked)
-##         elif prm["paradigm"] == tr("Odd One Out"):
-##             sortResponseOddOneOut(buttonClicked)
-##         prm["sortingResponse"] = False
-            
-##     def sortResponseAdaptive(self, buttonClicked, method):
-##         if prm["startOfBlock"] == True:
-##             prm["correctCount"] = 0
-##             prm["incorrectCount"] = 0
-##             prm["nTurnpoints"] = 0
-##             prm["startOfBlock"] = False
-##             prm["turnpointVal"] = []
-##             fullFileLines = []
-##             prm["buttonCounter"] = [0 for i in range(prm["nAlternatives"])]
-##         prm["buttonCounter"][buttonClicked-1] = prm["buttonCounter"][buttonClicked-1] + 1
+    if prm["paradigm"] == "Transformed Up-Down"
+        sortResponseAdaptive(buttonClicked, "transformedUpDown")
+    elseif prm["paradigm"] == "Transformed Up-Down Interleaved"
+        sortResponseAdaptiveInterleaved(buttonClicked, "transformedUpDown")
+    elseif prm["paradigm"] == "Weighted Up-Down"
+        sortResponseAdaptive(buttonClicked, "weightedUpDown")
+    elseif prm["paradigm"] == "Weighted Up-Down Interleaved"
+        sortResponseAdaptiveInterleaved(buttonClicked, "weightedUpDown")
+    elseif prm["paradigm"] == "Constant 1-Interval 2-Alternatives"
+        sortResponseConstant1Interval2Alternatives(buttonClicked)
+    elseif prm["paradigm"] == "Multiple Constants 1-Interval 2-Alternatives"
+        sortResponseMultipleConstants1Interval2Alternatives(buttonClicked)
+    elseif prm["paradigm"] == "Constant m-Intervals n-Alternatives"
+        sortResponseConstantMIntervalsNAlternatives(buttonClicked)
+    elseif prm["paradigm"] == "Multiple Constants m-Intervals n-Alternatives"
+        sortResponseMultipleConstantsMIntervalsNAlternatives(buttonClicked)
+    elseif prm["paradigm"] == "Constant 1-Pair Same/Different"
+        sortResponseConstant1PairSameDifferent(buttonClicked)
+    elseif prm["paradigm"] == "PEST"
+        sortResponsePEST(buttonClicked)
+    elseif prm["paradigm"] == "Odd One Out"
+        sortResponseOddOneOut(buttonClicked)
+    end
+    prm["sortingResponse"] = false
+end
 
-##         if method == "transformedUpDown":
-##             if prm["nTurnpoints"] < prm["initialTurnpoints"]:
-##                 stepSizeDown = prm["adaptiveStepSize1"]
-##                 stepSizeUp   = prm["adaptiveStepSize1"]
-##             else:
-##                 stepSizeDown = prm["adaptiveStepSize2"]
-##                 stepSizeUp   = prm["adaptiveStepSize2"]
-##         elif method == "weightedUpDown":
-##             if prm["nTurnpoints"] < prm["initialTurnpoints"]:
-##                 stepSizeDown = prm["adaptiveStepSize1"]
-##                 if prm["adaptiveType"] == tr("Arithmetic"):
-##                     stepSizeUp = prm["adaptiveStepSize1"] * (prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
-##                 elif prm["adaptiveType"] == tr("Geometric"):
-##                     stepSizeUp = prm["adaptiveStepSize1"] ** (prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
-##             else:
-##                 stepSizeDown = prm["adaptiveStepSize2"]
-##                 if prm["adaptiveType"] == tr("Arithmetic"):
-##                     stepSizeUp = prm["adaptiveStepSize2"] * (prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
-##                 elif prm["adaptiveType"] == tr("Geometric"):
-##                     stepSizeUp = prm["adaptiveStepSize2"] ** (prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
+function sortResponseAdaptive(buttonClicked, method)
+    currBlock = string("b", prm["currentBlock"])
+    if prm["startOfBlock"] == true
+        prm["correctCount"] = 0
+        prm["incorrectCount"] = 0
+        prm["nTurnpoints"] = 0
+        prm["startOfBlock"] = false
+        prm["turnpointVal"] = (FloatingPoint)[]
+        fullFileLines = []
+        prm["buttonCounter"] = [0 for i=1:prm["nAlternatives"]]
+    end
+    prm["buttonCounter"][buttonClicked] = prm["buttonCounter"][buttonClicked] + 1
+
+    if method == "transformedUpDown"
+        if prm["nTurnpoints"] < prm["initialTurnpoints"]
+            stepSizeDown = prm["adaptiveStepSize1"]
+            stepSizeUp   = prm["adaptiveStepSize1"]
+        else
+            stepSizeDown = prm["adaptiveStepSize2"]
+            stepSizeUp   = prm["adaptiveStepSize2"]
+        end
+    elseif method == "weightedUpDown"
+        if prm["nTurnpoints"] < prm["initialTurnpoints"]
+            stepSizeDown = prm["adaptiveStepSize1"]
+            if prm["adaptiveType"] == "Arithmetic"
+                stepSizeUp = prm["adaptiveStepSize1"] * (prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
+            elseif prm["adaptiveType"] == "Geometric"
+                stepSizeUp = prm["adaptiveStepSize1"]^(prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
+            end
+        else
+            stepSizeDown = prm["adaptiveStepSize2"]
+            if prm["adaptiveType"] == "Arithmetic"
+                stepSizeUp = prm["adaptiveStepSize2"] * (prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
+            elseif prm["adaptiveType"] == "Geometric"
+                stepSizeUp = prm["adaptiveStepSize2"]^(prm["percentCorrectTracked"] / (100-prm["percentCorrectTracked"]))
+            end
+        end
+    end
             
-##         if buttonClicked == correctButton:
-##             if prm["responseLight"] == tr("Feedback"):
-##                 responseLight.giveFeedback("correct")
-##             elif prm["responseLight"] == tr("Neutral"):
-##                 responseLight.giveFeedback("neutral")
-##             elif prm["responseLight"] == tr("None"):
-##                 responseLight.giveFeedback("off")
+        if buttonClicked == prm["correctButton"]
+            if prm["responseLight"] == "Feedback"
+                responseLight[:giveFeedback]("correct", prm[currBlock]["responseLightDuration"]/1000)
+            elseif prm["responseLight"] == "Neutral"
+                responseLight[:giveFeedback]("neutral", prm[currBlock]["responseLightDuration"]/1000)
+            elseif prm["responseLight"] == "None"
+                responseLight[:giveFeedback]("off", prm[currBlock]["responseLightDuration"]/1000)
+            end
             
 ##             fullFileLog.write(str(prm["adaptiveDifference"]) + "; ")
 ##             fullFileLines.append(str(prm["adaptiveDifference"]) + "; ")
@@ -748,13 +737,14 @@ end
 ##                 elif prm["adaptiveType"] == tr("Geometric"):
 ##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] / stepSizeDown
                 
-##         elif buttonClicked != correctButton:
-##             if prm["responseLight"] == tr("Feedback"):
-##                 responseLight.giveFeedback("incorrect")
-##             elif prm["responseLight"] == tr("Neutral"):
-##                 responseLight.giveFeedback("neutral")
-##             elif prm["responseLight"] == tr("None"):
-##                 responseLight.giveFeedback("off")
+        elseif buttonClicked != prm["correctButton"]
+            if prm["responseLight"] == "Feedback"
+                responseLight[:giveFeedback]("incorrect", prm[currBlock]["responseLightDuration"]/1000)
+            elseif prm["responseLight"] == "Neutral"
+                responseLight[:giveFeedback]("neutral", prm[currBlock]["responseLightDuration"]/1000)
+            elseif prm["responseLight"] == "None"
+                responseLight[:giveFeedback]("off", prm[currBlock]["responseLightDuration"]/1000)
+            end
                 
 ##             fullFileLog.write(str(prm["adaptiveDifference"]) + "; ")
 ##             fullFileLines.append(str(prm["adaptiveDifference"]) + "; ")
@@ -783,7 +773,7 @@ end
 ##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] + stepSizeUp
 ##                 elif prm["adaptiveType"] == tr("Geometric"):
 ##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] * stepSizeUp
-
+        end
 ##         fullFileLog.flush()
 ##         pcDone = (prm["nTurnpoints"] / prm["totalTurnpoints"]) * 100
 ##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
@@ -831,7 +821,7 @@ end
 ##             resFileLog.flush()
 ##             getEndTime()
 
-##             currBlock = "b" + str(prm["currentBlock"])
+##             
 ##             durString = "{0:5.3f}".format(prm["blockEndTime"] - prm["blockStartTime"])
 ##             resLineToWrite = "{0:5.3f}".format(turnpointMean) + prm["pref"]["general"]["csvSeparator"] + \
 ##                              "{0:5.3f}".format(turnpointSd) + prm["pref"]["general"]["csvSeparator"] + \
@@ -858,6 +848,7 @@ end
 ##         else:
 ##             doTrial()
 
+end
 
 ##     def sortResponseAdaptiveInterleaved(self, buttonClicked, method):
 ##         if prm["startOfBlock"] == True:
