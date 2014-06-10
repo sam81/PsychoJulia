@@ -670,9 +670,10 @@ function sortResponseAdaptive(buttonClicked, method)
         prm["nTurnpoints"] = 0
         prm["startOfBlock"] = false
         prm["turnpointVal"] = (FloatingPoint)[]
-        fullFileLines = []
+        prm["fullFileLines"] = (Any)[]
         prm["buttonCounter"] = [0 for i=1:prm["nAlternatives"]]
     end
+   
     prm["buttonCounter"][buttonClicked] = prm["buttonCounter"][buttonClicked] + 1
 
     if method == "transformedUpDown"
@@ -701,152 +702,173 @@ function sortResponseAdaptive(buttonClicked, method)
         end
     end
             
-        if buttonClicked == prm["correctButton"]
-            if prm["responseLight"] == "Feedback"
-                responseLight[:giveFeedback]("correct", prm[currBlock]["responseLightDuration"]/1000)
-            elseif prm["responseLight"] == "Neutral"
-                responseLight[:giveFeedback]("neutral", prm[currBlock]["responseLightDuration"]/1000)
-            elseif prm["responseLight"] == "None"
-                responseLight[:giveFeedback]("off", prm[currBlock]["responseLightDuration"]/1000)
-            end
-            
-##             fullFileLog.write(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLines.append(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLog.write("1; ")
-##             fullFileLines.append("1; ")
-##             if "additional_parameters_to_write" in prm:
-##                 for p in range(len(prm["additional_parameters_to_write"])):
-##                     fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLog.write(" ;")
-##                     fullFileLines.append(" ;")
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
-##             prm["correctCount"] = prm["correctCount"] + 1
-##             prm["incorrectCount"] = 0
-
-##             if prm["correctCount"] == prm["numberCorrectNeeded"]:
-##                 prm["correctCount"] = 0
-##                 if prm["trackDir"] == tr("Up"):
-##                     prm["turnpointVal"].append(prm["adaptiveDifference"])
-##                     prm["nTurnpoints"] = prm["nTurnpoints"] +1
-##                     prm["trackDir"] = tr("Down")
-                        
-##                 if prm["adaptiveType"] == tr("Arithmetic"):
-##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] - stepSizeDown
-##                 elif prm["adaptiveType"] == tr("Geometric"):
-##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] / stepSizeDown
-                
-        elseif buttonClicked != prm["correctButton"]
-            if prm["responseLight"] == "Feedback"
-                responseLight[:giveFeedback]("incorrect", prm[currBlock]["responseLightDuration"]/1000)
-            elseif prm["responseLight"] == "Neutral"
-                responseLight[:giveFeedback]("neutral", prm[currBlock]["responseLightDuration"]/1000)
-            elseif prm["responseLight"] == "None"
-                responseLight[:giveFeedback]("off", prm[currBlock]["responseLightDuration"]/1000)
-            end
-                
-##             fullFileLog.write(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLines.append(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLog.write("0; ")
-##             fullFileLines.append("0; ")
-##             if "additional_parameters_to_write" in prm:
-##                 for p in range(len(prm["additional_parameters_to_write"])):
-##                     fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLog.write("; ")
-##                     fullFileLines.append("; ")
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
-            
-##             prm["incorrectCount"] = prm["incorrectCount"] + 1
-##             prm["correctCount"] = 0
-
-##             if prm["incorrectCount"] == prm["numberIncorrectNeeded"]:
-##                 prm["incorrectCount"] = 0
-##                 if prm["trackDir"] == tr("Down"):
-##                     prm["turnpointVal"].append(prm["adaptiveDifference"])
-##                     prm["nTurnpoints"] = prm["nTurnpoints"] +1
-##                     prm["trackDir"] = tr("Up")
-                    
-##                 if prm["adaptiveType"] == tr("Arithmetic"):
-##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] + stepSizeUp
-##                 elif prm["adaptiveType"] == tr("Geometric"):
-##                     prm["adaptiveDifference"] = prm["adaptiveDifference"] * stepSizeUp
+    if buttonClicked == prm["correctButton"]
+        if prm["responseLight"] == "Feedback"
+            responseLight[:giveFeedback]("correct", prm[currBlock]["responseLightDuration"]/1000)
+        elseif prm["responseLight"] == "Neutral"
+            responseLight[:giveFeedback]("neutral", prm[currBlock]["responseLightDuration"]/1000)
+        elseif prm["responseLight"] == "None"
+            responseLight[:giveFeedback]("off", prm[currBlock]["responseLightDuration"]/1000)
         end
-##         fullFileLog.flush()
-##         pcDone = (prm["nTurnpoints"] / prm["totalTurnpoints"]) * 100
-##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
-##         pcThisRep = (bp-1) / prm["storedBlocks"]*100 + 1 / prm["storedBlocks"]*pcDone
-##         pcTot = (prm["currentRepetition"] - 1) / prm["allBlocks"]["repetitions"]*100 + 1 / prm["allBlocks"]["repetitions"]*pcThisRep
-##         gauge.setValue(pcTot)
-##         if prm["nTurnpoints"] == prm["totalTurnpoints"]:
-##             writeResultsHeader("standard")
-##             #process results
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             for i in range(len(prm["turnpointVal"])):
-##                 if i == prm["initialTurnpoints"]:
-##                     resFile.write("| ")
-##                 resFile.write("%5.2f " %prm["turnpointVal"][i])
-##                 resFileLog.write("%5.2f " %prm["turnpointVal"][i])
-##                 if i == prm["totalTurnpoints"]-1:
-##                     resFile.write("| ")
-##             if prm["adaptiveType"] == tr("Arithmetic"):
-##                 turnpointMean = mean(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
-##                 turnpointSd = std(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]], ddof=1)
-##                 resFile.write("\n\n")
-##                 resFile.write("turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
-##                 resFileLog.write("\n\n")
-##                 resFileLog.write("turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
-##             elif prm["adaptiveType"] == tr("Geometric"):
-##                 turnpointMean = geoMean(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
-##                 turnpointSd = geoSd(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
-##                 resFile.write("\n\n")
-##                 resFile.write("geometric turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
-##                 resFileLog.write("\n\n")
-##                 resFileLog.write("geometric turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
-
-##             for i in range(prm["nAlternatives"]):
-##                 resFile.write("B{0} = {1}".format(i+1, prm["buttonCounter"][i]))
-##                 resFileLog.write("B{0} = {1}".format(i+1, prm["buttonCounter"][i]))
-##                 if i != prm["nAlternatives"]-1:
-##                     resFile.write(", ")
-##                     resFileLog.write(", ")
-##             resFile.write("\n\n")
-##             resFile.flush()
-##             resFileLog.write("\n\n")
-##             resFileLog.flush()
-##             getEndTime()
-
-##             
-##             durString = "{0:5.3f}".format(prm["blockEndTime"] - prm["blockStartTime"])
-##             resLineToWrite = "{0:5.3f}".format(turnpointMean) + prm["pref"]["general"]["csvSeparator"] + \
-##                              "{0:5.3f}".format(turnpointSd) + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm[currBlock]["conditionLabel"] + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm["listener"] + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm["sessionLabel"] + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm["allBlocks"]["experimentLabel"] + prm["pref"]["general"]["csvSeparator"] +\
-##                              prm["blockEndDateString"] + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm["blockEndTimeString"] + prm["pref"]["general"]["csvSeparator"] + \
-##                              durString + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm[currBlock]["blockPosition"] + prm["pref"]["general"]["csvSeparator"] + \
-##                              prm[currBlock]["experiment"] + prm["pref"]["general"]["csvSeparator"] +\
-##                              prm[currBlock]["paradigm"] + prm["pref"]["general"]["csvSeparator"]
-##             resLineToWrite = getCommonTabFields(resLineToWrite)
-##             resLineToWrite = resLineToWrite + "\n"
+        
+        write(prm["fullFileLog"], string(prm["adaptiveDifference"], "; "))
+        push!(prm["fullFileLines"], string(prm["adaptiveDifference"], "; "))
+        write(prm["fullFileLog"], "1; ")
+        push!(prm["fullFileLines"], "1; ")
+        if haskey(prm, "additional_parameters_to_write")
+            for p=1:length(prm["additional_parameters_to_write"])
+                write(prm["fullFileLog"], string(prm["additional_parameters_to_write"][p]))
+                push!(prm["fullFileLines"], string(prm["additional_parameters_to_write"][p]))
+                write(prm["fullFileLog"], " ;")
+                push!(prm["fullFileLines"], " ;")
+            end
+        end
+        write(prm["fullFileLog"], "\n")
+        push!(prm["fullFileLines"], "\n")
+        prm["correctCount"] = prm["correctCount"] + 1
+        prm["incorrectCount"] = 0
+        
+        if prm["correctCount"] == prm["numberCorrectNeeded"]
+            prm["correctCount"] = 0
+            if prm["trackDir"] == "Up"
+                push!(prm["turnpointVal"], prm["adaptiveDifference"])
+                prm["nTurnpoints"] = prm["nTurnpoints"] +1
+                prm["trackDir"] = "Down"
+            end
             
-##             if method == "transformedUpDown":
-##                 writeResultsSummaryLine("Transformed Up-Down", resLineToWrite)
-##             elif method == "weightedUpDown":
-##                 writeResultsSummaryLine("Weighted Up-Down", resLineToWrite)
-
-##             atBlockEnd()
+            if prm["adaptiveType"] == "Arithmetic"
+                prm["adaptiveDifference"] = prm["adaptiveDifference"] - stepSizeDown
+            elseif prm["adaptiveType"] == "Geometric"
+                prm["adaptiveDifference"] = prm["adaptiveDifference"] / stepSizeDown
+            end
+        end
+        
+    elseif buttonClicked != prm["correctButton"]
+        if prm["responseLight"] == "Feedback"
+            responseLight[:giveFeedback]("incorrect", prm[currBlock]["responseLightDuration"]/1000)
+        elseif prm["responseLight"] == "Neutral"
+            responseLight[:giveFeedback]("neutral", prm[currBlock]["responseLightDuration"]/1000)
+        elseif prm["responseLight"] == "None"
+            responseLight[:giveFeedback]("off", prm[currBlock]["responseLightDuration"]/1000)
+        end
+        
+        write(prm["fullFileLog"], string(prm["adaptiveDifference"], "; "))
+        push!(prm["fullFileLines"], string(prm["adaptiveDifference"], "; "))
+        write(prm["fullFileLog"], "0; ")
+        push!(prm["fullFileLines"], "0; ")
+        if haskey(prm, "additional_parameters_to_write")
+            for p=1:length(prm["additional_parameters_to_write"])
+                write(prm["fullFileLog"], string(prm["additional_parameters_to_write"][p]))
+                push!(prm["fullFileLines"], string(prm["additional_parameters_to_write"][p]))
+                write(prm["fullFileLog"], "; ")
+                push!(prm["fullFileLines"], "; ")
+            end
+        end
+        write(prm["fullFileLog"], "\n")
+        push!(prm["fullFileLines"], "\n")
+        
+        prm["incorrectCount"] = prm["incorrectCount"] + 1
+        prm["correctCount"] = 0
+        
+        if prm["incorrectCount"] == prm["numberIncorrectNeeded"]
+            prm["incorrectCount"] = 0
+            if prm["trackDir"] == "Down"
+                push!(prm["turnpointVal"], prm["adaptiveDifference"])
+                prm["nTurnpoints"] = prm["nTurnpoints"] +1
+                prm["trackDir"] = "Up"
+            end
             
-##         else:
-##             doTrial()
+            if prm["adaptiveType"] == "Arithmetic"
+                prm["adaptiveDifference"] = prm["adaptiveDifference"] + stepSizeUp
+            elseif prm["adaptiveType"] == "Geometric"
+                prm["adaptiveDifference"] = prm["adaptiveDifference"] * stepSizeUp
+            end
+        end
+    end
+
+    flush(prm["fullFileLog"])
+    pcDone = (prm["nTurnpoints"] / prm["totalTurnpoints"]) * 100
+    bp = int(prm[string("b", prm["currentBlock"])]["blockPosition"])
+    pcThisRep = (bp-1) / prm["storedBlocks"]*100 + 1 / prm["storedBlocks"]*pcDone
+    pcTot = (prm["currentRepetition"] - 1) / prm["allBlocks"]["repetitions"]*100 + 1 / prm["allBlocks"]["repetitions"]*pcThisRep
+    gauge[:setValue](pcTot)
+    if prm["nTurnpoints"] == prm["totalTurnpoints"]
+        writeResultsHeader("standard", prm, wd)
+        #process results
+        write(prm["fullFileLog"], "\n")
+        push!(prm["fullFileLines"], "\n")
+        for i=1:length(prm["fullFileLines"])
+            write(prm["fullFile"], prm["fullFileLines"][i])
+        end
+        for i=1:length(prm["turnpointVal"])
+            if i == prm["initialTurnpoints"]
+                write(prm["resFile"], "| ")
+            end
+            @printf(prm["resFile"], "%5.2f ", prm["turnpointVal"][i])
+            @printf(prm["resFileLog"], "%5.2f ", prm["turnpointVal"][i])
+            if i == prm["totalTurnpoints"]-1
+                write(prm["resFile"], "| ")
+            end
+        end
+        if prm["adaptiveType"] == "Arithmetic"
+            turnpointMean = mean(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
+            turnpointSd = std(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
+            write(prm["resFile"], "\n\n")
+            @printf(prm["resFile"], "turnpointMean = %5.2f, s.d. = %5.2f \n", turnpointMean,turnpointSd)
+            write(prm["resFileLog"], "\n\n")
+            @printf(prm["resFileLog"], "turnpointMean = %5.2f, s.d. = %5.2f \n", turnpointMean,turnpointSd)
+        elseif prm["adaptiveType"] == "Geometric"
+            turnpointMean = geoMean(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
+            turnpointSd = geoSd(prm["turnpointVal"][prm["initialTurnpoints"] : prm["totalTurnpoints"]])
+            write(prm["resFile"], "\n\n")
+            @printf(prm["resFile"], "geometric turnpointMean = %5.2f, s.d. = %5.2f \n", turnpointMean,turnpointSd)
+            @printf(prm["resFileLog"], "\n\n")
+            @printf(prm["resFileLog"], "geometric turnpointMean = %5.2f, s.d. = %5.2f \n", turnpointMean,turnpointSd)
+        end
+        
+        for i=1:prm["nAlternatives"]
+            @printf(prm["resFile"], "B%d = %d", i, prm["buttonCounter"][i])
+            @printf(prm["resFileLog"], "B%d = %d", i, prm["buttonCounter"][i])
+            if i != prm["nAlternatives"]
+                write(prm["resFile"], ", ")
+                write(prm["resFileLog"], ", ")
+            end
+        end
+        write(prm["resFile"], "\n\n")
+        flush(prm["resFile"])
+        write(prm["resFileLog"], "\n\n")
+        flush(prm["resFileLog"])
+        getEndTime()
+        
+        
+        
+        ## durString = "{0:5.3f}".format(prm["blockEndTime"] - prm["blockStartTime"])
+        ## resLineToWrite = "{0:5.3f}".format(turnpointMean) + prm["pref"]["general"]["csvSeparator"] + \
+        ## "{0:5.3f}".format(turnpointSd) + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm[currBlock]["conditionLabel"] + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm["listener"] + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm["sessionLabel"] + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm["allBlocks"]["experimentLabel"] + prm["pref"]["general"]["csvSeparator"] +\
+        ## prm["blockEndDateString"] + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm["blockEndTimeString"] + prm["pref"]["general"]["csvSeparator"] + \
+        ## durString + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm[currBlock]["blockPosition"] + prm["pref"]["general"]["csvSeparator"] + \
+        ## prm[currBlock]["experiment"] + prm["pref"]["general"]["csvSeparator"] +\
+        ## prm[currBlock]["paradigm"] + prm["pref"]["general"]["csvSeparator"]
+        ## resLineToWrite = getCommonTabFields(resLineToWrite)
+        ## resLineToWrite = resLineToWrite + "\n"
+            
+        ## if method == "transformedUpDown":
+        ##     writeResultsSummaryLine("Transformed Up-Down", resLineToWrite)
+        ## elseif method == "weightedUpDown":
+        ##     writeResultsSummaryLine("Weighted Up-Down", resLineToWrite)
+        ## end
+
+        atBlockEnd()
+            
+    else
+        doTrial()
+    end
 
 end
 
@@ -857,7 +879,7 @@ end
 ##             prm["nTurnpoints"] = [0 for number in range(prm["nDifferences"])]
 ##             prm["startOfBlock"] = False
 ##             prm["turnpointVal"] = [[] for number in range(prm["nDifferences"])]
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             prm["buttonCounter"] = [[0 for a in range(prm["nAlternatives"])] for i in range(prm["nDifferences"])]
            
 ##         trackNumber = prm["currentDifference"]
@@ -892,18 +914,18 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
             
-##             fullFileLog.write(str(prm["adaptiveDifference"][trackNumber]) + "; ")
-##             fullFileLines.append(str(prm["adaptiveDifference"][trackNumber]) + "; ")
-##             fullFileLog.write("TRACK %d; 1; " %(trackNumber+1))
-##             fullFileLines.append("TRACK %d; 1; " %(trackNumber+1))
+##             write(prm["fullFileLog"], str(prm["adaptiveDifference"][trackNumber]) + "; ")
+##             push!(prm["fullFileLines"], str(prm["adaptiveDifference"][trackNumber]) + "; ")
+##             write(prm["fullFileLog"], "TRACK %d; 1; " %(trackNumber+1))
+##             push!(prm["fullFileLines"], "TRACK %d; 1; " %(trackNumber+1))
 ##             if "additional_parameters_to_write" in prm:
 ##                 for p in range(len(prm["additional_parameters_to_write"])):
-##                     fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLog.write("; ")
-##                     fullFileLines.append("; ")
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
+##                     write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                     push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                     write(prm["fullFileLog"], "; ")
+##                     push!(prm["fullFileLines"], "; ")
+##             write(prm["fullFileLog"], "\n")
+##             push!(prm["fullFileLines"], "\n")
 ##             prm["correctCount"][trackNumber] = prm["correctCount"][trackNumber] + 1
 ##             prm["incorrectCount"][trackNumber] = 0
 
@@ -927,18 +949,18 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
                 
-##             fullFileLog.write(str(prm["adaptiveDifference"][trackNumber]) + "; ")
-##             fullFileLines.append(str(prm["adaptiveDifference"][trackNumber]) + "; ")
-##             fullFileLog.write("TRACK %d; 0; " %(trackNumber+1))
-##             fullFileLines.append("TRACK %d; 0; " %(trackNumber+1))
+##             write(prm["fullFileLog"], str(prm["adaptiveDifference"][trackNumber]) + "; ")
+##             push!(prm["fullFileLines"], str(prm["adaptiveDifference"][trackNumber]) + "; ")
+##             write(prm["fullFileLog"], "TRACK %d; 0; " %(trackNumber+1))
+##             push!(prm["fullFileLines"], "TRACK %d; 0; " %(trackNumber+1))
 ##             if "additional_parameters_to_write" in prm:
 ##                 for p in range(len(prm["additional_parameters_to_write"])):
-##                     fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLog.write("; ")
-##                     fullFileLines.append("; ")
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
+##                     write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                     push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                     write(prm["fullFileLog"], "; ")
+##                     push!(prm["fullFileLines"], "; ")
+##             write(prm["fullFileLog"], "\n")
+##             push!(prm["fullFileLines"], "\n")
             
 ##             prm["incorrectCount"][trackNumber] = prm["incorrectCount"][trackNumber] + 1
 ##             prm["correctCount"][trackNumber] = 0
@@ -955,7 +977,7 @@ end
 ##                 elif prm["adaptiveType"] == tr("Geometric"):
 ##                     prm["adaptiveDifference"][trackNumber] = prm["adaptiveDifference"][trackNumber] * stepSizeUp
       
-##         fullFileLog.flush()
+##         flush(prm["fullFileLog"])
 ##         currNTurnpoints = 0
 ##         currTotTurnpoints = 0
 ##         for i in range(prm["nDifferences"]):
@@ -974,15 +996,15 @@ end
 ##         if finished == prm["nDifferences"]:
 ##             writeResultsHeader("standard")
 ##             #process results
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
+##             write(prm["fullFileLog"], "\n")
+##             push!(prm["fullFileLines"], "\n")
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
 ##             turnpointMeanList = []
 ##             turnpointSdList = []
 ##             for j in range(prm["nDifferences"]):
-##                 resFile.write("TRACK %d:\n" %(j+1))
-##                 resFileLog.write("TRACK %d:\n" %(j+1))
+##                 write(prm["resFile"], "TRACK %d:\n" %(j+1))
+##                 write(prm["resFileLog"], "TRACK %d:\n" %(j+1))
 ##                 if prm["turnpointsToAverage"] == tr("All final stepsize (even)"):
 ##                     tnpStart = prm["initialTurnpoints"][j]
 ##                     tnpEnd = len(prm["turnpointVal"][j])
@@ -996,44 +1018,44 @@ end
 ##                     tnpEnd = len(prm["turnpointVal"][j])
 ##                 for i in range(len(prm["turnpointVal"][j])):
 ##                     if i == (tnpStart):
-##                         resFile.write("| ")
-##                         resFileLog.write("| ")
-##                     resFile.write("%5.2f " %prm["turnpointVal"][j][i])
-##                     resFileLog.write("%5.2f " %prm["turnpointVal"][j][i])
+##                         write(prm["resFile"], "| ")
+##                         write(prm["resFileLog"], "| ")
+##                     write(prm["resFile"], "%5.2f " %prm["turnpointVal"][j][i])
+##                     write(prm["resFileLog"], "%5.2f " %prm["turnpointVal"][j][i])
 ##                     if i == (tnpEnd-1):
-##                         resFile.write("| ")
-##                         resFileLog.write("| ")
+##                         write(prm["resFile"], "| ")
+##                         write(prm["resFileLog"], "| ")
 ##                 if prm["adaptiveType"] == tr("Arithmetic"):
 ##                     turnpointMean = mean(prm["turnpointVal"][j][tnpStart : tnpEnd])
 ##                     turnpointSd = std(prm["turnpointVal"][j][tnpStart : tnpEnd], ddof=1)
-##                     resFile.write("\n\n")
-##                     resFile.write("turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
-##                     resFileLog.write("\n\n")
-##                     resFileLog.write("turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
+##                     write(prm["resFile"], "\n\n")
+##                     write(prm["resFile"], "turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
+##                     write(prm["resFileLog"], "\n\n")
+##                     write(prm["resFileLog"], "turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
 ##                     turnpointMeanList.append(turnpointMean)
 ##                     turnpointSdList.append(turnpointSd)
 ##                 elif prm["adaptiveType"] == tr("Geometric"):
 ##                     turnpointMean = geoMean(prm["turnpointVal"][j][tnpStart : tnpEnd])
 ##                     turnpointSd = geoSd(prm["turnpointVal"][j][tnpStart : tnpEnd])
-##                     resFile.write("\n\n")
-##                     resFile.write("geometric turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
-##                     resFileLog.write("\n\n")
-##                     resFileLog.write("geometric turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
+##                     write(prm["resFile"], "\n\n")
+##                     write(prm["resFile"], "geometric turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
+##                     write(prm["resFileLog"], "\n\n")
+##                     write(prm["resFileLog"], "geometric turnpointMean = %5.2f, s.d. = %5.2f \n" %(turnpointMean,turnpointSd))
 ##                     turnpointMeanList.append(turnpointMean)
 ##                     turnpointSdList.append(turnpointSd)
 ##                 for a in range(prm["nAlternatives"]):
-##                     resFile.write("B{0} = {1}".format(a+1, prm["buttonCounter"][j][a]))
-##                     resFileLog.write("B{0} = {1}".format(a+1, prm["buttonCounter"][j][a]))
+##                     write(prm["resFile"], "B{0} = {1}".format(a+1, prm["buttonCounter"][j][a]))
+##                     write(prm["resFileLog"], "B{0} = {1}".format(a+1, prm["buttonCounter"][j][a]))
 ##                     if a != prm["nAlternatives"]-1:
-##                         resFile.write(", ")
-##                         resFileLog.write(", ")
+##                         write(prm["resFile"], ", ")
+##                         write(prm["resFileLog"], ", ")
 ##                 if j != prm["nDifferences"]-1:
-##                     resFile.write("\n\n")
-##                     resFileLog.write("\n\n")
-##             resFile.write("\n.\n")
-##             resFile.flush()
-##             resFileLog.write("\n.\n")
-##             resFileLog.flush()
+##                     write(prm["resFile"], "\n\n")
+##                     write(prm["resFileLog"], "\n\n")
+##             write(prm["resFile"], "\n.\n")
+##             flush(prm["resFile"])
+##             write(prm["resFileLog"], "\n.\n")
+##             flush(prm["resFileLog"])
 ##             getEndTime()
 
 
@@ -1072,7 +1094,7 @@ end
 ##         if prm["startOfBlock"] == True:
 ##             prm["startOfBlock"] = False
 
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             trialCount = 0
 ##             correctCount = 0
 ##             trialCountAll = 0
@@ -1099,17 +1121,17 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
 ##             resp = "0"
-##         fullFileLog.write(resp + "; ")
-##         fullFileLines.append(resp + "; ")
+##         write(prm["fullFileLog"], resp + "; ")
+##         push!(prm["fullFileLines"], resp + "; ")
 ##         if "additional_parameters_to_write" in prm:
 ##             for p in range(len(prm["additional_parameters_to_write"])):
-##                 fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLog.write("; ")
-##                 fullFileLines.append("; ")
-##         fullFileLog.write("\n")
-##         fullFileLines.append("\n")
-##         fullFileLog.flush()
+##                 write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                 push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                 write(prm["fullFileLog"], "; ")
+##                 push!(prm["fullFileLines"], "; ")
+##         write(prm["fullFileLog"], "\n")
+##         push!(prm["fullFileLines"], "\n")
+##         flush(prm["fullFileLog"])
        
 ##         pcDone = trialCountAll / (prm["nTrials"]+prm["nPracticeTrials"]) * 100
 ##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
@@ -1119,10 +1141,10 @@ end
         
 ##         if trialCountAll >= (prm["nTrials"] + prm["nPracticeTrials"]): # Block is completed
 ##             writeResultsHeader("standard")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             fullFileLog.write("\n")
-##             fullFile.write("\n")
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
+##             write(prm["fullFileLog"], "\n")
+##             write(prm["fullFile"], ("\n")
             
 ##             propCorr = correctCount/trialCount
 ##             dp = dprime_mAFC(propCorr, prm["nAlternatives"])
@@ -1136,8 +1158,8 @@ end
 ##                 ftyp.flush()
 ##                 ftyp.flush()
             
-##             fullFile.flush()
-##             fullFileLog.flush()
+##             flush(prm["fullFile"])
+##             flush(prm["fullFileLog"])
 
 ##             getEndTime()
 
@@ -1177,7 +1199,7 @@ end
 ##         if prm["startOfBlock"] == True:
 ##             prm["startOfBlock"] = False
 
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             trialCount = {}
 ##             correctCount = {}
 ##             trialCountCnds = {}
@@ -1216,17 +1238,17 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
 ##             resp = "0"
-##         fullFileLog.write(currentCondition + "; " + resp + "; ")
-##         fullFileLines.append(currentCondition + "; " + resp + "; ")
+##         write(prm["fullFileLog"], currentCondition + "; " + resp + "; ")
+##         push!(prm["fullFileLines"], currentCondition + "; " + resp + "; ")
 ##         if "additional_parameters_to_write" in prm:
 ##             for p in range(len(prm["additional_parameters_to_write"])):
-##                 fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLog.write("; ")
-##                 fullFileLines.append("; ")
-##         fullFileLog.write("\n")
-##         fullFileLines.append("\n")
-##         fullFileLog.flush()
+##                 write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                 push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                 write(prm["fullFileLog"], "; ")
+##                 push!(prm["fullFileLines"], "; ")
+##         write(prm["fullFileLog"], "\n")
+##         push!(prm["fullFileLines"], "\n")
+##         flush(prm["fullFileLog"])
       
 ##         pcDone = trialCountAll / (prm["nTrials"] + prm["nPracticeTrials"])*100
 ##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
@@ -1241,10 +1263,10 @@ end
 ##                 totalTrialCount = totalTrialCount + trialCount[i]
 ##                 totalCorrectCount = totalCorrectCount + correctCountCnds[prm["conditions"][i]]
 ##             writeResultsHeader("standard")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             fullFileLog.write("\n")
-##             fullFile.write("\n")
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
+##             write(prm["fullFileLog"], "\n")
+##             write(prm["fullFile"], ("\n")
 
 ##             dprimeList = []
 ##             for i in range(len(prm["conditions"])):
@@ -1270,8 +1292,8 @@ end
           
 ##                 ftyp.write("\n.\n\n")
 ##                 ftyp.flush()
-##             fullFile.flush()
-##             fullFileLog.flush()
+##             flush(prm["fullFile"])
+##             flush(prm["fullFileLog"])
 
 ##             getEndTime()
 
@@ -1322,7 +1344,7 @@ end
 ##         if prm["startOfBlock"] == True: #Initialize counts and data structures
 ##             prm["startOfBlock"] = False
 
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             correctCount = 0 #count of correct trials 
 ##             trialCount = 0 #count of total trials 
 ##             correctCountCnds = {} #count of correct trials by condition
@@ -1360,17 +1382,17 @@ end
 ##                 responseLight.giveFeedback("off")
 ##             resp = "0"
             
-##         fullFileLog.write(currentCondition + "; " + resp + "; ")
-##         fullFileLines.append(currentCondition + "; " + resp + "; ")
+##         write(prm["fullFileLog"], currentCondition + "; " + resp + "; ")
+##         push!(prm["fullFileLines"], currentCondition + "; " + resp + "; ")
 ##         if "additional_parameters_to_write" in prm:
 ##             for p in range(len(prm["additional_parameters_to_write"])):
-##                 fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLog.write("; ")
-##                 fullFileLines.append("; ")
-##         fullFileLog.write("\n")
-##         fullFileLines.append("\n")
-##         fullFileLog.flush()
+##                 write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                 push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                 write(prm["fullFileLog"], "; ")
+##                 push!(prm["fullFileLines"], "; ")
+##         write(prm["fullFileLog"], "\n")
+##         push!(prm["fullFileLines"], "\n")
+##         flush(prm["fullFileLog"])
 
 ##         #move percent done bar
 ##         pcDone = trialCountAll/(prm["nTrials"] + prm["nPracticeTrials"])*100
@@ -1382,12 +1404,12 @@ end
 ##         #Completed all trials, compute stats
 ##         if trialCountAll >= prm["nPracticeTrials"] + prm["nTrials"]: # Block is completed
 ##             writeResultsHeader("standard")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             fullFileLog.write("\n")
-##             fullFile.write("\n")
-##             fullFile.flush()
-##             fullFileLog.flush()
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
+##             write(prm["fullFileLog"], "\n")
+##             write(prm["fullFile"], ("\n")
+##             flush(prm["fullFile"])
+##             flush(prm["fullFileLog"])
              
 ##             A_correct = correctCountCnds[prm["conditions"][0]]
 ##             A_total = trialCountCnds[prm["conditions"][0]]
@@ -1454,7 +1476,7 @@ end
 ##         if prm["startOfBlock"] == True:
 ##             prm["startOfBlock"] = False
 
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             trialCount = {}
 ##             correctCount = {}
 ##             trialCountCnds = {}
@@ -1497,17 +1519,17 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
 ##             resp = "0"
-##         fullFileLog.write(currentCondition + "; " + currentSubcondition + "; " + resp + "; ")
-##         fullFileLines.append(currentCondition + "; " + currentSubcondition + "; " + resp + "; ")
+##         write(prm["fullFileLog"], currentCondition + "; " + currentSubcondition + "; " + resp + "; ")
+##         push!(prm["fullFileLines"], currentCondition + "; " + currentSubcondition + "; " + resp + "; ")
 ##         if "additional_parameters_to_write" in prm:
 ##             for p in range(len(prm["additional_parameters_to_write"])):
-##                 fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLog.write("; ")
-##                 fullFileLines.append("; ")
-##         fullFileLog.write("\n")
-##         fullFileLines.append("\n")
-##         fullFileLog.flush()
+##                 write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                 push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                 write(prm["fullFileLog"], "; ")
+##                 push!(prm["fullFileLines"], "; ")
+##         write(prm["fullFileLog"], "\n")
+##         push!(prm["fullFileLines"], "\n")
+##         flush(prm["fullFileLog"])
      
 ##         pcDone = (trialCountAll / ((prm["nTrials"]+prm["nPracticeTrials"]) * len(prm["conditions"])))*100
 ##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
@@ -1519,10 +1541,10 @@ end
 ##         if trialCountAll >= (prm["nTrials"] + prm["nPracticeTrials"])*len(prm["conditions"]): # Block is completed
 
 ##             writeResultsHeader("standard")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             fullFileLog.write("\n")
-##             fullFile.write("\n")
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
+##             write(prm["fullFileLog"], "\n")
+##             write(prm["fullFile"], ("\n")
 
 ##             totalCorrectCount = 0
 ##             subconditionTrialCount = [0 for number in range(len(prm["subconditions"]))]
@@ -1572,8 +1594,8 @@ end
 ##                         ftyp.write("No. Total Subcondition %s = %d \n" %(prm["subconditions"][j], trialCountCnds[prm["conditions"][i]][prm["subconditions"][j]]))
 ##                         ftyp.write("Percent Correct Subcondition %s = %5.2f \n" %(prm["subconditions"][j], thisPercentCorrect))
                 
-##                 resFile.write("\n\n")
-##                 resFileLog.write("\n\n")
+##                 write(prm["resFile"], "\n\n")
+##                 write(prm["resFileLog"], "\n\n")
 
 
 ##             A_correct_ALL = subconditionCorrectCount[0]
@@ -1603,16 +1625,16 @@ end
 ##                     ftyp.write("No. Total Subcondition %s = %d \n" %(prm["subconditions"][j], subconditionTrialCount[j]))
 ##                     ftyp.write("Percent Correct Subcondition %s = %5.2f \n" %(prm["subconditions"][j], thisPercentCorrect))
 
-##             resFile.write("\n")
-##             resFileLog.write("\n")
+##             write(prm["resFile"], "\n")
+##             write(prm["resFileLog"], "\n")
      
             
-##             resFile.write(".\n\n")
-##             resFile.flush()
-##             resFileLog.write(".\n\n")
-##             resFileLog.flush()
-##             fullFile.flush()
-##             fullFileLog.flush()
+##             write(prm["resFile"], ".\n\n")
+##             flush(prm["resFile"])
+##             write(prm["resFileLog"], ".\n\n")
+##             flush(prm["resFileLog"])
+##             flush(prm["fullFile"])
+##             flush(prm["fullFileLog"])
 
 ##             getEndTime()
 
@@ -1662,7 +1684,7 @@ end
 ##         if prm["startOfBlock"] == True:
 ##             prm["startOfBlock"] = False
 
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             trialCount = 0
 ##             trialCountCnds = {}
 ##             correctCountCnds = {}
@@ -1693,17 +1715,17 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
 ##             resp = "0"
-##         fullFileLog.write(currentCondition + "; " + resp + "; ")
-##         fullFileLines.append(currentCondition + "; " + resp + "; ")
+##         write(prm["fullFileLog"], currentCondition + "; " + resp + "; ")
+##         push!(prm["fullFileLines"], currentCondition + "; " + resp + "; ")
 ##         if "additional_parameters_to_write" in prm:
 ##             for p in range(len(prm["additional_parameters_to_write"])):
-##                 fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLog.write("; ")
-##                 fullFileLines.append("; ")
-##         fullFileLog.write("\n")
-##         fullFileLines.append("\n")
-##         fullFileLog.flush()
+##                 write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                 push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                 write(prm["fullFileLog"], "; ")
+##                 push!(prm["fullFileLines"], "; ")
+##         write(prm["fullFileLog"], "\n")
+##         push!(prm["fullFileLines"], "\n")
+##         flush(prm["fullFileLog"])
 ##         cnt = 0
 ##         for i in range(len(prm["conditions"])):
 ##             cnt = cnt + trialCountCnds[prm["conditions"][i]]
@@ -1719,12 +1741,12 @@ end
 ##             for i in range(len(prm["conditions"])):
 ##                 totalCorrectCount = totalCorrectCount + correctCountCnds[prm["conditions"][i]]
 ##             writeResultsHeader("standard")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             fullFileLog.write("\n")
-##             fullFile.write("\n")
-##             fullFile.flush()
-##             fullFileLog.flush()
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
+##             write(prm["fullFileLog"], "\n")
+##             write(prm["fullFile"], ("\n")
+##             flush(prm["fullFile"])
+##             flush(prm["fullFileLog"])
             
 ##             A_correct = correctCountCnds[prm["conditions"][0]]
 ##             A_total = trialCountCnds[prm["conditions"][0]]
@@ -1801,7 +1823,7 @@ end
 ##             prm["lastStepDoubled"] = False
 ##             prm["stepBeforeLastReversalDoubled"] = False
             
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             prm["buttonCounter"] = [0 for i in range(prm["nAlternatives"])]
 ##         prm["buttonCounter"][buttonClicked-1] = prm["buttonCounter"][buttonClicked-1] + 1
 
@@ -1816,18 +1838,18 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
             
-##             fullFileLog.write(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLines.append(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLog.write("1; ")
-##             fullFileLines.append("1; ")
+##             write(prm["fullFileLog"], str(prm["adaptiveDifference"]) + "; ")
+##             push!(prm["fullFileLines"], str(prm["adaptiveDifference"]) + "; ")
+##             write(prm["fullFileLog"], "1; ")
+##             push!(prm["fullFileLines"], "1; ")
 ##             if "additional_parameters_to_write" in prm:
 ##                 for p in range(len(prm["additional_parameters_to_write"])):
-##                     fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLog.write(" ;")
-##                     fullFileLines.append(" ;")
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
+##                     write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                     push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                     write(prm["fullFileLog"], " ;")
+##                     push!(prm["fullFileLines"], " ;")
+##             write(prm["fullFileLog"], "\n")
+##             push!(prm["fullFileLines"], "\n")
 ##             prm["correctCount"] = prm["correctCount"] + 1
 ##         elif buttonClicked != correctButton:
 ##             if prm["responseLight"] == tr("Feedback"):
@@ -1837,18 +1859,18 @@ end
 ##             elif prm["responseLight"] == tr("None"):
 ##                 responseLight.giveFeedback("off")
                                
-##             fullFileLog.write(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLines.append(str(prm["adaptiveDifference"]) + "; ")
-##             fullFileLog.write("0; ")
-##             fullFileLines.append("0; ")
+##             write(prm["fullFileLog"], str(prm["adaptiveDifference"]) + "; ")
+##             push!(prm["fullFileLines"], str(prm["adaptiveDifference"]) + "; ")
+##             write(prm["fullFileLog"], "0; ")
+##             push!(prm["fullFileLines"], "0; ")
 ##             if "additional_parameters_to_write" in prm:
 ##                 for p in range(len(prm["additional_parameters_to_write"])):
-##                     fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                     fullFileLog.write("; ")
-##                     fullFileLines.append("; ")
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
+##                     write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                     push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                     write(prm["fullFileLog"], "; ")
+##                     push!(prm["fullFileLines"], "; ")
+##             write(prm["fullFileLog"], "\n")
+##             push!(prm["fullFileLines"], "\n")
             
 
 ##         #perform test
@@ -1936,7 +1958,7 @@ end
 ##                 prm["adaptiveDifference"] = prm["adaptiveDifference"] * prm["currStepSize"]
                 
 
-##         fullFileLog.flush()
+##         flush(prm["fullFileLog"])
 ##         pcDone = 0#(prm["nTurnpoints"] / prm["totalTurnpoints"]) * 100
 ##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
 ##         pcThisRep = (bp-1) / prm["storedBlocks"]*100 + 1 / prm["storedBlocks"]*pcDone
@@ -1945,31 +1967,31 @@ end
 ##         if prm["currStepSize"] < prm["minStepSize"]:
 ##             writeResultsHeader("standard")
 ##             #process results
-##             fullFileLog.write("\n")
-##             fullFileLines.append("\n")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
+##             write(prm["fullFileLog"], "\n")
+##             push!(prm["fullFileLines"], "\n")
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
 ##             if prm["adaptiveType"] == tr("Arithmetic"):
-##                 resFile.write("\n\n")
-##                 resFile.write("Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
-##                 resFileLog.write("\n\n")
-##                 resFileLog.write("Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
+##                 write(prm["resFile"], "\n\n")
+##                 write(prm["resFile"], "Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
+##                 write(prm["resFileLog"], "\n\n")
+##                 write(prm["resFileLog"], "Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
 ##             elif prm["adaptiveType"] == tr("Geometric"):
-##                 resFile.write("\n\n")
-##                 resFile.write("Geometric Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
-##                 resFileLog.write("\n\n")
-##                 resFileLog.write("Geometric Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
+##                 write(prm["resFile"], "\n\n")
+##                 write(prm["resFile"], "Geometric Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
+##                 write(prm["resFileLog"], "\n\n")
+##                 write(prm["resFileLog"], "Geometric Threshold = %5.2f \n" %(prm["adaptiveDifference"]))
 
 ##             for i in range(prm["nAlternatives"]):
-##                 resFile.write("B{0} = {1}".format(i+1, prm["buttonCounter"][i]))
-##                 resFileLog.write("B{0} = {1}".format(i+1, prm["buttonCounter"][i]))
+##                 write(prm["resFile"], "B{0} = {1}".format(i+1, prm["buttonCounter"][i]))
+##                 write(prm["resFileLog"], "B{0} = {1}".format(i+1, prm["buttonCounter"][i]))
 ##                 if i != prm["nAlternatives"]-1:
-##                     resFile.write(", ")
-##                     resFileLog.write(", ")
-##             resFile.write("\n\n")
-##             resFile.flush()
-##             resFileLog.write("\n\n")
-##             resFileLog.flush()
+##                     write(prm["resFile"], ", ")
+##                     write(prm["resFileLog"], ", ")
+##             write(prm["resFile"], "\n\n")
+##             flush(prm["resFile"])
+##             write(prm["resFileLog"], "\n\n")
+##             flush(prm["resFileLog"])
 ##             getEndTime()
 
 ##             currBlock = "b" + str(prm["currentBlock"])
@@ -2003,7 +2025,7 @@ end
 ##             prm["ones"] = 0
 ##             prm["twos"] = 0
 ##             prm["threes"] = 0
-##             fullFileLines = []
+##             prm["fullFileLines"] = []
 ##             stimCount = {}
 ##             trialCountCnds = {}
 ##             for i in range(prm["nDifferences"]):
@@ -2026,17 +2048,17 @@ end
 ##                 stimCount[currentCondition][prm["currStimOrder"][2]] = stimCount[currentCondition][prm["currStimOrder"][2]]+1   
 
 ##         resp = str(prm["currStimOrder"][buttonClicked-1]+1)
-##         fullFileLog.write(currentCondition + "; " + resp + "; ")
-##         fullFileLines.append(currentCondition + "; " + resp + "; ")
+##         write(prm["fullFileLog"], currentCondition + "; " + resp + "; ")
+##         push!(prm["fullFileLines"], currentCondition + "; " + resp + "; ")
 ##         if "additional_parameters_to_write" in prm:
 ##             for p in range(len(prm["additional_parameters_to_write"])):
-##                 fullFileLog.write(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLines.append(str(prm["additional_parameters_to_write"][p]))
-##                 fullFileLog.write("; ")
-##                 fullFileLines.append("; ")
-##         fullFileLog.write("\n")
-##         fullFileLines.append("\n")
-##         fullFileLog.flush()
+##                 write(prm["fullFileLog"], str(prm["additional_parameters_to_write"][p]))
+##                 push!(prm["fullFileLines"], str(prm["additional_parameters_to_write"][p]))
+##                 write(prm["fullFileLog"], "; ")
+##                 push!(prm["fullFileLines"], "; ")
+##         write(prm["fullFileLog"], "\n")
+##         push!(prm["fullFileLines"], "\n")
+##         flush(prm["fullFileLog"])
 ##         cnt = 0
 ##         for i in range(len(prm["conditions"])):
 ##             cnt = cnt + trialCountCnds[prm["conditions"][i]]
@@ -2051,10 +2073,10 @@ end
 ##             prm["comparisonChoices"].remove(currentCondition)
 ##         if len(prm["comparisonChoices"]) == 0: #Block is completed
 ##             writeResultsHeader("standard")
-##             for i in range(len(fullFileLines)):
-##                 fullFile.write(fullFileLines[i])
-##             fullFileLog.write("\n")
-##             fullFile.write("\n")
+##             for i in range(len(prm["fullFileLines"])):
+##                 write(prm["fullFile"], (prm["fullFileLines"][i])
+##             write(prm["fullFileLog"], "\n")
+##             write(prm["fullFile"], ("\n")
             
 ##             for ftyp in [resFile, resFileLog]:
 ##                 for cnd in prm["conditions"]:
@@ -2072,8 +2094,8 @@ end
 
 ##                 ftyp.flush()
             
-##             fullFile.flush()
-##             fullFileLog.flush()
+##             flush(prm["fullFile"])
+##             flush(prm["fullFileLog"])
 
 ##             getEndTime()
 
@@ -2112,14 +2134,14 @@ end
 ##             doTrial()
 
             
-##     def whenFinished(self):
+function whenFinished()
 ##         if prm["currentRepetition"] == prm["allBlocks"]["repetitions"]:
 ##             statusButton.setText(prm["rbTrans"].translate("rb", "Finished"))
 ##             gauge.setValue(100)
 ##             QApplication.processEvents()
 ##             fullFile.close()
 ##             resFile.close()
-##             fullFileLog.close()
+##             prm["fullFileLog"].close()
 ##             resFileLog.close()
 ##             prm["shuffled"] = False
 ##             if prm["allBlocks"]["procRes"] == True:
@@ -2160,14 +2182,15 @@ end
 
 ##             if prm["allBlocks"]["responseMode"] == tr("Automatic") or prm["allBlocks"]["responseMode"] == tr("Simulated Listener"):
 ##                 onClickStatusButton()
-                
-##     def atBlockEnd(self):
+end
+
+function atBlockEnd()
 ##         writeResultsFooter("log");  writeResultsFooter("standard")
 
-##         bp = int(prm["b"+str(prm["currentBlock"])]["blockPosition"])
-##         cb = (prm["currentRepetition"]-1)*prm["storedBlocks"]+bp
-##         blockGauge.setValue(cb)
-##         blockGauge.setFormat(prm["rbTrans"].translate("rb", "Blocks Completed") +  ": " + str(cb) + "/" + str(prm["storedBlocks"]*prm["allBlocks"]["repetitions"]))
+    bp = int(prm[string("b", prm["currentBlock"])]["blockPosition"])
+    cb = (prm["currentRepetition"]-1)*prm["storedBlocks"]+bp
+    blockGauge[:setValue](cb)
+    blockGauge[:setFormat](string(prm["rbTrans"][:translate]("rb", "Blocks Completed"), ": ", cb, "/", prm["storedBlocks"]*prm["allBlocks"]["repetitions"]))
         
 ##         if prm["allBlocks"]["sendTriggers"] == True:
 ##             thisSnd = pureTone(440, 0, -200, 80, 10, "Both", prm["allBlocks"]["sampRate"], 100)
@@ -2182,16 +2205,19 @@ end
 ##                 executerThread.executeCommand([cmd])
 ##             if prm["pref"]["email"]["notifyEnd"] == True:
 ##                 sendEndNotification()
-##         if int(prm["b"+str(prm["currentBlock"])]["blockPosition"]) < prm["storedBlocks"]:
-##             parent().onClickNextBlockPositionButton()
-##             if prm["allBlocks"]["responseMode"] == tr("Automatic") or prm["allBlocks"]["responseMode"] == tr("Simulated Listener"):
-##                 onClickStatusButton()
-##             else:
-##                 return
-##         else:
-##             whenFinished()
-##         prm["cmdOutFileHandle"].flush()
-        
+    if int(prm[string("b", prm["currentBlock"])]["blockPosition"]) < prm["storedBlocks"]
+        onClickNextBlockPositionButton()
+        if (prm["allBlocks"]["responseMode"] == "Automatic") | (prm["allBlocks"]["responseMode"] == "Simulated Listener")
+            onClickStatusButton()
+        else
+            return
+        end
+    else
+        whenFinished()
+        #flush(prm["cmdOutFileHandle"])
+    end
+end
+
 function getEndTime()
     prm["blockEndTime"] = time()
     prm["blockEndTimeStamp"] = pycall(QtCore["QDateTime"]["toString"], PyAny, QtCore["QDateTime"][:currentDateTime](), prm["currentLocale"][:dateTimeFormat](prm["currentLocale"][:ShortFormat]))

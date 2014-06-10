@@ -54,7 +54,7 @@ function close_w()
     rbw[:close]()
 end
 
-function closeEvent(self, event):
+function closeEvent(event):
         ## #here we need to check if parameters file and temporary parameters file are the same or not
         ## self.compareGuiStoredParameters()
         ## if self.prm["storedBlocks"] > 0:
@@ -685,7 +685,7 @@ end
 
 function onClickNextBlockPositionButton()
     compareGuiStoredParameters()
-    if self.prm["currentBlock"] > self.prm["storedBlocks"]
+    if prm["currentBlock"] > prm["storedBlocks"]
         position = 1
     else
         position = int(prm[string("b", prm["currentBlock"])]["blockPosition"])+1
@@ -716,7 +716,7 @@ function onClickPrevBlockButton()
         elseif (prm["currentBlock"] < 2) & (prm["storedBlocks"] == 0)
             prm["currentBlock"] = 1
         else
-            if prm["currentBlock"] > self.prm["storedBlocks"]
+            if prm["currentBlock"] > prm["storedBlocks"]
                 lastBlock = string("b", prm["currentBlock"]-1)
                 prm["currentBlock"] = prm["currentBlock"] -1
             end
@@ -729,8 +729,8 @@ end
 
 function onClickPrevBlockPositionButton()
     compareGuiStoredParameters()
-    if prm["currentBlock"] > self.prm["storedBlocks"]
-        position = self.prm["currentBlock"]-1
+    if prm["currentBlock"] > prm["storedBlocks"]
+        position = prm["currentBlock"]-1
     else
         position = int(prm[string("b", prm["currentBlock"])]["blockPosition"])-1
     end
