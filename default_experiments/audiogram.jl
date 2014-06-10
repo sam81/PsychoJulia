@@ -80,7 +80,6 @@ function select_default_parameters_audiogram(prm, par)
 end
 
 function get_fields_to_hide_audiogram(prm, wd)
-## println( find(wd["chooserLabel"] .== "Signal Type:"))
     if wd["chooser"][find(prm["chooserLabel"] .== "Signal Type:")[1]][:currentText]() == "Sinusoid"
         prm["fieldsToHide"] = [find(prm["fieldLabel"] .== "Bandwidth (Hz)")]
     else
@@ -88,7 +87,7 @@ function get_fields_to_hide_audiogram(prm, wd)
     end
 end
 
-function doTrial_audiogram(prm, wdc)
+function doTrial_audiogram(prm, wd, wdc)
  
     currBlock = string("b", prm["currentBlock"])
     if prm["startOfBlock"] == true
@@ -96,7 +95,7 @@ function doTrial_audiogram(prm, wdc)
         prm["adaptiveDifference"] = prm[currBlock]["field"][find(prm["fieldLabel"] .== "Level (dB SPL)")][1]
         prm["conditions"] = [string(prm["adaptiveDifference"])]
 
-        writeResultsHeader("log")
+        writeResultsHeader("log", prm, wd)
     end
 
     currentCondition = prm["conditions"][1]

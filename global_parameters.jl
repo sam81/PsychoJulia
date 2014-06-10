@@ -54,9 +54,10 @@ function set_global_parameters(prm)
     prm["blocks"] = (String => Any)[]
     prm["appData"] = (String => Any)[]
     prm["appData"]["plotting_available"] = false
-    ## prm['backupDirectoryName'] = os.path.expanduser("~") +'/.local/share/data/pychoacoustics/data_backup/'
-    ## if os.path.exists(prm['backupDirectoryName']) == False:
-    ##     os.makedirs(prm['backupDirectoryName'])
+    prm["backupDirectoryName"] = expanduser("~/.local/share/data/pychoacoustics/data_backup/")
+    if isdir(prm["backupDirectoryName"]) == false
+         mkpath(prm["backupDirectoryName"])
+    end
 
     ## prm['appData']['alsaaudioAvailable'] = alsaaudioAvailable
     ## if matplotlib_available and pandas_available:

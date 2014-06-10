@@ -769,23 +769,23 @@ function onClickStoreParametersButton()
     prm[currBlock]["conditionLabel"] = conditionLabelTF[:text]()
     prm[currBlock]["experiment"] = currExp
     prm[currBlock]["paradigm"] = currParadigm
-    prm[currBlock]["field"] = (Any)[] #list(range(prm["nFields"]))
-    prm[currBlock]["fieldLabel"] = (Any)[] #list(range(prm["nFields"]))
-    prm[currBlock]["fieldCheckBox"] = (Any)[] #list(range(prm["nFields"]))
-    prm[currBlock]["chooser"] = (Any)[] #list(range(prm["nChoosers"]))
-    prm[currBlock]["chooserOptions"] = (Any)[] #list(range(prm["nChoosers"]))
-    prm[currBlock]["chooserCheckBox"] = (Any)[] #list(range(prm["nChoosers"]))
-    prm[currBlock]["chooserLabel"] = (Any)[] #list(range(prm["nChoosers"]))
-    prm[currBlock]["fileChooser"] = (Any)[] #list(range(prm["nFileChoosers"]))
-    prm[currBlock]["fileChooserButton"] = (Any)[] #list(range(prm["nFileChoosers"]))
-    prm[currBlock]["fileChooserCheckBox"] = (Any)[] #list(range(prm["nFileChoosers"]))
-    prm[currBlock]["paradigmChooser"] = (Any)[] #[]
-    prm[currBlock]["paradigmChooserCheckBox"] = (Any)[] #[]
-    prm[currBlock]["paradigmField"] = (Any)[] #[]
-    prm[currBlock]["paradigmFieldCheckBox"] = (Any)[] #[]
-    prm[currBlock]["paradigmChooserLabel"] = (Any)[] #[]
-    prm[currBlock]["paradigmChooserOptions"] = (Any)[] #[]
-    prm[currBlock]["paradigmFieldLabel"] = (Any)[] #[]
+    prm[currBlock]["field"] = (Any)[] 
+    prm[currBlock]["fieldLabel"] = (Any)[] 
+    prm[currBlock]["fieldCheckBox"] = (Any)[] 
+    prm[currBlock]["chooser"] = (Any)[] 
+    prm[currBlock]["chooserOptions"] = (Any)[] 
+    prm[currBlock]["chooserCheckBox"] = (Any)[] 
+    prm[currBlock]["chooserLabel"] = (Any)[] 
+    prm[currBlock]["fileChooser"] = (Any)[] 
+    prm[currBlock]["fileChooserButton"] = (Any)[] 
+    prm[currBlock]["fileChooserCheckBox"] = (Any)[] 
+    prm[currBlock]["paradigmChooser"] = (Any)[] 
+    prm[currBlock]["paradigmChooserCheckBox"] = (Any)[] 
+    prm[currBlock]["paradigmField"] = (Any)[] 
+    prm[currBlock]["paradigmFieldCheckBox"] = (Any)[] 
+    prm[currBlock]["paradigmChooserLabel"] = (Any)[] 
+    prm[currBlock]["paradigmChooserOptions"] = (Any)[] 
+    prm[currBlock]["paradigmFieldLabel"] = (Any)[] 
     prm[currBlock]["blockPosition"] = currentBlockPositionLabel[:text]()
     
     prm[currBlock]["preTrialSilence"] = prm["currentLocale"][:toInt](preTrialSilenceTF[:text]())[1]
@@ -2067,7 +2067,9 @@ function setParadigmWidgets()
         
         wdc["paradigmChooserList"] = [wd["adaptiveTypeChooser"], wd["initialTrackDirChooser"]]
         wdc["paradigmChooserLabelList"] = [wd["adaptiveTypeChooserLabel"], wd["initialTrackDirChooserLabel"]]
-        wdc["paradigmChooserOptionsList"] = [prm["adaptiveTypeChoices"], ["Up", "Down"]]
+        wdc["paradigmChooserOptionsList"] = (Any)[]
+        push!(wdc["paradigmChooserOptionsList"], prm["adaptiveTypeChoices"])
+        push!(wdc["paradigmChooserOptionsList"], ["Up", "Down"])
         wdc["paradigmChooserCheckBoxList"] = [wd["adaptiveTypeCheckBox"], wd["initialTrackDirCheckBox"]]
         
         wdc["paradigmFieldList"] = [wd["ruleDownTF"], wd["ruleUpTF"], wd["initialTurnpointsTF"], wd["totalTurnpointsTF"], wd["stepSize1TF"], wd["stepSize2TF"]]

@@ -598,7 +598,7 @@ function doTrial()
 ##             methodToCall1 = getattr(labexp, execString)
 ##         except:
 ##             pass
-    eval(parse(string("default_experiments.doTrial_", execString, "(prm, wdc)")))
+    eval(parse(string("default_experiments.doTrial_", execString, "(prm, wd, wdc)")))
    
 ##         methodToCall2 = getattr(methodToCall1, "doTrial_"+ execString)
 ##         result = methodToCall2(self)
@@ -2206,89 +2206,110 @@ function getStartTime()
     prm["blockStartTimeString"] = pycall(QtCore["QTime"]["toString"], PyAny, QtCore["QTime"][:currentTime](), prm["currentLocale"][:timeFormat](prm["currentLocale"][:ShortFormat]))
 end        
 
-function writeResultsHeader(fileType)
-##         if fileType == "log":
-##             resLogFilePath = prm["backupDirectoryName"]  + time.strftime("%y-%m-%d_%H-%M-%S", time.localtime()) + "_" + prm["listener"] + "_log"
-##             resLogFullFilePath = prm["backupDirectoryName"]  + time.strftime("%y-%m-%d_%H-%M-%S", time.localtime()) + "_" + prm["listener"] + "full_log"
-##             resFileLog = open(resLogFilePath, "a")
-##             fullFileLog = open(resLogFullFilePath, "a")
-##             filesToWrite = [resFileLog, fullFileLog]
-##         elif fileType == "standard":
-##             resFilePath = prm["resultsFile"]
-##             fullFilePath = prm["resultsFile"].split(".txt")[0] + prm["pref"]["general"]["fullFileSuffix"] + ".txt"
-##             resFile = open(resFilePath, "a")
-##             fullFile = open(fullFilePath, "a")
-##             filesToWrite = [resFile, fullFile]
+function writeResultsHeader(fileType, prm, wd)
+    if fileType == "log"
+        prm["resLogFilePath"] = string(prm["backupDirectoryName"],  strftime("%y-%m-%d_%H-%M-%S", time()), "_", prm["listener"], "_log")
+        prm["resLogFullFilePath"] = string(prm["backupDirectoryName"], strftime("%y-%m-%d_%H-%M-%S", time()), "_", prm["listener"], "full_log")
+        prm["resFileLog"] = open(prm["resLogFilePath"], "a")
+        prm["fullFileLog"] = open(prm["resLogFullFilePath"], "a")
+        filesToWrite = [prm["resFileLog"], prm["fullFileLog"]]
+         elseif fileType == "standard"
+        prm["resFilePath"] = prm["resultsFile"]
+        prm["fullFilePath"] = string(split(prm["resultsFile"], ".txt")[1], prm["pref"]["general"]["fullFileSuffix"], ".txt")
+        prm["resFile"] = open(prm["resFilePath"], "a")
+        prm["fullFile"] = open(prm["fullFilePath"], "a")
+        filesToWrite = [prm["resFile"], prm["fullFile"]]
+    end
             
-##         currBlock = "b" + str(prm["currentBlock"])
-##         for i in range(2):
-##             thisFile = filesToWrite[i]
-##             thisFile.write("*******************************************************\n")
+    currBlock = string("b", prm["currentBlock"])
+        for i=1:2
+            thisFile = filesToWrite[i]
+            write(thisFile, "*******************************************************\n")
 ##             thisFile.write("pychoacoustics version: " + prm["version"] + "; build date: " +  prm["builddate"] + "\n")
 ##             if "version" in prm[parent().currExp]:
 ##                 thisFile.write("Experiment version: " + prm[parent().currExp]["version"] + "\n") 
-##             thisFile.write("Block Number: " + str(prm["currentBlock"]) + "\n")
-##             thisFile.write("Block Position: " + prm["b"+str(prm["currentBlock"])]["blockPosition"] + "\n")
-##             thisFile.write("Start: " + prm["blockStartTimeStamp"]+ "\n") 
-##             thisFile.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n")
-##             thisFile.write("Experiment Label: " + prm["allBlocks"]["experimentLabel"] + "\n")
-##             thisFile.write("Session Label: " + prm["sessionLabel"] + "\n")
-##             thisFile.write("Condition Label: " + prm[currBlock]["conditionLabel"] + "\n")
-##             thisFile.write("Experiment:    " + prm[currBlock]["experiment"] + "\n")
-##             thisFile.write("Listener:      " + prm["listener"] + "\n")
-##             thisFile.write("Response Mode: " + prm["allBlocks"]["responseMode"] + "\n")
-##             if prm["allBlocks"]["responseMode"] == tr("Automatic"):
-##                 thisFile.write("Auto Resp. Mode Perc. Corr.: " + str(prm["allBlocks"]["autoPCCorr"]) + "\n")
-##             thisFile.write("Paradigm:      " + prm["paradigm"] +"\n")
-##             thisFile.write("Intervals:     " + currLocale.toString(prm["nIntervals"]) + "\n")
-##             thisFile.write("Alternatives:  " + currLocale.toString(prm["nAlternatives"]) + "\n")
-##             for j in range(len(prm[currBlock]["paradigmChooser"])):
-##                 thisFile.write(prm[currBlock]["paradigmChooserLabel"][j] +  " " + prm[currBlock]["paradigmChooser"][j] + "\n")
-##             for j in range(len(prm[currBlock]["paradigmField"])):
-##                 thisFile.write(prm[currBlock]["paradigmFieldLabel"][j] +  ": " + currLocale.toString(prm[currBlock]["paradigmField"][j], precision=prm["pref"]["general"]["precision"]) + "\n")
-##             thisFile.write("Phones:        " + prm["allBlocks"]["currentPhones"] + "\n")
-##             thisFile.write("Sample Rate:   " + currLocale.toString(prm["allBlocks"]["sampRate"]) + "\n")
-##             thisFile.write("Bits:          " + currLocale.toString(prm["allBlocks"]["nBits"]) + "\n")
-##             thisFile.write("Pre-Trial Silence (ms): " + currLocale.toString(prm[currBlock]["preTrialSilence"]) + "\n")
-##             thisFile.write("Warning Interval: " + str(prm[currBlock]["warningInterval"]) + "\n")
-##             thisFile.write("Interval Lights: " + prm[currBlock]["intervalLights"] + "\n")
-##             if prm[currBlock]["warningInterval"] == tr("Yes"):
-##                 thisFile.write("Warning Interval Duration (ms): " + currLocale.toString(prm[currBlock]["warningIntervalDur"]) + "\n")
-##                 thisFile.write("Warning Interval ISI (ms): " + currLocale.toString(prm[currBlock]["warningIntervalISI"]) + "\n")
-##             thisFile.write("Response Light: " + prm["responseLight"] + "\n")
-##             thisFile.write("Response Light Duration (ms): " + currLocale.toString(prm[currBlock]["responseLightDuration"]) + "\n")
-##             if prm[parent().currExp]["hasISIBox"] == True:
-##                 thisFile.write("ISI:           " + currLocale.toString(prm["isi"]) + "\n")
-##             if prm[parent().currExp]["hasPreTrialInterval"] == True:
-##                 thisFile.write("Pre-Trial Interval:           " + prm[currBlock]["preTrialInterval"] + "\n")
-##                 if prm[currBlock]["preTrialInterval"] == tr("Yes"):
-##                     thisFile.write("Pre-Trial Interval ISI:           " + currLocale.toString(prm[currBlock]["preTrialIntervalISI"]) + "\n")
-##             if prm[parent().currExp]["hasPrecursorInterval"] == True:
-##                 thisFile.write("Precursor Interval:           " + prm[currBlock]["precursorInterval"] + "\n")
-##                 if prm[currBlock]["precursorInterval"] == tr("Yes"):
-##                     thisFile.write("Precursor Interval ISI:           " + currLocale.toString(prm[currBlock]["precursorIntervalISI"]) + "\n")
-##             if prm[parent().currExp]["hasPostcursorInterval"] == True:
-##                 thisFile.write("Postcursor Interval:           " + prm[currBlock]["postcursorInterval"] + "\n")
-##                 if prm[currBlock]["postcursorInterval"] == tr("Yes"):
-##                     thisFile.write("Postcursor Interval ISI:           " + currLocale.toString(prm[currBlock]["postcursorIntervalISI"]) + "\n")
-##             if prm[parent().currExp]["hasAltReps"] == True:
-##                 thisFile.write("Alternated (AB) Reps.:         " + currLocale.toString(prm["altReps"]) + "\n")
-##                 thisFile.write("Alternated (AB) Reps. ISI (ms):         " + currLocale.toString(prm["altRepsISI"]) + "\n")
+            write(thisFile, string("Block Number: ", prm["currentBlock"], "\n"))
+            write(thisFile, string("Block Position: ", prm[currBlock]["blockPosition"], "\n"))
+            write(thisFile, string("Start: ", prm["blockStartTimeStamp"], "\n"))
+            write(thisFile, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n")
+            write(thisFile, string("Experiment Label: ", prm["allBlocks"]["experimentLabel"], "\n"))
+            write(thisFile, string("Session Label: ", prm["sessionLabel"], "\n"))
+            write(thisFile, string("Condition Label: ", prm[currBlock]["conditionLabel"], "\n"))
+            write(thisFile, string("Experiment:    ", prm[currBlock]["experiment"], "\n"))
+            write(thisFile, string("Listener:      ", prm["listener"], "\n"))
+            write(thisFile, string("Response Mode: ", prm["allBlocks"]["responseMode"], "\n"))
+            if prm["allBlocks"]["responseMode"] == "Automatic"
+                write(thisFile, string("Auto Resp. Mode Perc. Corr.: ", prm["allBlocks"]["autoPCCorr"], "\n"))
+            end
+            write(thisFile, string("Paradigm:      ", prm["paradigm"], "\n"))
+            write(thisFile, string("Intervals:     ", prm["nIntervals"], "\n"))
+            write(thisFile, string("Alternatives:  ", prm["nAlternatives"], "\n"))
+            for j=1:length(prm[currBlock]["paradigmChooser"])
+                write(thisFile, string(prm[currBlock]["paradigmChooserLabel"][j], " ", prm[currBlock]["paradigmChooser"][j], "\n"))
+            end
 
-##             thisFile.write("\n")
+            for j=1:length(prm[currBlock]["paradigmField"])
+                write(thisFile, string(prm[currBlock]["paradigmFieldLabel"][j], ": ", prm["currentLocale"][:toString](prm[currBlock]["paradigmField"][j], precision=prm["pref"]["general"]["precision"]), "\n"))
+            end
+            write(thisFile, string("Phones:        ", prm["allBlocks"]["currentPhones"], "\n"))
+            write(thisFile, string("Sample Rate:   ", prm["allBlocks"]["sampRate"], "\n"))
+            write(thisFile, string("Bits:          ", prm["allBlocks"]["nBits"], "\n"))
+            write(thisFile, string("Pre-Trial Silence (ms): ", prm[currBlock]["preTrialSilence"], "\n"))
+            write(thisFile, string("Warning Interval: ", prm[currBlock]["warningInterval"], "\n"))
+            write(thisFile, string("Interval Lights: ", prm[currBlock]["intervalLights"], "\n"))
+            if prm[currBlock]["warningInterval"] == "Yes"
+                write(thisFile, string("Warning Interval Duration (ms): ", prm[currBlock]["warningIntervalDur"], "\n"))
+                write(thisFile, string("Warning Interval ISI (ms): ", prm[currBlock]["warningIntervalISI"], "\n"))
+            end
+            write(thisFile, string("Response Light: ", prm["responseLight"], "\n"))
+            write(thisFile, string("Response Light Duration (ms): ", prm[currBlock]["responseLightDuration"], "\n"))
+            if prm[prm["currExp"]]["hasISIBox"] == true
+                write(thisFile, string("ISI:           ", prm["isi"], "\n"))
+            end
+            if prm[prm["currExp"]]["hasPreTrialInterval"] == true
+                write(thisFile, string("Pre-Trial Interval:           ", prm[currBlock]["preTrialInterval"], "\n"))
+                if prm[currBlock]["preTrialInterval"] == "Yes"
+                    write(thisFile, string("Pre-Trial Interval ISI:           ", prm[currBlock]["preTrialIntervalISI"], "\n"))
+                end
+            end
+            if prm[prm["currExp"]]["hasPrecursorInterval"] == true
+                write(thisFile, string("Precursor Interval:           ", prm[currBlock]["precursorInterval"], "\n"))
+                if prm[currBlock]["precursorInterval"] == "Yes"
+                 write(thisFile, string("Precursor Interval ISI:           ", prm[currBlock]["precursorIntervalISI"], "\n"))
+                end
+            end
+            if prm[prm["currExp"]]["hasPostcursorInterval"] == true
+                 write(thisFile, string("Postcursor Interval:           ", prm[currBlock]["postcursorInterval"], "\n"))
+                if prm[currBlock]["postcursorInterval"] == "Yes"
+                    write(thisFile, string("Postcursor Interval ISI:           ", prm[currBlock]["postcursorIntervalISI"], "\n"))
+                end
+            end
+            if prm[prm["currExp"]]["hasAltReps"] == true
+                write(thisFile, string("Alternated (AB) Reps.:         ", prm["altReps"], "\n"))
+                write(thisFile, string("Alternated (AB) Reps. ISI (ms):         ", prm["altRepsISI"], "\n"))
+            end
 
-##             for j in range(len(prm[currBlock]["chooser"])):
-##                 if j not in parent().choosersToHide:
-##                     thisFile.write(parent().chooserLabel[j].text() + " " + prm[currBlock]["chooser"][j] + "\n")
-##             for j in range(len(prm[currBlock]["fileChooser"])):
-##                 if j not in parent().fileChoosersToHide:
-##                     thisFile.write(parent().fileChooserButton[j].text() + " " + prm[currBlock]["fileChooser"][j] + "\n")
-##             for j in range(len(prm[currBlock]["field"])):
-##                 if j not in parent().fieldsToHide and parent().fieldLabel[j].text()!= "Random Seed":
-##                     thisFile.write(parent().fieldLabel[j].text() + ":  " + currLocale.toString(prm[currBlock]["field"][j]) + "\n")
-##             thisFile.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n")
+            write(thisFile, "\n")
 
-##             thisFile.flush()
+            for j=1:length(prm[currBlock]["chooser"])
+                if in(j,  prm["choosersToHide"]) == false
+                    write(thisFile, string(wd["chooserLabel"][j][:text](), " ", prm[currBlock]["chooser"][j], "\n"))
+                end
+            end
+            for j=1:length(prm[currBlock]["fileChooser"])
+                if in(j, prm["fileChoosersToHide"]) == false
+                    write(thisFile, string(wd["fileChooserButton"][j][:text](), " ", prm[currBlock]["fileChooser"][j], "\n"))
+                end
+            end
+            for j=1:length(prm[currBlock]["field"])
+                if (in(j, prm["fieldsToHide"]) == false) & (wd["fieldLabel"][j][:text]()!= "Random Seed")
+                    write(thisFile, string(wd["fieldLabel"][j][:text](), ":  ", prm[currBlock]["field"][j], "\n"))
+                end
+            end
+            write(thisFile, "+++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n")
+
+            flush(thisFile)
+        end
 end
 function writeResultsFooter(fileType)
 ##         if fileType == "log":
@@ -2297,10 +2318,10 @@ function writeResultsFooter(fileType)
 ##             filesToWrite = [resFile, fullFile]
 ##         for i in range(2):
 ##             thisFile = filesToWrite[i]
-##             #thisFile.write("*******************************************************\n\n")
-##             thisFile.write("End: " + prm["blockEndTimeStamp"] + "\n") 
-##             thisFile.write("Duration: {} min. \n".format( (prm["blockEndTime"] - prm["blockStartTime"]) / 60 ))
-##             thisFile.write("\n")
+##             #write(thisFile, "*******************************************************\n\n")
+##             write(thisFile, "End: " + prm["blockEndTimeStamp"] + "\n") 
+##             write(thisFile, "Duration: {} min. \n".format( (prm["blockEndTime"] - prm["blockStartTime"]) / 60 ))
+##             write(thisFile, "\n")
 ##             thisFile.flush()
 end
 ##     def writeResultsSummaryLine(self, paradigm, resultsLine):
@@ -2489,18 +2510,18 @@ end
 ##             if prm[currBlock]["paradigmChooserCheckBox"][i] == True:
 ##                 headerToWrite = headerToWrite + prm[currBlock]["paradigmChooserLabel"][i] + prm["pref"]["general"]["csvSeparator"]
 
-##         if prm[parent().currExp]["hasISIBox"] == True:
+##         if prm[prm["currExp"]]["hasISIBox"] == True:
 ##             if prm[currBlock]["ISIValCheckBox"] == True:
 ##                 headerToWrite = headerToWrite + "ISI (ms)" + prm["pref"]["general"]["csvSeparator"]
 
 ##         if paradigm not in ["Constant m-Intervals n-Alternatives", "Multiple Constants m-Intervals n-Alternatives"]:
-##             if prm[parent().currExp]["hasAlternativesChooser"] == True:
+##             if prm[prm["currExp"]]["hasAlternativesChooser"] == True:
 ##                 if prm[currBlock]["nIntervalsCheckBox"] == True:
 ##                     headerToWrite = headerToWrite + "Intervals" + prm["pref"]["general"]["csvSeparator"] 
 ##                 if prm[currBlock]["nAlternativesCheckBox"] == True:
 ##                     headerToWrite = headerToWrite + "Alternatives" + prm["pref"]["general"]["csvSeparator"]
 
-##         if prm[parent().currExp]["hasAltReps"] == True:
+##         if prm[prm["currExp"]]["hasAltReps"] == True:
 ##             if prm[currBlock]["altRepsCheckBox"] == True:
 ##                 headerToWrite = headerToWrite + "Alternated (AB) Reps." + prm["pref"]["general"]["csvSeparator"]
 ##                 headerToWrite = headerToWrite + "Alternated (AB) Reps. ISI (ms)" + prm["pref"]["general"]["csvSeparator"]
@@ -2570,18 +2591,18 @@ end
 ##             if prm[currBlock]["paradigmChooserCheckBox"][i] == True:
 ##                 resLineToWrite = resLineToWrite + prm[currBlock]["paradigmChooser"][i].split(":")[0] + prm["pref"]["general"]["csvSeparator"]
 
-##         if prm[parent().currExp]["hasISIBox"] == True:
+##         if prm[prm["currExp"]]["hasISIBox"] == True:
 ##             if prm[currBlock]["ISIValCheckBox"] == True:
 ##                 resLineToWrite = resLineToWrite + str(prm[currBlock]["ISIVal"]) + prm["pref"]["general"]["csvSeparator"]
 
 ##         if  prm["paradigm"] not in ["Constant m-Intervals n-Alternatives", "Multiple Constants m-Intervals n-Alternatives"]:
-##             if prm[parent().currExp]["hasAlternativesChooser"] == True:
+##             if prm[prm["currExp"]]["hasAlternativesChooser"] == True:
 ##                 if prm[currBlock]["nIntervalsCheckBox"] == True:
 ##                     resLineToWrite = resLineToWrite + str(prm[currBlock]["nIntervals"]) + prm["pref"]["general"]["csvSeparator"] 
 ##                 if prm[currBlock]["nAlternativesCheckBox"] == True:
 ##                     resLineToWrite = resLineToWrite + str(prm[currBlock]["nAlternatives"]) + prm["pref"]["general"]["csvSeparator"]
 
-##         if prm[parent().currExp]["hasAltReps"] == True:
+##         if prm[prm["currExp"]]["hasAltReps"] == True:
 ##             if prm[currBlock]["altRepsCheckBox"] == True:
 ##                 resLineToWrite = resLineToWrite + str(prm[currBlock]["altReps"]) + prm["pref"]["general"]["csvSeparator"]
 ##                 resLineToWrite = resLineToWrite + str(prm[currBlock]["altRepsISI"]) + prm["pref"]["general"]["csvSeparator"]
@@ -2598,14 +2619,14 @@ end
 ##         currBlock = "b"+ str(prm["currentBlock"])
 ##         subject = tr("Pychoacoustics Notification: Listener ") + prm["listener"] + tr(" has ") \
 ##                + str(prm["pref"]["email"]["nBlocksNotify"]) + tr(" block(s) to go")
-##         body = subject + "\n" + tr("Experiment: ") + parent().currExp + \
+##         body = subject + "\n" + tr("Experiment: ") + prm["currExp"] + \
 ##               "\n" + tr("Completed Blocks: ") + str(prm["currentBlock"]) + tr(" Stored Blocks: ") + str(prm["storedBlocks"])
 ##         emailThread.sendEmail(subject, body)
 
 ##     def sendData(self):
 ##         currBlock = "b"+ str(prm["currentBlock"])
 ##         subject = "Pychoacoustics Data, Listener: " + prm["listener"] +  ", Experiment: " + \
-##                parent().currExp
+##                prm["currExp"]
 ##         body = ""
 ##         filesToSend = [pychovariablesSubstitute[pychovariables.index("[resFile]")],
 ##                        pychovariablesSubstitute[pychovariables.index("[resFileFull]")],
