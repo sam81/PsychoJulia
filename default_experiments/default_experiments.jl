@@ -16,9 +16,10 @@
 
 module default_experiments
 using WAV
+using sndlib
 include("../audio_manager.jl")
 include("../response_box_functions.jl")
-include("../jsndlib.jl")
+#include("../jsndlib.jl")
 exps = ["audiogram",
         "freq"]
 for i in 1:length(exps)

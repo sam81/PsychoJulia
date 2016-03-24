@@ -2,3 +2,4 @@ AudioIO
 DataFrames
 PySide
 WAV
+SndLib
